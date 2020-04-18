@@ -1,0 +1,87 @@
+<div class="card-body">
+  <h5 class="card-title" [innerHTML]="subType.name"></h5>
+  <form>
+    <div class="form-group row">
+      <label for="name" [class]="labelClass">Name</label>
+      <input
+        [class]="inputClass"
+        type="text"
+        name="name"
+        readonly
+        class="form-control-plaintext"
+        [(ngModel)]="subType.name"
+      />
+    </div>
+
+    <div class="form-group row">
+      <label for="objectType" [class]="labelClass">Type</label>
+      <select
+        class="custom-select"
+        [class]="inputClass"
+        disabled="true"
+        name="objectType"
+        [(ngModel)]="subType.objectType.id"
+      >
+        <option
+          *ngFor="let otherObjectType of objectTypes; trackBy: trackByFunc"
+          [value]="otherObjectType.id"
+          >{{ otherObjectType.name }} - {{ otherObjectType.type }}</option
+        >
+      </select>
+    </div>
+    <div class="form-group row">
+      <label for="min" [class]="labelClass">Min</label>
+      <input
+        [class]="inputClass"
+        type="number"
+        name="min"
+        readonly
+        class="form-control-plaintext"
+        [(ngModel)]="subType.min"
+      />
+    </div>
+    <div class="form-group row">
+      <label for="min" [class]="labelClass">Max</label>
+      <input
+        [class]="inputClass"
+        type="number"
+        name="max"
+        readonly
+        class="form-control-plaintext"
+        [(ngModel)]="subType.min"
+      />
+    </div>
+    <div class="form-group row" *ngIf="1 < objectType.objectSubTypes.length">
+      <label for="exclusions" [class]="labelClass">Max</label>
+      <select
+        class="custom-select"
+        multiple
+        [class]="inputClass"
+        readonly
+        name="exclusions"
+        [(ngModel)]="subType.exclusions"
+      >
+        <option
+          *ngFor="let brother of brothers; trackBy: trackByFunc"
+          [value]="brother.name"
+        ></option>
+      </select>
+    </div>
+    <div class="form-group row" *ngIf="1 < objectType.objectSubTypes.length">
+      <label for="mandatories" [class]="labelClass">Max</label>
+      <select
+        class="custom-select"
+        multiple
+        [class]="inputClass"
+        readonly
+        name="mandatories"
+        [(ngModel)]="subType.mandatories"
+      >
+        <option
+          *ngFor="let brother of brothers; trackBy: trackByFunc"
+          [value]="brother.name"
+        ></option>
+      </select>
+    </div>
+  </form>
+</div>
