@@ -16,7 +16,7 @@ export class ObjectTypesListComponent extends CommonComponentComponent {
   }
 
   get objectTypes(): ObjectTypeImpl[] {
-    return Object.values(this.objectsCommonService.objectTypes);
+    return this.objectsCommonService.objectTypesArray;
   }
 
   public trackByObjectType(objectType: ObjectTypeImpl) {

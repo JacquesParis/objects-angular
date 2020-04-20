@@ -12,6 +12,11 @@ import { RootAdminModule } from './root-admin/root-admin.module';
 import { LAZY_STATES } from './app.lazy.route';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  SchemaFormModule,
+  WidgetRegistry,
+  DefaultWidgetRegistry,
+} from 'ngx-schema-form';
 
 @NgModule({
   declarations: [AppComponent, WelcomeComponent],
@@ -23,13 +28,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       states: [...APP_STATES, ...LAZY_STATES],
       useHash: true,
     }),
+    SchemaFormModule.forRoot(),
     ObjectsClientModule,
     CommonAppModule,
     RootAdminModule,
     AccordionModule.forRoot(),
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
   bootstrap: [WelcomeComponent],
 })
 export class AppModule {}

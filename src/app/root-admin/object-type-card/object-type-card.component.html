@@ -5,6 +5,22 @@
     #libEditableForm="EditableFormDirective"
   >
     <h5 class="card-title" [innerHTML]="objectType.name"></h5>
+    <lib-editable-json-schema-form
+      [ngModel]="editionProperties"
+      (ngModelChange)="onChange($event)"
+      [schema]="objectTypeSchema"
+    ></lib-editable-json-schema-form>
+  </div>
+</div>
+<!--
+   <div class="card">
+
+  <div
+    class="card-body"
+    libEditableForm
+    #libEditableForm="EditableFormDirective"
+  >
+    <h5 class="card-title" [innerHTML]="objectType.name"></h5>
     <form>
       <div class="form-group row">
         <label for="type" [class]="labelClass">Type</label>
@@ -40,10 +56,10 @@
     >
       Save
     </button>
-    <div class="mt-2">
-      <app-object-sub-types-accordion
-        [objectType]="objectType"
-      ></app-object-sub-types-accordion>
-    </div>
   </div>
+</div>-->
+<div class="mt-2">
+  <app-object-sub-types-accordion
+    [objectType]="objectType"
+  ></app-object-sub-types-accordion>
 </div>

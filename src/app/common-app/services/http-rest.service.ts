@@ -72,4 +72,42 @@ export class HttpRestService implements IRestService {
     }
     return response;
   }
+
+  public patch<T>(uri: string, entity: T): Promise<IRestResponse<void>> {
+    return this.patchOdPushOrPost('patch', uri, entity) as Promise<
+      IRestResponse<void>
+    >;
+  }
+
+  public post<T>(uri: string, entity: T): Promise<IRestResponse<T>> {
+    return this.patchOdPushOrPost('post', uri, entity) as Promise<
+      IRestResponse<T>
+    >;
+  }
+
+  protected async patchOdPushOrPost<T>(
+    type: 'patch' | 'put' | 'post',
+    uri: string,
+    entity: T
+  ): Promise<IRestResponse<void | T>> {
+    const response: IRestResponse<void> = { result: null, status: null };
+    const options: any = {
+      responseType: 'json',
+      observe: 'events',
+    };
+    try {
+      const httpResponse: HttpResponse<void> = (await ((this.httpClient[type](
+        uri,
+        entity,
+        options
+      ) as unknown) as Observable<
+        HttpResponse<void>
+      >).toPromise()) as HttpResponse<void>;
+      response.result = httpResponse.body;
+      response.status = httpResponse.status;
+    } catch (error) {
+      throw error;
+    }
+    return response;
+  }
 }

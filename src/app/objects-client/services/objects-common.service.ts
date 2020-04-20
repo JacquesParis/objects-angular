@@ -53,6 +53,12 @@ export class ObjectsCommonService {
     }
     return this._objectTypesByName;
   }
+  get objectTypesArray(): ObjectTypeImpl[] {
+    if (!this._objectTypes) {
+      throw new NotInitialized(this);
+    }
+    return this._objectTypes;
+  }
 
   get rootType(): ObjectTypeImpl {
     return this.configurationService.getRootObjectTypeName() in
@@ -61,9 +67,5 @@ export class ObjectsCommonService {
           this.configurationService.getRootObjectTypeName()
         ]
       : this._objectTypes[0];
-  }
-
-  putObjectType(objectType: ObjectTypeImpl): Promise<void> {
-    return this.objectsTypeService.put(objectType);
   }
 }

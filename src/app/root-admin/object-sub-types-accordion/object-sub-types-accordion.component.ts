@@ -18,6 +18,6 @@ export class ObjectSubTypesAccordionComponent extends CommonComponentComponent {
   }
 
   get objectTypes(): ObjectTypeImpl[] {
-    return Object.values(this.objectsCommonService.objectTypes);
+    return this.objectsCommonService.objectTypesArray;
   }
 }
