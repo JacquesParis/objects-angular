@@ -6,9 +6,10 @@
   >
     <h5 class="card-title" [innerHTML]="objectType.name"></h5>
     <lib-editable-json-schema-form
-      [ngModel]="editionProperties"
-      (ngModelChange)="onChange($event)"
+      [properties]="objectType"
+      [saveValue]="saveValueMethod"
       [schema]="objectTypeSchema"
+      [validators]="objectTypeValidators"
     ></lib-editable-json-schema-form>
   </div>
 </div>

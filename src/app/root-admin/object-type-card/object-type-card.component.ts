@@ -8,20 +8,33 @@ import { ObjectsCommonService } from '../../objects-client/services/objects-comm
 import { EditableFormDirective } from '@jacquesparis/objects-angular-forms';
 import { IJsonSchema } from '@jacquesparis/objects-angular-forms/lib/editable-abstract/i-json-schema';
 
-const OBJECT_TYPE_SCHEMA = {
-  properties: {
-    name: {
-      type: 'string',
-      description: 'Object type name',
+const OBJECT_TYPE_DEF = {
+  schema: {
+    properties: {
+      name: {
+        type: 'string',
+        description: 'Object type name',
+      },
+      type: {
+        type: 'string',
+        description: 'Stockage type',
+      },
+      definitionString: {
+        type: 'string',
+        description: 'Object type json schema description',
+        widget: { id: 'textarea', rows: 10 },
+      },
     },
-    type: {
-      type: 'string',
-      description: 'Stockage type',
-    },
-    definitionString: {
-      type: 'string',
-      description: 'Object type json schema description',
-      widget: 'textarea',
+  },
+  validators: {
+    '/definitionString': (value, property, form) => {
+      try {
+        JSON.parse(value);
+      } catch (error) {
+        console.log('unvalid value');
+        return { unvalidJson: { expectedValue: 'A JSON value' } };
+      }
+      return null;
     },
   },
 };
@@ -36,7 +49,9 @@ export class ObjectTypeCardComponent extends CommonComponentComponent
   @Input() objectType: ObjectTypeImpl;
   @ViewChild('libEditableForm') libEditableForm: EditableFormDirective;
 
-  public objectTypeSchema: IJsonSchema = OBJECT_TYPE_SCHEMA;
+  public objectTypeSchema: IJsonSchema = OBJECT_TYPE_DEF.schema;
+  public objectTypeValidators: { [key: string]: any } =
+    OBJECT_TYPE_DEF.validators;
   public editionProperties: Partial<ObjectTypeImpl>;
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
@@ -54,6 +69,13 @@ export class ObjectTypeCardComponent extends CommonComponentComponent
 
   get objectTypes(): ObjectTypeImpl[] {
     return this.objectsCommonService.objectTypesArray;
+  }
+  get saveValueMethod() {
+    return this.saveValue.bind(this);
+  }
+
+  public async saveValue(value: Partial<ObjectTypeImpl>): Promise<void> {
+    await this.objectType.updateEditionProperties(value);
   }
 
   switchMode() {
