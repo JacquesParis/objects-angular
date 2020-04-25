@@ -5,16 +5,18 @@ import { CommonComponentComponent } from '../../common-app/common-component/comm
 import { IObjectSubType } from '@jacquesparis/objects-model';
 
 const OBJECT_SUB_TYPE_SCHEMA = {
+  type: 'object',
   properties: {
     name: {
       type: 'string',
-      description: 'Name of the relation to the sub-object',
-      readOnly: true,
+      title: 'Name of the relation to the sub-object',
+      readonly: false,
     },
+
     subObjectTypeId: {
       type: 'string',
       widget: 'select',
-      description: 'Type of sub-object',
+      title: 'Type of sub-object',
       oneOf: [],
       buttons: [
         {
@@ -22,17 +24,22 @@ const OBJECT_SUB_TYPE_SCHEMA = {
           label: 'Reset',
         },
       ],
-      readOnly: true,
     },
     min: {
       type: 'number',
-      description: 'Minimum number of child',
-      readOnly: true,
+      title: 'Minimum number of child',
+      minimum: 0,
     },
     max: {
       type: 'number',
-      description: 'Maximum number of child',
-      readOnly: true,
+      title: 'Maximum number of child',
+      readonly: true,
+    },
+    submit: {
+      type: 'submit',
+      title: 'coucou',
+      hidden: true,
+      condition: false,
     },
   },
   buttons: [
@@ -46,7 +53,7 @@ const OBJECT_SUB_TYPE_SCHEMA = {
 @Component({
   selector: 'app-object-sub-type-card',
   templateUrl: './object-sub-type-card.component.html',
-  styleUrls: ['./object-sub-type-card.component.sass'],
+  styleUrls: ['./object-sub-type-card.component.scss'],
 })
 export class ObjectSubTypeCardComponent extends CommonComponentComponent {
   @Input() objectType: ObjectTypeImpl;
@@ -61,15 +68,31 @@ export class ObjectSubTypeCardComponent extends CommonComponentComponent {
       property.reset();
     },
   };
+  myLayout: any;
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super();
-    this.objectTypes.forEach((objectType) => {
-      this.mySchema.properties.subObjectTypeId.oneOf.push({
-        enum: [objectType.id],
-        description: objectType.name + ' - ' + objectType.type,
+    this.myLayout = [
+      '*',
+      {
+        type: 'submit',
+        title: 'OK',
+        htmlClass: 'd-none',
+      },
+    ];
+    if (0 === this.mySchema.properties.subObjectTypeId.oneOf.length) {
+      this.objectTypes.forEach((availableObjectType) => {
+        this.mySchema.properties.subObjectTypeId.oneOf.push({
+          enum: [availableObjectType.id],
+          title: availableObjectType.name + ' - ' + availableObjectType.type,
+        });
+        /*
+        this.mySchema.properties.subObjectTypeId.enum.push(objectType.id);
+        this.mySchema.properties.subObjectTypeId.optionLabels.push(
+          objectType.name + ' - ' + objectType.type
+        );*/
       });
-    });
+    }
   }
 
   get objectTypes(): ObjectTypeImpl[] {

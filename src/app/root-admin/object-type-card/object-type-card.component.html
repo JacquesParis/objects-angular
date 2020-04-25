@@ -1,66 +1,16 @@
 <div class="card">
-  <div
-    class="card-body"
-    libEditableForm
-    #libEditableForm="EditableFormDirective"
-  >
-    <h5 class="card-title" [innerHTML]="objectType.name"></h5>
+  <div class="card-body">
+    <h5 class="card-title" [innerHTML]="entity.name"></h5>
     <lib-editable-json-schema-form
-      [properties]="objectType"
+      [properties]="entity"
       [saveValue]="saveValueMethod"
-      [schema]="objectTypeSchema"
-      [validators]="objectTypeValidators"
+      [schema]="schema"
+      [layout]="layout"
     ></lib-editable-json-schema-form>
   </div>
 </div>
-<!--
-   <div class="card">
-
-  <div
-    class="card-body"
-    libEditableForm
-    #libEditableForm="EditableFormDirective"
-  >
-    <h5 class="card-title" [innerHTML]="objectType.name"></h5>
-    <form>
-      <div class="form-group row">
-        <label for="type" [class]="labelClass">Type</label>
-        <lib-editable-text
-          name="type"
-          [(ngModel)]="objectType.type"
-          [class]="inputClass"
-        ></lib-editable-text>
-      </div>
-      <div class="form-group row">
-        <label for="definitionString" [class]="labelClass">Definition</label>
-        <lib-editable-textarea
-          name="definitionString"
-          [(ngModel)]="objectType.definitionString"
-          [class]="inputClass"
-        ></lib-editable-textarea>
-      </div>
-    </form>
-
-    <button
-      class="btn mr-2 mt-2"
-      [class.btn-primary]="libEditableForm.isViewMode"
-      [class.btn-secondary]="libEditableForm.isEditMode"
-      [innerHTML]="libEditableForm.isEditMode ? 'Cancel' : 'Edit'"
-      [disabled]="libEditableForm.hasActionDisabled"
-      (click)="switchMode()"
-    ></button>
-    <button
-      *ngIf="libEditableForm.isEditMode"
-      type="button"
-      class="btn btn-primary mr-2 mt-2"
-      (click)="saveEditMode()"
-    >
-      Save
-    </button>
-  </div>
-</div>-->
 <div class="mt-2">
   <app-object-sub-types-accordion
-    [objectType]="objectType"
+    [objectType]="entity"
   ></app-object-sub-types-accordion>
 </div>

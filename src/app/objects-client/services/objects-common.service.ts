@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   ObjectsTypeService,
   ObjectTypeImpl,
+  EntityName,
+  IJsonSchema,
 } from '@jacquesparis/objects-client';
 import { ConfigurationService } from '../../common-app/services/configuration.service';
 import { NotInitialized } from '../../common-app/errors/not-initialized.error';
@@ -16,6 +18,9 @@ export class ObjectsCommonService {
   private _objectTypesByName: { [uri: string]: ObjectTypeImpl } = {};
   private _objectTypesByUri: { [uri: string]: ObjectTypeImpl } = {};
   private _objectTypesById: { [id: string]: ObjectTypeImpl } = {};
+  private entitySchema: Partial<
+    { [entityType in EntityName]: IJsonSchema }
+  > = {};
   private objectsTypeService: ObjectsTypeService;
   constructor(
     protected configurationService: ConfigurationService,
@@ -25,6 +30,9 @@ export class ObjectsCommonService {
       this.httpRestService,
       this.configurationService.getServer() + OBJECT_TYPES_URI
     );
+    this.entitySchema[
+      this.objectsTypeService.entityName
+    ] = this.objectsTypeService.entityDefinition;
   }
 
   public async init(): Promise<void> {
@@ -67,5 +75,9 @@ export class ObjectsCommonService {
           this.configurationService.getRootObjectTypeName()
         ]
       : this._objectTypes[0];
+  }
+
+  public getSchema(entityName: EntityName) {
+    return this.entitySchema[entityName];
   }
 }

@@ -8,7 +8,7 @@ import { CommonComponentComponent } from '../../common-app/common-component/comm
 @Component({
   selector: 'app-object-types-list',
   templateUrl: './object-types-list.component.html',
-  styleUrls: ['./object-types-list.component.sass'],
+  styleUrls: ['./object-types-list.component.scss'],
 })
 export class ObjectTypesListComponent extends CommonComponentComponent {
   constructor(protected objectsCommonService: ObjectsCommonService) {

@@ -1,6 +1,16 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title" [innerHTML]="subType.name"></h5>
+
+    <json-schema-form
+      [schema]="mySchema"
+      framework="bootstrap-4"
+      (onSubmit)="subType = $event; onChange()"
+      [model]="subType"
+      [layout]="myLayout"
+    >
+    </json-schema-form>
+    <!--
     <sf-form
       [schema]="mySchema"
       [(model)]="subType"
@@ -27,7 +37,7 @@
           [class]="inputClass"
           disabled="true"
           name="objectType"
-          [(ngModel)]="subType.objectType.id"
+          [(ngModel)]="subObjectTypeId"
         >
           <option
             *ngFor="let otherObjectType of objectTypes; trackBy: trackByFunc"
@@ -90,6 +100,6 @@
           ></option>
         </select>
       </div>
-    </form>
+    </form>-->
   </div>
 </div>

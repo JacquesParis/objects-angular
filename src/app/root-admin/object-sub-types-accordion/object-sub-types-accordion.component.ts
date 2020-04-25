@@ -8,7 +8,7 @@ import { IObjectSubType } from '@jacquesparis/objects-model';
 @Component({
   selector: 'app-object-sub-types-accordion',
   templateUrl: './object-sub-types-accordion.component.html',
-  styleUrls: ['./object-sub-types-accordion.component.sass'],
+  styleUrls: ['./object-sub-types-accordion.component.scss'],
 })
 export class ObjectSubTypesAccordionComponent extends CommonComponentComponent {
   @Input() objectType: ObjectTypeImpl;

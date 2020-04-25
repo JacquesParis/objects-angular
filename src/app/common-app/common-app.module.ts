@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ObjectsAngularFormsModule } from '@jacquesparis/objects-angular-forms';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { SchemaFormModule } from 'ngx-schema-form';
-
+import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
 @NgModule({
   declarations: [],
   imports: [
@@ -17,6 +17,7 @@ import { SchemaFormModule } from 'ngx-schema-form';
     AccordionModule,
     ObjectsAngularFormsModule,
     SchemaFormModule,
+    Bootstrap4FrameworkModule,
   ],
   exports: [
     BrowserModule,
@@ -26,6 +27,7 @@ import { SchemaFormModule } from 'ngx-schema-form';
     FormsModule,
     ObjectsAngularFormsModule,
     SchemaFormModule,
+    Bootstrap4FrameworkModule,
   ],
 })
 export class CommonAppModule {}
