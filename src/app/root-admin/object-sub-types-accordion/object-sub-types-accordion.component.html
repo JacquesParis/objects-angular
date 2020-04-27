@@ -2,24 +2,12 @@
   <h5 for="subTypes">Sous-types</h5>
   <div name="subTypes">
     <accordion [isAnimated]="true">
-      <accordion-group
-        *ngFor="let subType of objectType.objectSubTypes; trackBy: trackByFunc"
-      >
-        <button
-          class="btn btn-link btn-block clearfix"
-          accordion-heading
-          type="button"
-        >
+      <accordion-group *ngFor="let subType of objectType.objectSubTypes; trackBy: trackByFunc">
+        <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
           <div class="pull-left float-left" [innerHTML]="subType.name"></div>
-          <span
-            class="badge badge-secondary float-right pull-right"
-            [innerHTML]="subType.objectType.name"
-          ></span>
+          <span class="badge badge-secondary float-right pull-right" [innerHTML]="subType.objectType.name"></span>
         </button>
-        <app-object-sub-type-card
-          [objectType]="objectType"
-          [subType]="subType"
-        ></app-object-sub-type-card>
+        <app-object-sub-type-card [entity]="subType"></app-object-sub-type-card>
       </accordion-group>
     </accordion>
 

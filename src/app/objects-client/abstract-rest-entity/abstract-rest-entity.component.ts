@@ -16,7 +16,7 @@ import { ObjectsCommonService } from '../services/objects-common.service';
 export abstract class AbstractRestEntityComponent<
   Entity extends IRestEntity,
   EntityWrapper extends IEntityPropertiesWrapper<Entity>
-> extends CommonComponentComponent {
+> extends CommonComponentComponent implements OnInit {
   entity: EntityWrapper;
   public schema: IJsonSchema;
   public layout: IJsonLayoutPorperty[] = [];
@@ -25,6 +25,9 @@ export abstract class AbstractRestEntityComponent<
     protected objectsCommonService: ObjectsCommonService
   ) {
     super();
+  }
+
+  ngOnInit() {
     this.schema = this.objectsCommonService.getSchema(this.entityTypeName);
   }
 
@@ -34,5 +37,6 @@ export abstract class AbstractRestEntityComponent<
 
   public async saveValue(value: Partial<Entity>): Promise<void> {
     await this.entity.updateEditionProperties(value);
+    return;
   }
 }
