@@ -9,7 +9,6 @@ import {
 import { ConfigurationService } from '../../common-app/services/configuration.service';
 import { NotInitialized } from '../../common-app/errors/not-initialized.error';
 import { HttpRestService } from '../../common-app/services/http-rest.service';
-import { IRestEntity, IObjectSubType } from '@jacquesparis/objects-model';
 import * as _ from 'lodash-es';
 import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
 
@@ -94,51 +93,5 @@ export class ObjectsCommonService {
 
   public getSchema(entityName: EntityName) {
     return this.entitySchema[entityName];
-    /*
-    switch (entityName) {
-      case EntityName.objectSubType:
-        /*
-        result = _.cloneDeep(result);
-        result.properties.subObjectTypeId.oneOf = [];
-        this._objectTypes.forEach((availableObjectType) => {
-          result.properties.subObjectTypeId.oneOf.push({
-            enum: [availableObjectType.id],
-            title: availableObjectType.name + ' - ' + availableObjectType.type,
-          });
-        });
-        const objectSubType: IObjectSubType = entity as IObjectSubType;
-        const objectType = this._objectTypesById[objectSubType.objectTypeId];
-        const brothers = objectType.objectSubTypes.filter(
-          (oneBrother) => oneBrother.id !== objectSubType.id
-        );
-        if (0 === brothers.length) {
-        delete result.properties.exclusions;
-        delete result.properties
-          .mandatories;
-        } else {
-          result.properties.exclusions.items = {
-            type: 'string',
-            enum: [],
-            enumNames: [],
-          };
-          result.properties.mandatories.items = {
-            type: 'string',
-            enum: [],
-            enumNames: [],
-          };
-          brothers.forEach((brother) => {
-            result.properties.exclusions.items.enum.push(brother.id);
-            result.properties.mandatories.items.enum.push(brother.id);
-            result.properties.exclusions.items.enumNames.push(brother.name);
-            result.properties.mandatories.items.enumNames.push(brother.name);
-          });
-        }
-
-        break;
-
-      default:
-        break;
-    }
-    return result;*/
   }
 }

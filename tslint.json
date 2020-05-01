@@ -95,8 +95,7 @@
       }
     },
     "typedef-whitespace": {
-      "options": [
-        {
+      "options": [{
           "call-signature": "nospace",
           "index-signature": "nospace",
           "parameter": "nospace",
@@ -112,13 +111,7 @@
         }
       ]
     },
-    "variable-name": {
-      "options": [
-        "ban-keywords",
-        "check-format",
-        "allow-pascal-case"
-      ]
-    },
+    "variable-name": false,
     "whitespace": {
       "options": [
         "check-branch",
