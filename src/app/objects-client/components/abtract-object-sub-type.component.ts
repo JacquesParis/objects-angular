@@ -5,7 +5,7 @@ import { ObjectsCommonService } from '../services/objects-common.service';
 import { OnInit } from '@angular/core';
 import * as _ from 'lodash-es';
 
-export class AbtractObjectSubTypeComponent
+export abstract class AbtractObjectSubTypeComponent
   extends AbstractRestEntityComponent<IObjectSubType, ObjectSubTypeImpl>
   implements OnInit {
   entity: ObjectSubTypeImpl;
@@ -57,39 +57,5 @@ export class AbtractObjectSubTypeComponent
       delete this.schema.properties.exclusions;
       delete this.schema.properties.mandatories;
     }
-    /*
-    const subObjectTypeId = {
-      key: 'subObjectTypeId',
-      titleMap: {},
-    };
-    this.objectsCommonService.objectTypesArray.forEach((objectType) => {
-      subObjectTypeId.titleMap[objectType.id] =
-        objectType.name + ' - ' + objectType.type;
-    });
-    this.layout.push(subObjectTypeId);
-    const owner = this.objectsCommonService.getObjectType(
-      this.entity.objectTypeId
-    );
-    if (1 < owner.objectSubTypes.length) {
-      const exclusions = {
-        key: 'exclusions',
-        titleMap: {},
-      };
-      const mandatories = {
-        key: 'mandatories',
-        titleMap: {},
-      };
-      owner.objectSubTypes.forEach((subType) => {
-        if (subType.id !== this.entity.id) {
-          exclusions.titleMap[subType.id] =
-            subType.name + ' (' + subType.objectType.name + ')';
-          mandatories.titleMap[subType.id] =
-            subType.name + ' (' + subType.objectType.name + ')';
-        }
-      });
-      this.layout.push(exclusions);
-      this.layout.push(mandatories);
-    }
-      */
   }
 }

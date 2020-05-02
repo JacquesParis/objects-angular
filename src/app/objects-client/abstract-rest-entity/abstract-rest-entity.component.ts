@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  EventEmitter,
+} from '@angular/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
 import { extend } from '@uirouter/core';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
@@ -20,6 +25,9 @@ export abstract class AbstractRestEntityComponent<
   entity: EntityWrapper;
   public schema: IJsonSchema;
   public layout: IJsonLayoutPorperty[] = [];
+  public abstract onCancel: EventEmitter<void>;
+  public abstract onSave: EventEmitter<void>;
+  public abstract onDelete: EventEmitter<void>;
   constructor(
     protected entityTypeName: EntityName,
     protected objectsCommonService: ObjectsCommonService
@@ -31,12 +39,48 @@ export abstract class AbstractRestEntityComponent<
     this.schema = this.objectsCommonService.getSchema(this.entityTypeName);
   }
 
-  get saveValueMethod() {
+  get saveValueMethod(): (value) => Promise<void> {
     return this.saveValue.bind(this);
   }
 
-  public async saveValue(value: Partial<Entity>): Promise<void> {
-    await this.entity.updateEditionProperties(value);
+  get deleteValueMethod(): () => Promise<void> {
+    return this.deleteValue.bind(this);
+  }
+
+  protected async onNewEntityCreated(): Promise<void> {
+    this.objectsCommonService.registerNewlyCreatedEntity(
+      this.entityTypeName,
+      this.entity
+    );
     return;
+  }
+
+  protected async onEntityDeleted(): Promise<void> {
+    this.objectsCommonService.unRegisterEntity(
+      this.entityTypeName,
+      this.entity
+    );
+    return;
+  }
+
+  public async saveValue(value: Partial<Entity>): Promise<void> {
+    const isNew = this.entity.isNewEntity;
+    await this.entity.updateEditionProperties(value);
+    if (isNew) {
+      await this.onNewEntityCreated();
+    }
+    this.onSave.emit();
+    return;
+  }
+
+  public async deleteValue(): Promise<void> {
+    await this.entity.delete();
+    await this.onEntityDeleted();
+    this.onDelete.emit();
+    return;
+  }
+
+  public cancelAction() {
+    this.onCancel.emit();
   }
 }

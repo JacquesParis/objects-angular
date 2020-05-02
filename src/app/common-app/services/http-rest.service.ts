@@ -28,7 +28,7 @@ export class HttpRestService implements IRestService {
       Object.keys(queryParams).forEach((key) => {
         if (Array.isArray(queryParams[key])) {
           options.params[key] = [];
-          queryParams[key].array.forEach((element) => {
+          queryParams[key].forEach((element) => {
             options.params[key].push(JSON.stringify(element));
           });
         } else {
@@ -83,6 +83,23 @@ export class HttpRestService implements IRestService {
     return this.patchOdPushOrPost('post', uri, entity) as Promise<
       IRestResponse<T>
     >;
+  }
+
+  public async delete<T>(uri: string): Promise<IRestResponse<void>> {
+    const response: IRestResponse<void> = { result: null, status: null };
+    const options: any = { responseType: 'json', observe: 'events' };
+    try {
+      const httpResponse: HttpResponse<void> = (await ((this.httpClient.delete(
+        uri,
+        options
+      ) as unknown) as Observable<
+        HttpResponse<void>
+      >).toPromise()) as HttpResponse<void>;
+      response.status = httpResponse.status;
+    } catch (error) {
+      throw error;
+    }
+    return response;
   }
 
   protected async patchOdPushOrPost<T>(

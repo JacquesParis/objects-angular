@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RootAdminComponent } from './root-admin/root-admin.component';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonAppModule } from '../common-app/common-app.module';
 import { ROOT_ADMIN_STATES } from './root-admin.route';
 import { UIRouterModule } from '@uirouter/angular';
@@ -16,7 +15,13 @@ import { ObjectSubTypeCardComponent } from './object-sub-type-card/object-sub-ty
       states: ROOT_ADMIN_STATES,
     }),
   ],
-  declarations: [RootAdminComponent, ObjectTypesListComponent, ObjectTypeCardComponent, ObjectSubTypesAccordionComponent, ObjectSubTypeCardComponent],
+  declarations: [
+    RootAdminComponent,
+    ObjectTypesListComponent,
+    ObjectTypeCardComponent,
+    ObjectSubTypesAccordionComponent,
+    ObjectSubTypeCardComponent,
+  ],
   entryComponents: [RootAdminComponent],
   exports: [],
 })

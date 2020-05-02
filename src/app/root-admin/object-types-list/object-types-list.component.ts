@@ -11,6 +11,8 @@ import { CommonComponentComponent } from '../../common-app/common-component/comm
   styleUrls: ['./object-types-list.component.scss'],
 })
 export class ObjectTypesListComponent extends CommonComponentComponent {
+  public newObjectType: ObjectTypeImpl;
+  public inCreation = false;
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super();
   }
@@ -21,5 +23,14 @@ export class ObjectTypesListComponent extends CommonComponentComponent {
 
   public trackByObjectType(objectType: ObjectTypeImpl) {
     return objectType.id + objectType.name + objectType.type;
+  }
+
+  public createNewType() {
+    this.newObjectType = this.objectsCommonService.newObjectType();
+    this.inCreation = true;
+  }
+
+  public endCreation() {
+    this.inCreation = false;
   }
 }

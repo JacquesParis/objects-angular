@@ -1,9 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ObjectSubTypeImpl, EntityName } from '@jacquesparis/objects-client';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
-import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
-import { IObjectSubType } from '@jacquesparis/objects-model';
-import { AbstractRestEntityComponent } from '../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
 import * as _ from 'lodash-es';
 import { AbtractObjectSubTypeComponent } from '../../objects-client/components/abtract-object-sub-type.component';
 
@@ -14,6 +11,9 @@ import { AbtractObjectSubTypeComponent } from '../../objects-client/components/a
 })
 export class ObjectSubTypeCardComponent extends AbtractObjectSubTypeComponent {
   @Input() entity: ObjectSubTypeImpl;
+  @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super(objectsCommonService);

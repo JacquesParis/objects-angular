@@ -1,20 +1,21 @@
-<p>object-types-list works!</p>
 <accordion [isAnimated]="true">
-  <accordion-group
-    *ngFor="let objectType of objectTypes; trackBy: trackByObjectType"
-  >
-    <button
-      class="btn btn-link btn-block clearfix"
-      accordion-heading
-      type="button"
-    >
+  <accordion-group *ngFor="let objectType of objectTypes; trackBy: trackByObjectType">
+    <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
       <div class="pull-left float-left" [innerHTML]="objectType.name"></div>
-      <span
-        class="badge badge-secondary float-right pull-right"
-        [innerHTML]="objectType.type"
-        >Some HTML here</span
-      >
+      <span class="badge badge-secondary float-right pull-right" [innerHTML]="objectType.type">Some HTML here</span>
     </button>
     <app-object-type-card [entity]="objectType"></app-object-type-card>
   </accordion-group>
+  <accordion-group *ngIf="inCreation" [isOpen]="true">
+    <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+      <div class="pull-left float-left" [innerHTML]="'New type'"></div>
+    </button>
+    <app-object-type-card [entity]="newObjectType" (onCancel)="endCreation()" (onSave)="endCreation()">
+    </app-object-type-card>
+
+  </accordion-group>
 </accordion>
+
+<button type="button" class="btn btn-primary mr-2 mt-2" *ngIf="!inCreation" (click)="createNewType()">
+  Add a type
+</button>
