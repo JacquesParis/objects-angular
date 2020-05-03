@@ -13,6 +13,7 @@ import { HttpRestService } from '../../common-app/services/http-rest.service';
 import * as _ from 'lodash-es';
 import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
 import { IRestEntity } from '@jacquesparis/objects-model';
+import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 
 @Injectable({
   providedIn: 'root',
@@ -97,32 +98,79 @@ export class ObjectsCommonService {
     return this.entitySchema[entityName];
   }
 
-  public newObjectType(): ObjectTypeImpl {
-    return new ObjectTypeImpl(this.objectsTypeService);
+  public insertInArray(entities: any[], entity: any, sortKey: string): number {
+    const index = _.sortedIndexBy(entities, entity, (o) => {
+      return o[sortKey];
+    });
+    entities.splice(index, 0, entity);
+    return index;
+    /*
+    let index = 0;
+    while (
+      index < entities.length &&
+      entities[index][sortKey] < entity[sortKey]
+    ) {
+      index++;
+    }
+    if (index === entities.length) {
+      entities.push(entity);
+    } else {
+      entities.splice(index, 0, entity);
+    }*/
+  }
+  public removeFromArray(entities: any[], entity: any, idKey: string = 'id') {
+    entities.splice(
+      _.findIndex(entities, (o) => {
+        return o[idKey] === entity[idKey];
+      }),
+      1
+    );
+  }
+
+  public newEntity<T extends RestEntityImpl<T>>(
+    entityName: EntityName,
+    parentEntity?: IRestEntity
+  ): T {
+    switch (entityName) {
+      case EntityName.objectType:
+        return (new ObjectTypeImpl(this.objectsTypeService) as unknown) as T;
+        break;
+      case EntityName.objectSubType:
+        return (new ObjectSubTypeImpl(
+          this.objectsSubTypeService,
+          parentEntity.id,
+          parentEntity.uri
+        ) as unknown) as T;
+      default:
+        throw new Error('Method not implemented.');
+    }
   }
 
   public registerNewlyCreatedEntity(
-    entityTypeName: EntityName,
+    entityName: EntityName,
     entity: IEntityPropertiesWrapper<IRestEntity>
   ) {
-    switch (entityTypeName) {
+    switch (entityName) {
       case EntityName.objectType:
         const objectType: ObjectTypeImpl = entity as ObjectTypeImpl;
-        let index = 0;
-        while (
-          index < this._objectTypes.length &&
-          this._objectTypes[index].name < objectType.name
-        ) {
-          index++;
-        }
-        if (index === this._objectTypes.length) {
-          this._objectTypes.push(objectType);
-        } else {
-          this._objectTypes.splice(index, 0, objectType);
-        }
+        const index = this.insertInArray(this._objectTypes, objectType, 'name');
         this._objectTypesByName[objectType.name] = this._objectTypes[index];
         this._objectTypesById[objectType.id] = this._objectTypes[index];
         this._objectTypesByUri[objectType.uri] = this._objectTypes[index];
+        break;
+      case EntityName.objectSubType:
+        const objectSubType = entity as ObjectSubTypeImpl;
+        const objectSubTypeParent: ObjectTypeImpl = this.getObjectType(
+          objectSubType.objectTypeId
+        );
+        objectSubType.objectType = this.getObjectType(
+          objectSubType.subObjectTypeId
+        );
+        this.insertInArray(
+          objectSubTypeParent.objectSubTypes,
+          objectSubType,
+          'index'
+        );
         break;
 
       default:
@@ -137,19 +185,17 @@ export class ObjectsCommonService {
     switch (entityTypeName) {
       case EntityName.objectType:
         const objectType: ObjectTypeImpl = entity as ObjectTypeImpl;
-        let index = 0;
-        while (
-          index < this._objectTypes.length &&
-          this._objectTypes[index].id !== objectType.id
-        ) {
-          index++;
-        }
-        if (index < this._objectTypes.length) {
-          this._objectTypes.splice(index, 1);
-          delete this._objectTypesByName[objectType.name];
-          delete this._objectTypesById[objectType.id];
-          delete this._objectTypesByUri[objectType.uri];
-        }
+        this.removeFromArray(this._objectTypes, objectType);
+        delete this._objectTypesByName[objectType.name];
+        delete this._objectTypesById[objectType.id];
+        delete this._objectTypesByUri[objectType.uri];
+        break;
+      case EntityName.objectSubType:
+        const objectSubType: ObjectSubTypeImpl = entity as ObjectSubTypeImpl;
+        const objectSubTypeParent: ObjectTypeImpl = this.getObjectType(
+          objectSubType.objectTypeId
+        );
+        this.removeFromArray(objectSubTypeParent.objectSubTypes, objectSubType);
         break;
       default:
         throw new Error('Method not implemented.');

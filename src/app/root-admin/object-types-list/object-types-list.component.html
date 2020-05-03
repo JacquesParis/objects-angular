@@ -1,5 +1,5 @@
 <accordion [isAnimated]="true">
-  <accordion-group *ngFor="let objectType of objectTypes; trackBy: trackByObjectType">
+  <accordion-group *ngFor="let objectType of objectTypes; trackBy: trackByFunc">
     <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
       <div class="pull-left float-left" [innerHTML]="objectType.name"></div>
       <span class="badge badge-secondary float-right pull-right" [innerHTML]="objectType.type">Some HTML here</span>
@@ -10,12 +10,12 @@
     <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
       <div class="pull-left float-left" [innerHTML]="'New type'"></div>
     </button>
-    <app-object-type-card [entity]="newObjectType" (onCancel)="endCreation()" (onSave)="endCreation()">
+    <app-object-type-card [entity]="newEntity" (onCancel)="endCreation()" (onSave)="endCreation()">
     </app-object-type-card>
 
   </accordion-group>
 </accordion>
 
-<button type="button" class="btn btn-primary mr-2 mt-2" *ngIf="!inCreation" (click)="createNewType()">
+<button type="button" class="btn btn-primary mr-2 mt-2" *ngIf="!inCreation" (click)="createNewEntity()">
   Add a type
 </button>

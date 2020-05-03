@@ -9,9 +9,17 @@
         </button>
         <app-object-sub-type-card [entity]="subType"></app-object-sub-type-card>
       </accordion-group>
+
+      <accordion-group *ngIf="inCreation" [isOpen]="true">
+        <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+          <div class="pull-left float-left" [innerHTML]="'New sub type'"></div>
+        </button>
+        <app-object-sub-type-card [entity]="newEntity" (onCancel)="endCreation()" (onSave)="endCreation()">
+        </app-object-sub-type-card>
+      </accordion-group>
     </accordion>
 
-    <button type="button" class="btn btn-primary mr-2 mt-2">
+    <button type="button" class="btn btn-primary mr-2 mt-2" *ngIf="!inCreation" (click)="createNewEntity()">
       Add a sub-type
     </button>
   </div>

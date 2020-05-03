@@ -1,20 +1,31 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { extend } from '@uirouter/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
-import { ObjectTypeImpl } from '@jacquesparis/objects-client';
+import {
+  ObjectTypeImpl,
+  ObjectSubTypeImpl,
+  EntityName,
+} from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import { IObjectSubType } from '@jacquesparis/objects-model';
+import { AbstractRestEntityListComponent } from '../../objects-client/abstract-rest-entity/abtrsact-rest-entity-list.component';
 
 @Component({
   selector: 'app-object-sub-types-accordion',
   templateUrl: './object-sub-types-accordion.component.html',
   styleUrls: ['./object-sub-types-accordion.component.scss'],
 })
-export class ObjectSubTypesAccordionComponent extends CommonComponentComponent {
+export class ObjectSubTypesAccordionComponent extends AbstractRestEntityListComponent<
+  ObjectSubTypeImpl
+> {
   @Input() objectType: ObjectTypeImpl;
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
-    super();
+    super(
+      objectsCommonService,
+      EntityName.objectSubType,
+      EntityName.objectType
+    );
   }
 
   get objectTypes(): ObjectTypeImpl[] {
