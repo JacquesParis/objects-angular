@@ -10,19 +10,15 @@ import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
 @NgModule({
   declarations: [],
   imports: [
-    BrowserModule,
     CommonModule,
     FormsModule,
-    BrowserAnimationsModule,
     AccordionModule,
     ObjectsAngularFormsModule,
     SchemaFormModule,
     Bootstrap4FrameworkModule,
   ],
   exports: [
-    BrowserModule,
     CommonModule,
-    BrowserAnimationsModule,
     AccordionModule,
     FormsModule,
     ObjectsAngularFormsModule,
