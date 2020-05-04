@@ -23,7 +23,8 @@ export abstract class AbtractObjectSubTypeComponent
       (availableObjectType) => {
         this.schema.properties.subObjectTypeId.oneOf.push({
           enum: [availableObjectType.id],
-          title: availableObjectType.name + ' - ' + availableObjectType.type,
+          title:
+            availableObjectType.name + ' - ' + availableObjectType.contentType,
         });
       }
     );

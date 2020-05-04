@@ -2,7 +2,8 @@
   <accordion-group *ngFor="let objectType of objectTypes; trackBy: trackByFunc">
     <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
       <div class="pull-left float-left" [innerHTML]="objectType.name"></div>
-      <span class="badge badge-secondary float-right pull-right" [innerHTML]="objectType.type">Some HTML here</span>
+      <span class="badge badge-secondary float-right pull-right" [innerHTML]="objectType.contentType">Some HTML
+        here</span>
     </button>
     <app-object-type-card [entity]="objectType"></app-object-type-card>
   </accordion-group>

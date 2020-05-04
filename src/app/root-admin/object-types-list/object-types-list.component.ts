@@ -18,9 +18,4 @@ export class ObjectTypesListComponent extends AbstractRestEntityListComponent<
   get objectTypes(): ObjectTypeImpl[] {
     return this.objectsCommonService.objectTypesArray;
   }
-  /*
-  public trackByObjectType(objectType: ObjectTypeImpl) {
-    return objectType.id + objectType.name + objectType.type;
-  }
-*/
 }
