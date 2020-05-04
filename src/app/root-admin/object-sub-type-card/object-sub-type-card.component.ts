@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import * as _ from 'lodash-es';
-import { AbtractObjectSubTypeComponent } from '../../objects-client/components/abtract-object-sub-type.component';
+import { AbstractObjectSubTypeComponent } from '../../objects-client/components/abstract-object-sub-type.component';
 
 @Component({
   selector: 'app-object-sub-type-card',
   templateUrl: './object-sub-type-card.component.html',
   styleUrls: ['./object-sub-type-card.component.scss'],
 })
-export class ObjectSubTypeCardComponent extends AbtractObjectSubTypeComponent {
+export class ObjectSubTypeCardComponent extends AbstractObjectSubTypeComponent {
   @Input() entity: ObjectSubTypeImpl;
   @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();

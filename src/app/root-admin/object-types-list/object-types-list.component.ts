@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import { ObjectTypeImpl, EntityName } from '@jacquesparis/objects-client';
-import { AbstractRestEntityListComponent } from '../../objects-client/abstract-rest-entity/abtrsact-rest-entity-list.component';
+import { AbstractRestEntityListComponent } from '../../objects-client/abstract-rest-entity/abstract-rest-entity-list.component';
 
 @Component({
   selector: 'app-object-types-list',

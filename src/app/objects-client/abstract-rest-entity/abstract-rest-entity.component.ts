@@ -1,21 +1,14 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  EventEmitter,
-} from '@angular/core';
+import { OnInit, EventEmitter } from '@angular/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
-import { extend } from '@uirouter/core';
-import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 import {
   IEntityPropertiesWrapper,
   EntityName,
+  IRestEntity,
 } from '@jacquesparis/objects-client';
 import {
   IJsonSchema,
-  IJsonLayoutPorperty,
+  IJsonLayoutProperty,
 } from '@jacquesparis/objects-angular-forms';
-import { IRestEntity } from '@jacquesparis/objects-model';
 import { ObjectsCommonService } from '../services/objects-common.service';
 
 export abstract class AbstractRestEntityComponent<
@@ -24,7 +17,7 @@ export abstract class AbstractRestEntityComponent<
 > extends CommonComponentComponent implements OnInit {
   entity: EntityWrapper;
   public schema: IJsonSchema;
-  public layout: IJsonLayoutPorperty[] = [];
+  public layout: IJsonLayoutProperty[] = [];
   public abstract onCancel: EventEmitter<void>;
   public abstract onSave: EventEmitter<void>;
   public abstract onDelete: EventEmitter<void>;

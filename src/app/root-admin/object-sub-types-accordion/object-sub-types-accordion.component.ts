@@ -7,8 +7,7 @@ import {
   EntityName,
 } from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
-import { IObjectSubType } from '@jacquesparis/objects-model';
-import { AbstractRestEntityListComponent } from '../../objects-client/abstract-rest-entity/abtrsact-rest-entity-list.component';
+import { AbstractRestEntityListComponent } from '../../objects-client/abstract-rest-entity/abstract-rest-entity-list.component';
 
 @Component({
   selector: 'app-object-sub-types-accordion',

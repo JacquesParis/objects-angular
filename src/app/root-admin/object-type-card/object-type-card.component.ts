@@ -1,6 +1,9 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { ObjectTypeImpl, EntityName } from '@jacquesparis/objects-client';
-import { IObjectType } from '@jacquesparis/objects-model';
+import {
+  ObjectTypeImpl,
+  EntityName,
+  IObjectType,
+} from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import * as _ from 'lodash-es';
 

@@ -1,11 +1,14 @@
 import { AbstractRestEntityComponent } from '../abstract-rest-entity/abstract-rest-entity.component';
-import { IObjectSubType } from '@jacquesparis/objects-model';
-import { ObjectSubTypeImpl, EntityName } from '@jacquesparis/objects-client';
+import {
+  ObjectSubTypeImpl,
+  IObjectSubType,
+  EntityName,
+} from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from '../services/objects-common.service';
 import { OnInit } from '@angular/core';
 import * as _ from 'lodash-es';
 
-export abstract class AbtractObjectSubTypeComponent
+export abstract class AbstractObjectSubTypeComponent
   extends AbstractRestEntityComponent<IObjectSubType, ObjectSubTypeImpl>
   implements OnInit {
   entity: ObjectSubTypeImpl;

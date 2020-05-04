@@ -2,7 +2,6 @@ import { CommonComponentComponent } from '../../common-app/common-component/comm
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 import { ObjectsCommonService } from '../services/objects-common.service';
 import { EntityName } from '@jacquesparis/objects-client';
-import { IRestEntity } from '@jacquesparis/objects-model';
 export class AbstractRestEntityListComponent<
   T extends RestEntityImpl<T>
 > extends CommonComponentComponent {

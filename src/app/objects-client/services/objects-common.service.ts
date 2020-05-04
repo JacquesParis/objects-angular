@@ -11,8 +11,7 @@ import { ConfigurationService } from '../../common-app/services/configuration.se
 import { NotInitialized } from '../../common-app/errors/not-initialized.error';
 import { HttpRestService } from '../../common-app/services/http-rest.service';
 import * as _ from 'lodash-es';
-import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
-import { IRestEntity } from '@jacquesparis/objects-model';
+import { ObjectSubTypeImpl, IRestEntity } from '@jacquesparis/objects-client';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 
 @Injectable({
