@@ -1,13 +1,14 @@
+import { ObjectsCommonService } from './../objects-client/services/objects-common.service';
 import { getParentStateName } from '../app.const';
-import { Ng2StateDeclaration } from '@uirouter/angular';
+import { Ng2StateDeclaration, StateService } from '@uirouter/angular';
 import {
   ADMIN_ROUTE_NAME,
   ADMIN_OBJECTS_LIST_ROUTE_NAME,
-  ADMIN_OBJECT_TYPE_ROUTE_NAME,
+  OBJECT_TREE_TOKEN,
 } from './admin.const';
 import { AdminComponent } from './admin/admin.component';
-import { ADMIN_OBJECT_NAME_ROUTE_NAME } from './admin.const';
 import { ObjectNodesListComponent } from './admin/object-nodes-list/object-nodes-list.component';
+import { ObjectTree } from '../objects-client/models/object-tree';
 
 const adminState: Ng2StateDeclaration = {
   parent: getParentStateName(ADMIN_ROUTE_NAME),
@@ -16,32 +17,36 @@ const adminState: Ng2StateDeclaration = {
   component: AdminComponent,
   redirectTo: {
     state: ADMIN_OBJECTS_LIST_ROUTE_NAME,
-    params: { objectType: 'site', objectName: 'demo' },
+    params: {
+      ownerType: 'tenant',
+      ownerName: 'demo',
+      treeType: 'site',
+      treeName: 'demo',
+    },
   },
-};
-
-const adminObjectTypeState = {
-  parent: getParentStateName(ADMIN_OBJECT_TYPE_ROUTE_NAME),
-  name: ADMIN_OBJECT_TYPE_ROUTE_NAME,
-  url: '/list/:objectType',
-  abstract: true,
-};
-const adminObjectNameState = {
-  parent: getParentStateName(ADMIN_OBJECT_NAME_ROUTE_NAME),
-  name: ADMIN_OBJECT_NAME_ROUTE_NAME,
-  url: '/:objectName',
-  abstract: true,
 };
 const adminObjectsListState = {
   parent: getParentStateName(ADMIN_OBJECTS_LIST_ROUTE_NAME),
   name: ADMIN_OBJECTS_LIST_ROUTE_NAME,
-  url: '',
+  url: '/list/:ownerType/:ownerName/:namespaceType/:namespaceName',
   component: ObjectNodesListComponent,
+  resolve: [
+    {
+      token: OBJECT_TREE_TOKEN,
+      deps: [ObjectsCommonService, StateService],
+      resolveFn: (
+        objectsCommonService: ObjectsCommonService,
+        stateService: StateService
+      ): Promise<ObjectTree> => {
+        return objectsCommonService.getNamespaceTree(
+          stateService.transition.params().ownerType,
+          stateService.transition.params().ownerName,
+          stateService.transition.params().namespaceType,
+          stateService.transition.params().namespaceName
+        );
+      },
+    },
+  ],
 };
 
-export const ADMIN_STATES = [
-  adminState,
-  adminObjectTypeState,
-  adminObjectNameState,
-  adminObjectsListState,
-];
+export const ADMIN_STATES = [adminState, adminObjectsListState];

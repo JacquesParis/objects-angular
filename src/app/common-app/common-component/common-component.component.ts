@@ -1,4 +1,4 @@
-import { IDataEntity } from '@jacquesparis/objects-client';
+import { IDataEntity } from '@jacquesparis/objects-model';
 import {
   Component,
   OnInit,

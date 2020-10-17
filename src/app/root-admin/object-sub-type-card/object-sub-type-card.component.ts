@@ -11,9 +11,6 @@ import { AbstractObjectSubTypeComponent } from '../../objects-client/components/
 })
 export class ObjectSubTypeCardComponent extends AbstractObjectSubTypeComponent {
   @Input() entity: ObjectSubTypeImpl;
-  @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
-  @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
-  @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super(objectsCommonService);

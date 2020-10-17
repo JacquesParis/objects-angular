@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title" [innerHTML]="title"></h5>
+    <lib-editable-json-schema-form
+      *ngIf="!hideNode"
+      [entity]="entity"
+      [saveValue]="saveValueMethod"
+      [schema]="schema"
+      [layout]="layout"
+      (onCancel)="cancelAction()"
+      [deleteValue]="deleteValueMethod"
+    >
+    </lib-editable-json-schema-form>
+  </div>
+</div>
+<div *ngIf="!hideChildren" class="ml-3">
+  <ng-container *ngFor="let subType of subTypes">
+    <app-object-node-children-accordion
+      [objectSubType]="subType"
+      [objectTree]="objectTree"
+      *ngIf="subType.objectType"
+    ></app-object-node-children-accordion>
+  </ng-container>
+</div>

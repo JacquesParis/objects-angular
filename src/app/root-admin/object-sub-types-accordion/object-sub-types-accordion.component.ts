@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { extend } from '@uirouter/core';
-import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
+import { EditableFormService } from '@jacquesparis/objects-angular-forms';
+import { Component, Input } from '@angular/core';
 import {
   ObjectTypeImpl,
   ObjectSubTypeImpl,
@@ -19,9 +18,13 @@ export class ObjectSubTypesAccordionComponent extends AbstractRestEntityListComp
 > {
   @Input() objectType: ObjectTypeImpl;
 
-  constructor(protected objectsCommonService: ObjectsCommonService) {
+  constructor(
+    protected objectsCommonService: ObjectsCommonService,
+    protected editableFormService: EditableFormService
+  ) {
     super(
       objectsCommonService,
+      editableFormService,
       EntityName.objectSubType,
       EntityName.objectType
     );

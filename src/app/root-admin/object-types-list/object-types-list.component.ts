@@ -1,3 +1,4 @@
+import { EditableFormService } from '@jacquesparis/objects-angular-forms';
 import { Component, OnInit } from '@angular/core';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import { ObjectTypeImpl, EntityName } from '@jacquesparis/objects-client';
@@ -11,8 +12,11 @@ import { AbstractRestEntityListComponent } from '../../objects-client/abstract-r
 export class ObjectTypesListComponent extends AbstractRestEntityListComponent<
   ObjectTypeImpl
 > {
-  constructor(protected objectsCommonService: ObjectsCommonService) {
-    super(objectsCommonService, EntityName.objectType);
+  constructor(
+    protected objectsCommonService: ObjectsCommonService,
+    protected editableFormService: EditableFormService
+  ) {
+    super(objectsCommonService, editableFormService, EntityName.objectType);
   }
 
   get objectTypes(): ObjectTypeImpl[] {

@@ -1,9 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import {
-  ObjectTypeImpl,
-  EntityName,
-  IObjectType,
-} from '@jacquesparis/objects-client';
+import { ObjectTypeImpl, EntityName } from '@jacquesparis/objects-client';
+import { IObjectType } from '@jacquesparis/objects-model';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
 import * as _ from 'lodash-es';
 
@@ -19,9 +16,6 @@ export class ObjectTypeCardComponent extends AbstractRestEntityComponent<
   ObjectTypeImpl
 > {
   @Input() entity: ObjectTypeImpl;
-  @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
-  @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
-  @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super(EntityName.objectType, objectsCommonService);

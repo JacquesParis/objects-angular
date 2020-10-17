@@ -1,3 +1,4 @@
+import { AdminModule } from './../admin/admin.module';
 import { NgModule } from '@angular/core';
 import { RootAdminComponent } from './root-admin/root-admin.component';
 import { CommonAppModule } from '../common-app/common-app.module';
@@ -11,6 +12,7 @@ import { ObjectSubTypeCardComponent } from './object-sub-type-card/object-sub-ty
 @NgModule({
   imports: [
     CommonAppModule,
+    AdminModule,
     UIRouterModule.forChild({
       states: ROOT_ADMIN_STATES,
     }),

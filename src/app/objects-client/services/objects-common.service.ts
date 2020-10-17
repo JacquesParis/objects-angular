@@ -1,3 +1,5 @@
+import { ObjectTree } from './../models/object-tree';
+import { element } from 'protractor';
 import { Injectable } from '@angular/core';
 import {
   ObjectTypesService,
@@ -6,12 +8,15 @@ import {
   IJsonSchema,
   ObjectSubTypesService,
   IEntityPropertiesWrapper,
+  ObjectNodesService,
+  ObjectNodeImpl,
 } from '@jacquesparis/objects-client';
 import { ConfigurationService } from '../../common-app/services/configuration.service';
 import { NotInitialized } from '../../common-app/errors/not-initialized.error';
 import { HttpRestService } from '../../common-app/services/http-rest.service';
 import * as _ from 'lodash-es';
-import { ObjectSubTypeImpl, IRestEntity } from '@jacquesparis/objects-client';
+import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
+import { IRestEntity } from '@jacquesparis/objects-model';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 
 @Injectable({
@@ -22,11 +27,14 @@ export class ObjectsCommonService {
   private _objectTypesByName: { [uri: string]: ObjectTypeImpl } = {};
   private _objectTypesByUri: { [uri: string]: ObjectTypeImpl } = {};
   private _objectTypesById: { [id: string]: ObjectTypeImpl } = {};
-  private entitySchema: Partial<
-    { [entityType in EntityName]: IJsonSchema }
-  > = {};
+  private _objectTreeNodesById: { [id: string]: ObjectTree } = {};
+
   private objectsTypeService: ObjectTypesService;
   private objectsSubTypeService: ObjectSubTypesService;
+  private objectNodesService: ObjectNodesService;
+  private _objectTrees: {
+    [treeType: string]: { [treeName: string]: ObjectTree };
+  } = {};
   constructor(
     protected configurationService: ConfigurationService,
     protected httpRestService: HttpRestService
@@ -35,16 +43,14 @@ export class ObjectsCommonService {
       this.httpRestService,
       this.configurationService.getServer()
     );
-    this.entitySchema[
-      this.objectsTypeService.entityName
-    ] = this.objectsTypeService.entityDefinition;
     this.objectsSubTypeService = ObjectSubTypesService.getService(
       this.httpRestService,
       this.configurationService.getServer()
     );
-    this.entitySchema[
-      this.objectsSubTypeService.entityName
-    ] = this.objectsSubTypeService.entityDefinition;
+    this.objectNodesService = ObjectNodesService.getService(
+      this.httpRestService,
+      this.configurationService.getServer()
+    );
   }
 
   public async init(): Promise<void> {
@@ -84,6 +90,16 @@ export class ObjectsCommonService {
     return this._objectTypesById[id];
   }
 
+  public getObjectNode(id): ObjectNodeImpl {
+    return this._objectTreeNodesById[id]
+      ? this._objectTreeNodesById[id].treeNode
+      : null;
+  }
+
+  public getObjectTree(id): ObjectTree {
+    return this._objectTreeNodesById[id];
+  }
+
   get rootType(): ObjectTypeImpl {
     return this.configurationService.getRootObjectTypeName() in
       this._objectTypesByName
@@ -93,11 +109,25 @@ export class ObjectsCommonService {
       : this._objectTypes[0];
   }
 
-  public getSchema(entityName: EntityName) {
-    return this.entitySchema[entityName];
+  public getSchema(entityName: EntityName, entity?: IRestEntity) {
+    switch (entityName) {
+      case EntityName.objectType:
+        return this.objectsTypeService.entityDefinition;
+      case EntityName.objectSubType:
+        return this.objectsSubTypeService.getSchema(
+          entity as ObjectSubTypeImpl,
+          this.getObjectType((entity as ObjectSubTypeImpl).objectTypeId),
+          this.objectTypesArray
+        );
+      case EntityName.objectNode:
+        return this.objectNodesService.entityDefinition;
+      default:
+        throw new Error('Unknown schema');
+        break;
+    }
   }
 
-  public insertInArray(entities: any[], entity: any, sortKey: string): number {
+  private insertInArray(entities: any[], entity: any, sortKey: string): number {
     const index = _.sortedIndexBy(entities, entity, (o) => {
       return o[sortKey];
     });
@@ -117,7 +147,7 @@ export class ObjectsCommonService {
       entities.splice(index, 0, entity);
     }*/
   }
-  public removeFromArray(entities: any[], entity: any, idKey: string = 'id') {
+  private removeFromArray(entities: any[], entity: any, idKey: string = 'id') {
     entities.splice(
       _.findIndex(entities, (o) => {
         return o[idKey] === entity[idKey];
@@ -128,7 +158,11 @@ export class ObjectsCommonService {
 
   public newEntity<T extends RestEntityImpl<T>>(
     entityName: EntityName,
-    parentEntity?: IRestEntity
+    entitySpeficities: {
+      [specifity: string]: any;
+      parentEntity?: IRestEntity;
+      entityType?: IRestEntity;
+    }
   ): T {
     switch (entityName) {
       case EntityName.objectType:
@@ -137,8 +171,16 @@ export class ObjectsCommonService {
       case EntityName.objectSubType:
         return (new ObjectSubTypeImpl(
           this.objectsSubTypeService,
-          parentEntity.id,
-          parentEntity.uri
+          entitySpeficities.parentEntity.id,
+          entitySpeficities.parentEntity.uri
+        ) as unknown) as T;
+      case EntityName.objectNode:
+        return (new ObjectNodeImpl(
+          this.objectNodesService,
+          entitySpeficities.parentEntity.id,
+          entitySpeficities.parentEntity.uri,
+          entitySpeficities.entityType.id,
+          entitySpeficities.entityType.uri
         ) as unknown) as T;
       default:
         throw new Error('Method not implemented.');
@@ -172,6 +214,13 @@ export class ObjectsCommonService {
         );
         break;
 
+      case EntityName.objectNode:
+        const objectNode = entity as ObjectNodeImpl;
+        const parentTree = this.getObjectTree(objectNode.parentNodeId);
+        parentTree.addChildren([objectNode], this._objectTypesById);
+        this.updateRegisteredTrees(parentTree);
+        break;
+
       default:
         throw new Error('Method not implemented.');
         break;
@@ -196,9 +245,89 @@ export class ObjectsCommonService {
         );
         this.removeFromArray(objectSubTypeParent.objectSubTypes, objectSubType);
         break;
+      case EntityName.objectNode:
+        const objectNode: ObjectNodeImpl = entity as ObjectNodeImpl;
+        const objectTree: ObjectTree = this.getObjectTree(objectNode.id);
+        this.deleteRegisteredTrees(objectTree);
+        break;
       default:
         throw new Error('Method not implemented.');
         break;
+    }
+  }
+
+  private updateRegisteredTrees(tree: ObjectTree) {
+    this._objectTreeNodesById[tree.id] = tree;
+    for (const children of _.values(tree.childrenByType)) {
+      for (const child of children) {
+        this.updateRegisteredTrees(child);
+      }
+    }
+  }
+  private deleteRegisteredTrees(tree: ObjectTree) {
+    const parentTree = this.getObjectTree(tree.parentId);
+    this.removeFromArray(parentTree.childrenByType[tree.treeType.id], tree);
+    for (const children of _.values(tree.childrenByType)) {
+      for (const child of children) {
+        this.deleteRegisteredTrees(child);
+      }
+    }
+    delete this._objectTreeNodesById[tree.id];
+  }
+
+  public async getNamespaceTree(
+    ownerType: any,
+    ownerName: any,
+    namespaceType: any,
+    namespaceName: any
+  ): Promise<ObjectTree> {
+    const ownerTreeType = ownerType + '$$' + ownerName + '$$' + namespaceType;
+    if (!(ownerTreeType in this._objectTrees)) {
+      this._objectTrees[ownerTreeType] = {};
+    }
+    if (!(namespaceName in this._objectTrees[ownerTreeType])) {
+      const nodes = await this.objectNodesService.getAll(
+        ownerType,
+        ownerName,
+        namespaceType,
+        namespaceName
+      );
+      this._objectTrees[ownerTreeType][namespaceName] = new ObjectTree(
+        nodes[0],
+        nodes,
+        this._objectTypesById
+      );
+      this.updateRegisteredTrees(
+        this._objectTrees[ownerTreeType][namespaceName]
+      );
+    }
+    return this._objectTrees[ownerTreeType][namespaceName];
+  }
+
+  public async getOwnerTree(
+    ownerType: any,
+    ownerName: any
+  ): Promise<ObjectTree> {
+    if (!(ownerType in this._objectTrees)) {
+      this._objectTrees[ownerType] = {};
+    }
+    if (!(ownerName in this._objectTrees[ownerType])) {
+      const nodes = await this.objectNodesService.getAll(ownerType, ownerName);
+      this._objectTrees[ownerType][ownerName] = new ObjectTree(
+        nodes[0],
+        nodes,
+        this._objectTypesById
+      );
+      this.updateRegisteredTrees(this._objectTrees[ownerType][ownerName]);
+    }
+    return this._objectTrees[ownerType][ownerName];
+  }
+
+  public async loadSubTree(tree: ObjectTree) {
+    if (!tree.childsLoaded) {
+      const nodes = await this.objectNodesService.getChilds(tree.id);
+      tree.addChildren(nodes, this._objectTypesById);
+      this.updateRegisteredTrees(tree);
     }
   }
 }

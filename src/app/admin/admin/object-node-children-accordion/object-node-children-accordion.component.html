@@ -1,0 +1,94 @@
+<div>
+  <h5 for="children">{{ objectSubType.name }}</h5>
+  <div name="children">
+    <accordion [isAnimated]="true">
+      <accordion-group
+        [isOpen]="isOpen(child)"
+        *ngFor="let child of children; let index = index; trackBy: trackByFunc"
+        (isOpenChange)="checkLoadedChilds(child, $event)"
+      >
+        <button
+          class="btn btn-link btn-block clearfix"
+          accordion-heading
+          type="button"
+        >
+          <div
+            class="pull-left float-left"
+            [innerHTML]="child.treeNode.name"
+          ></div>
+          <span
+            class="badge badge-secondary float-right pull-right"
+            [innerHTML]="child.treeType.name"
+          ></span>
+        </button>
+        <div>
+          <div class="position-relative hideAccordion">
+            <button
+              type="button"
+              class="btn btn-primary my-1 mr-2 float-left"
+              (click)="setOpen(child, false)"
+            >
+              Back
+            </button>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <ng-container
+                  *ngTemplateOutlet="parentNode; context: { node: objectNode }"
+                ></ng-container>
+                <li
+                  class="breadcrumb-item"
+                  aria-current="page"
+                  [innerHTML]="child.treeNode.name"
+                ></li>
+              </ol>
+            </nav>
+
+            <ng-template #parentNode let-node="node">
+              <ng-container *ngIf="getObjectNode(node.parentNodeId)"
+                ><ng-container
+                  *ngTemplateOutlet="
+                    parentNode;
+                    context: { node: getObjectNode(node.parentNodeId) }
+                  "
+                ></ng-container
+              ></ng-container>
+
+              <li class="breadcrumb-item" [innerHTML]="node.name"></li>
+            </ng-template>
+          </div>
+          <app-object-node-card [objectTree]="child"></app-object-node-card>
+        </div>
+      </accordion-group>
+
+      <accordion-group *ngIf="inCreation" [isOpen]="true">
+        <button
+          class="btn btn-link btn-block clearfix"
+          accordion-heading
+          type="button"
+        >
+          <div
+            class="pull-left float-left"
+            [innerHTML]="'New ' + objectSubType.name"
+          ></div>
+        </button>
+        <app-object-node-card
+          [hideChildren]="true"
+          [objectTree]="newTree"
+          (onCancel)="endCreation()"
+          (onSave)="endCreation()"
+        >
+        </app-object-node-card>
+      </accordion-group>
+    </accordion>
+
+    <button
+      type="button"
+      class="btn btn-primary mr-2 mt-2"
+      *ngIf="!inCreation"
+      [disabled]="disabledAction"
+      (click)="createNewEntity()"
+    >
+      Add {{ objectSubType.name }}
+    </button>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
 import { UIRouterModule } from '@uirouter/angular';
@@ -28,6 +29,7 @@ import {
       states: [...APP_STATES, ...LAZY_STATES],
       useHash: true,
     }),
+    ModalModule.forRoot(),
     SchemaFormModule.forRoot(),
     ObjectsClientModule,
     CommonAppModule,

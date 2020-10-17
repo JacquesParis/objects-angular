@@ -1,9 +1,6 @@
 import { AbstractRestEntityComponent } from '../abstract-rest-entity/abstract-rest-entity.component';
-import {
-  ObjectSubTypeImpl,
-  IObjectSubType,
-  EntityName,
-} from '@jacquesparis/objects-client';
+import { ObjectSubTypeImpl, EntityName } from '@jacquesparis/objects-client';
+import { IObjectSubType } from '@jacquesparis/objects-model';
 import { ObjectsCommonService } from '../services/objects-common.service';
 import { OnInit } from '@angular/core';
 import * as _ from 'lodash-es';
@@ -16,7 +13,7 @@ export abstract class AbstractObjectSubTypeComponent
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super(EntityName.objectSubType, objectsCommonService);
   }
-
+  /*
   ngOnInit() {
     super.ngOnInit();
 
@@ -61,5 +58,5 @@ export abstract class AbstractObjectSubTypeComponent
       delete this.schema.properties.exclusions;
       delete this.schema.properties.mandatories;
     }
-  }
+  }*/
 }

@@ -1,0 +1,26 @@
+::ng-deep {
+  .hideAccordion {
+    display: none;
+    overflow: hidden;
+  }
+}
+.fullScreen::ng-deep {
+  .hideAccordion {
+    display: block;
+  }
+  .panel-collapse.collapse.in {
+    /*display: none;
+    position: relative;
+    transition: top 2s, left 2s, right 2s, bottom 2s, position 2s;*/
+    &.show {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      background-color: white;
+    }
+  }
+}

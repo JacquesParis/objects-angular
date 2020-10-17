@@ -1,10 +1,10 @@
-import { OnInit, EventEmitter } from '@angular/core';
+import { OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
 import {
   IEntityPropertiesWrapper,
   EntityName,
-  IRestEntity,
 } from '@jacquesparis/objects-client';
+import { IRestEntity } from '@jacquesparis/objects-model';
 import {
   IJsonSchema,
   IJsonLayoutProperty,
@@ -12,15 +12,17 @@ import {
 import { ObjectsCommonService } from '../services/objects-common.service';
 
 export abstract class AbstractRestEntityComponent<
-  Entity extends IRestEntity,
-  EntityWrapper extends IEntityPropertiesWrapper<Entity>
-> extends CommonComponentComponent implements OnInit {
-  entity: EntityWrapper;
+    Entity extends IRestEntity,
+    EntityWrapper extends IEntityPropertiesWrapper<Entity>
+  >
+  extends CommonComponentComponent
+  implements OnInit {
+  abstract entity: EntityWrapper;
   public schema: IJsonSchema;
   public layout: IJsonLayoutProperty[] = [];
-  public abstract onCancel: EventEmitter<void>;
-  public abstract onSave: EventEmitter<void>;
-  public abstract onDelete: EventEmitter<void>;
+  @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
   constructor(
     protected entityTypeName: EntityName,
     protected objectsCommonService: ObjectsCommonService
@@ -29,7 +31,10 @@ export abstract class AbstractRestEntityComponent<
   }
 
   ngOnInit() {
-    this.schema = this.objectsCommonService.getSchema(this.entityTypeName);
+    this.schema = this.objectsCommonService.getSchema(
+      this.entityTypeName,
+      this.entity
+    );
   }
 
   get saveValueMethod(): (value) => Promise<void> {

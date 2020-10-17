@@ -12,6 +12,32 @@ import {
 } from '@jacquesparis/objects-client';
 import { Observable } from 'rxjs';
 
+interface HttpErrorInterface {
+  headers?: { [header: string]: any };
+  status?: number; // 405
+  statusCode?: number; // 405,
+  statusText?: string; // "Method Not Allowed",
+  url?: string; // "http://localhost:3000/api/object-nodes/84f55252-c50b-453e-b549-ef5568c0aa97",
+  ok?: boolean; // false,
+  name: string; // "HttpErrorResponse",
+  message: string; // "Http failure response for http://localhost:3000...: 405 Method Not Allowed",
+  error?: {
+    error?: HttpErrorInterface;
+  };
+}
+
+export class HttpRestError extends Error {
+  constructor(public error: HttpErrorInterface) {
+    super(HttpRestError.buildMessage(error));
+  }
+  public static buildMessage(error: HttpErrorInterface): string {
+    if (error.error && error.error.error) {
+      return this.buildMessage(error.error.error);
+    }
+    return error.message ? error.message : 'Unexpected error';
+  }
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -46,31 +72,15 @@ export class HttpRestService implements IRestService {
       response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
-      throw error;
+      throw new HttpRestError(error);
     }
     return response;
   }
 
   public async put<T>(uri: string, entity: T): Promise<IRestResponse<void>> {
-    const response: IRestResponse<void> = { result: null, status: null };
-    const options: any = {
-      responseType: 'json',
-      observe: 'events',
-    };
-    try {
-      const httpResponse: HttpResponse<void> = (await ((this.httpClient.put(
-        uri,
-        entity,
-        options
-      ) as unknown) as Observable<
-        HttpResponse<void>
-      >).toPromise()) as HttpResponse<void>;
-      response.result = httpResponse.body;
-      response.status = httpResponse.status;
-    } catch (error) {
-      throw error;
-    }
-    return response;
+    return this.patchOdPushOrPost('put', uri, entity) as Promise<
+      IRestResponse<void>
+    >;
   }
 
   public patch<T>(uri: string, entity: T): Promise<IRestResponse<void>> {
@@ -95,9 +105,10 @@ export class HttpRestService implements IRestService {
       ) as unknown) as Observable<
         HttpResponse<void>
       >).toPromise()) as HttpResponse<void>;
+      response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
-      throw error;
+      throw new HttpRestError(error);
     }
     return response;
   }
@@ -107,23 +118,21 @@ export class HttpRestService implements IRestService {
     uri: string,
     entity: T
   ): Promise<IRestResponse<void | T>> {
-    const response: IRestResponse<void> = { result: null, status: null };
+    const response: IRestResponse<void | T> = { result: null, status: null };
     const options: any = {
       responseType: 'json',
       observe: 'events',
     };
     try {
-      const httpResponse: HttpResponse<void> = (await ((this.httpClient[type](
-        uri,
-        entity,
-        options
-      ) as unknown) as Observable<
-        HttpResponse<void>
-      >).toPromise()) as HttpResponse<void>;
+      const httpResponse: HttpResponse<void | T> = (await ((this.httpClient[
+        type
+      ](uri, entity, options) as unknown) as Observable<
+        HttpResponse<void | T>
+      >).toPromise()) as HttpResponse<void | T>;
       response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
-      throw error;
+      throw new HttpRestError(error);
     }
     return response;
   }
