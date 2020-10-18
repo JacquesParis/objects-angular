@@ -1,11 +1,9 @@
 import { ObjectTree } from './../models/object-tree';
-import { element } from 'protractor';
 import { Injectable } from '@angular/core';
 import {
   ObjectTypesService,
   ObjectTypeImpl,
   EntityName,
-  IJsonSchema,
   ObjectSubTypesService,
   IEntityPropertiesWrapper,
   ObjectNodesService,
@@ -16,7 +14,7 @@ import { NotInitialized } from '../../common-app/errors/not-initialized.error';
 import { HttpRestService } from '../../common-app/services/http-rest.service';
 import * as _ from 'lodash-es';
 import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
-import { IRestEntity } from '@jacquesparis/objects-model';
+import { IJsonSchema, IRestEntity } from '@jacquesparis/objects-model';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 
 @Injectable({
@@ -109,7 +107,7 @@ export class ObjectsCommonService {
       : this._objectTypes[0];
   }
 
-  public getSchema(entityName: EntityName, entity?: IRestEntity) {
+  public getSchema(entityName: EntityName, entity?: IRestEntity): IJsonSchema {
     switch (entityName) {
       case EntityName.objectType:
         return this.objectsTypeService.entityDefinition;
@@ -120,10 +118,11 @@ export class ObjectsCommonService {
           this.objectTypesArray
         );
       case EntityName.objectNode:
-        return this.objectNodesService.entityDefinition;
+        return this.objectNodesService.getSchema(
+          this.getObjectType((entity as ObjectNodeImpl).objectTypeId)
+        );
       default:
         throw new Error('Unknown schema');
-        break;
     }
   }
 

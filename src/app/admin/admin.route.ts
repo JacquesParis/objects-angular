@@ -20,8 +20,8 @@ const adminState: Ng2StateDeclaration = {
     params: {
       ownerType: 'tenant',
       ownerName: 'demo',
-      treeType: 'site',
-      treeName: 'demo',
+      namespaceType: 'site',
+      namespaceName: 'demo',
     },
   },
 };

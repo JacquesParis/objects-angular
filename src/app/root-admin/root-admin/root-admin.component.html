@@ -1,9 +1,15 @@
-<ul class="nav">
-  <li class="nav-item">
-    <a class="nav-link active" [uiSref]="objectTypesRootName">Types</a>
+<ul class="nav nav-tabs position-fixed">
+  <li class="nav-item mt-1 ml-1">
+    <a class="nav-link" [uiSrefActive]="'active'" [uiSref]="objectTypesRootName"
+      >Types</a
+    >
   </li>
-  <li class="nav-item">
-    <a class="nav-link" [uiSref]="objectsRootName">Objects</a>
+  <li class="nav-item mt-1 ml-1">
+    <a class="nav-link" [uiSrefActive]="'active'" [uiSref]="objectsRootName"
+      >Objects</a
+    >
   </li>
 </ul>
-<ui-view></ui-view>
+<div class="mt-5">
+  <ui-view></ui-view>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ObjectNodesListService {
   private _isOpen: { [childId: string]: boolean } = {};
   constructor() {}

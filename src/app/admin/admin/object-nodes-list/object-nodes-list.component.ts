@@ -12,7 +12,6 @@ export enum ObjectNodesListMode {
   selector: 'app-object-nodes-list',
   templateUrl: './object-nodes-list.component.html',
   styleUrls: ['./object-nodes-list.component.scss'],
-  providers: [ObjectNodesListService],
 })
 export class ObjectNodesListComponent implements OnInit {
   public viewMode = ObjectNodesListMode.fullScreen;
