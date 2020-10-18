@@ -1,3 +1,4 @@
+import { ObjectNodesListService } from './object-nodes-list.service';
 import { ObjectTree } from './../../../objects-client/models/object-tree';
 import { OBJECT_TREE_TOKEN } from './../../admin.const';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -11,6 +12,7 @@ export enum ObjectNodesListMode {
   selector: 'app-object-nodes-list',
   templateUrl: './object-nodes-list.component.html',
   styleUrls: ['./object-nodes-list.component.scss'],
+  providers: [ObjectNodesListService],
 })
 export class ObjectNodesListComponent implements OnInit {
   public viewMode = ObjectNodesListMode.fullScreen;

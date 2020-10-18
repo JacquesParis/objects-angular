@@ -1,3 +1,4 @@
+import { ObjectNodesListService } from './../object-nodes-list/object-nodes-list.service';
 import { ObjectTree } from '../../../objects-client/models/object-tree';
 import { Component, OnInit, Input } from '@angular/core';
 import {
@@ -21,10 +22,10 @@ export class ObjectNodeChildrenAccordionComponent
   implements OnInit {
   @Input() objectTree: ObjectTree;
   @Input() objectSubType: ObjectSubTypeImpl;
-  private _isOpen: { [childId: string]: boolean } = {};
   constructor(
     protected objectsCommonService: ObjectsCommonService,
-    protected editableFormService: EditableFormService
+    protected editableFormService: EditableFormService,
+    protected objectNodesListService: ObjectNodesListService
   ) {
     super(
       objectsCommonService,
@@ -36,10 +37,16 @@ export class ObjectNodeChildrenAccordionComponent
   }
 
   public isOpen(child: ObjectTree): boolean {
-    return !!this._isOpen[child.id];
+    return this.objectNodesListService.isOpen(child.id);
   }
-  public setOpen(child: ObjectTree, value = true) {
-    this._isOpen[child.id] = value;
+  public setOpen(child: ObjectTree, value = true, parents: ObjectTree[] = []) {
+    for (const parent of parents) {
+      this.setOpen(parent, value);
+    }
+    if (child.parentId === this.objectNode.id && value && !child.childsLoaded) {
+      this.objectsCommonService.loadSubTree(child);
+    }
+    this.objectNodesListService.setOpen(child.id, value);
   }
 
   public ngOnInit() {
@@ -70,9 +77,5 @@ export class ObjectNodeChildrenAccordionComponent
 
   public checkLoadedChilds(objectTree: ObjectTree, open) {
     this.setOpen(objectTree, open);
-
-    if (!objectTree.childsLoaded) {
-      this.objectsCommonService.loadSubTree(objectTree);
-    }
   }
 }

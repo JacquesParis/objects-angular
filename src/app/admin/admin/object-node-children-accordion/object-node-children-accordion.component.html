@@ -33,7 +33,10 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <ng-container
-                  *ngTemplateOutlet="parentNode; context: { node: objectNode }"
+                  *ngTemplateOutlet="
+                    parentNode;
+                    context: { node: objectNode, parents: [] }
+                  "
                 ></ng-container>
                 <li
                   class="breadcrumb-item"
@@ -43,17 +46,25 @@
               </ol>
             </nav>
 
-            <ng-template #parentNode let-node="node">
+            <ng-template #parentNode let-node="node" let-parents="parents">
               <ng-container *ngIf="getObjectNode(node.parentNodeId)"
                 ><ng-container
                   *ngTemplateOutlet="
                     parentNode;
-                    context: { node: getObjectNode(node.parentNodeId) }
+                    context: {
+                      node: getObjectNode(node.parentNodeId),
+                      parents: parents.concat(node)
+                    }
                   "
                 ></ng-container
               ></ng-container>
 
-              <li class="breadcrumb-item" [innerHTML]="node.name"></li>
+              <li
+                class="breadcrumb-item"
+                (click)="setOpen(child, false, parents.reverse())"
+              >
+                <a [innerHTML]="node.name" href="javascript:"></a>
+              </li>
             </ng-template>
           </div>
           <app-object-node-card [objectTree]="child"></app-object-node-card>
