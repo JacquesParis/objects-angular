@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpResponse,
-  HttpHeaders,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import {
   IRestService,
   IRestQueryParam,
   IRestResponse,
 } from '@jacquesparis/objects-client';
 import { Observable } from 'rxjs';
+import * as _ from 'lodash-es';
 
 interface HttpErrorInterface {
   headers?: { [header: string]: any };
@@ -124,9 +120,31 @@ export class HttpRestService implements IRestService {
       observe: 'events',
     };
     try {
+      let postData: any = entity;
+      let postUri = uri;
+      if (
+        _.isObject(entity) &&
+        _.some(entity, (value) => {
+          return 'File' === value?.constructor?.name;
+        })
+      ) {
+        const formData = new FormData();
+        for (const key in entity) {
+          if ('File' === entity[key]?.constructor?.name) {
+            const file = (entity[key] as unknown) as File;
+            formData.append(key, file, file.name);
+          } else if (_.isString(entity[key])) {
+            formData.append(key, (entity[key] as unknown) as string);
+          } else if (_.isNumber(entity[key])) {
+            formData.append(key, Number(entity[key]).toString());
+          }
+        }
+        postData = formData;
+        postUri = postUri + (postUri.endsWith('/') ? '' : '/') + 'multipart/';
+      }
       const httpResponse: HttpResponse<void | T> = (await ((this.httpClient[
         type
-      ](uri, entity, options) as unknown) as Observable<
+      ](postUri, postData, options) as unknown) as Observable<
         HttpResponse<void | T>
       >).toPromise()) as HttpResponse<void | T>;
       response.result = httpResponse.body;

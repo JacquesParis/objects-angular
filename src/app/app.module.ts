@@ -1,3 +1,4 @@
+import { ObjectsAngularFormsModule } from '@jacquesparis/objects-angular-forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
