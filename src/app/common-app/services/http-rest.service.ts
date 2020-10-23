@@ -73,20 +73,32 @@ export class HttpRestService implements IRestService {
     return response;
   }
 
-  public async put<T>(uri: string, entity: T): Promise<IRestResponse<void>> {
-    return this.patchOdPushOrPost('put', uri, entity) as Promise<
+  public async put<T>(
+    uri: string,
+    entity: T,
+    formDataUri?: string
+  ): Promise<IRestResponse<void>> {
+    return this.patchOdPushOrPost('put', uri, entity, formDataUri) as Promise<
       IRestResponse<void>
     >;
   }
 
-  public patch<T>(uri: string, entity: T): Promise<IRestResponse<void>> {
-    return this.patchOdPushOrPost('patch', uri, entity) as Promise<
+  public patch<T>(
+    uri: string,
+    entity: T,
+    formDataUri?: string
+  ): Promise<IRestResponse<void>> {
+    return this.patchOdPushOrPost('patch', uri, entity, formDataUri) as Promise<
       IRestResponse<void>
     >;
   }
 
-  public post<T>(uri: string, entity: T): Promise<IRestResponse<T>> {
-    return this.patchOdPushOrPost('post', uri, entity) as Promise<
+  public post<T>(
+    uri: string,
+    entity: T,
+    formDataUri?: string
+  ): Promise<IRestResponse<T>> {
+    return this.patchOdPushOrPost('post', uri, entity, formDataUri) as Promise<
       IRestResponse<T>
     >;
   }
@@ -109,10 +121,49 @@ export class HttpRestService implements IRestService {
     return response;
   }
 
+  protected lookForFormData(
+    value: any,
+    formData = new FormData(),
+    jsonPath = ''
+  ): boolean | FormData {
+    let fileFound = false;
+    if ('File' === value?.constructor?.name) {
+      const file = (value as unknown) as File;
+      formData.append(jsonPath, file, file.name);
+      fileFound = true;
+    } else if (_.isObject(value)) {
+      // tslint:disable-next-line: forin
+      for (const key in value) {
+        fileFound =
+          fileFound ||
+          !!this.lookForFormData(
+            value[key],
+            formData,
+            ('' !== jsonPath ? jsonPath + '.' : '') + key
+          );
+      }
+    } else if (_.isArray(value)) {
+      // tslint:disable-next-line: forin
+      for (const index in value) {
+        fileFound =
+          fileFound ||
+          !!this.lookForFormData(
+            value[index],
+            formData,
+            jsonPath + '[' + index + ']'
+          );
+      }
+    } else {
+      formData.append(jsonPath, JSON.stringify(value));
+    }
+    return fileFound ? formData : false;
+  }
+
   protected async patchOdPushOrPost<T>(
     type: 'patch' | 'put' | 'post',
     uri: string,
-    entity: T
+    entity: T,
+    formDataUri?: string
   ): Promise<IRestResponse<void | T>> {
     const response: IRestResponse<void | T> = { result: null, status: null };
     const options: any = {
@@ -122,25 +173,12 @@ export class HttpRestService implements IRestService {
     try {
       let postData: any = entity;
       let postUri = uri;
-      if (
-        _.isObject(entity) &&
-        _.some(entity, (value) => {
-          return 'File' === value?.constructor?.name;
-        })
-      ) {
-        const formData = new FormData();
-        for (const key in entity) {
-          if ('File' === entity[key]?.constructor?.name) {
-            const file = (entity[key] as unknown) as File;
-            formData.append(key, file, file.name);
-          } else if (_.isString(entity[key])) {
-            formData.append(key, (entity[key] as unknown) as string);
-          } else if (_.isNumber(entity[key])) {
-            formData.append(key, Number(entity[key]).toString());
-          }
+      if (formDataUri) {
+        const formData = this.lookForFormData(entity);
+        if (formData) {
+          postData = formData;
+          postUri = formDataUri;
         }
-        postData = formData;
-        postUri = postUri + (postUri.endsWith('/') ? '' : '/') + 'multipart/';
       }
       const httpResponse: HttpResponse<void | T> = (await ((this.httpClient[
         type
