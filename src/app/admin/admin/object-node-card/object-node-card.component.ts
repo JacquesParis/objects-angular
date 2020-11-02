@@ -1,9 +1,9 @@
-import { ObjectTree } from './../../../objects-client/models/object-tree';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
 import {
   ObjectNodeImpl,
   EntityName,
   ObjectTypeImpl,
+  ObjectTreeImpl,
 } from '@jacquesparis/objects-client';
 import { Component, Input } from '@angular/core';
 import { AbstractRestEntityComponent } from '../../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
@@ -18,7 +18,7 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
   IObjectNode,
   ObjectNodeImpl
 > {
-  @Input() objectTree: ObjectTree;
+  @Input() objectTree: ObjectTreeImpl;
   @Input() hideNode = false;
   @Input() hideChildren = false;
 
@@ -31,7 +31,7 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
   }
 
   get treeType() {
-    return this.objectTree.treeType;
+    return this.objectTree.treeNode.objectType;
   }
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
@@ -39,6 +39,6 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
   }
 
   get subTypes() {
-    return this.objectTree.treeType.objectSubTypes;
+    return this.objectTree.treeNode.objectType.objectSubTypes;
   }
 }

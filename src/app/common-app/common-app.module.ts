@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ObjectsAngularFormsModule } from '@jacquesparis/objects-angular-forms';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { SchemaFormModule } from 'ngx-schema-form';
 import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
+import { NgxBootstrapIconsModule, Trash } from 'ngx-bootstrap-icons';
+const icons = {
+  Trash,
+};
+
 @NgModule({
   declarations: [],
   imports: [
@@ -16,6 +19,7 @@ import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
     ObjectsAngularFormsModule,
     SchemaFormModule,
     Bootstrap4FrameworkModule,
+    NgxBootstrapIconsModule.pick(icons),
   ],
   exports: [
     CommonModule,
@@ -24,6 +28,7 @@ import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
     ObjectsAngularFormsModule,
     SchemaFormModule,
     Bootstrap4FrameworkModule,
+    NgxBootstrapIconsModule,
   ],
 })
 export class CommonAppModule {}

@@ -1,3 +1,4 @@
+import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { OBJECT_TREE_TOKEN } from './../admin/admin.const';
 import { ObjectNodesListComponent } from './../admin/admin/object-nodes-list/object-nodes-list.component';
 import { RootAdminComponent } from './root-admin/root-admin.component';
@@ -9,7 +10,6 @@ import {
 import { getParentStateName } from '../app.const';
 import { Ng2StateDeclaration } from '@uirouter/angular';
 import { ObjectTypesListComponent } from './object-types-list/object-types-list.component';
-import { ObjectTree } from '../objects-client/models/object-tree';
 import { ObjectsCommonService } from '../objects-client/services/objects-common.service';
 
 const rootAdminState: Ng2StateDeclaration = {
@@ -38,7 +38,7 @@ const rootAdminObjectsListState = {
       deps: [ObjectsCommonService],
       resolveFn: (
         objectsCommonService: ObjectsCommonService
-      ): Promise<ObjectTree> => {
+      ): Promise<ObjectTreeImpl> => {
         return objectsCommonService.getOwnerTree('root', 'root');
       },
     },

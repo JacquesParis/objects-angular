@@ -3,6 +3,8 @@
   <div name="subTypes">
     <accordion [isAnimated]="true">
       <accordion-group
+        [isOpen]="isOpen(subType)"
+        (isOpenChange)="setOpen(subType, $event)"
         *ngFor="let subType of objectType.objectSubTypes; trackBy: trackByFunc"
       >
         <button

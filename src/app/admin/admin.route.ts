@@ -8,7 +8,7 @@ import {
 } from './admin.const';
 import { AdminComponent } from './admin/admin.component';
 import { ObjectNodesListComponent } from './admin/object-nodes-list/object-nodes-list.component';
-import { ObjectTree } from '../objects-client/models/object-tree';
+import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 
 const adminState: Ng2StateDeclaration = {
   parent: getParentStateName(ADMIN_ROUTE_NAME),
@@ -37,7 +37,7 @@ const adminObjectsListState = {
       resolveFn: (
         objectsCommonService: ObjectsCommonService,
         stateService: StateService
-      ): Promise<ObjectTree> => {
+      ): Promise<ObjectTreeImpl> => {
         return objectsCommonService.getNamespaceTree(
           stateService.transition.params().ownerType,
           stateService.transition.params().ownerName,

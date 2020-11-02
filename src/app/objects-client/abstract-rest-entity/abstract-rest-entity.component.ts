@@ -46,18 +46,10 @@ export abstract class AbstractRestEntityComponent<
   }
 
   protected async onNewEntityCreated(): Promise<void> {
-    this.objectsCommonService.registerNewlyCreatedEntity(
-      this.entityTypeName,
-      this.entity
-    );
     return;
   }
 
   protected async onEntityDeleted(): Promise<void> {
-    this.objectsCommonService.unRegisterEntity(
-      this.entityTypeName,
-      this.entity
-    );
     return;
   }
 

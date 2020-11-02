@@ -8,7 +8,7 @@ export class ConfigurationService {
     return 'root';
   }
   getServer(): string {
-    return 'http://127.0.0.1:3000/api';
+    return 'http://' + location.hostname + ':3000/api';
   }
 
   constructor() {}

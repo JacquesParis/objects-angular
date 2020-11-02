@@ -1,3 +1,15 @@
 .height-200 {
   height: 200px;
 }
+
+.form-group-plaintext .form-control,
+.form-control.form-control-plaintext {
+  background-color: transparent;
+  &:disabled,
+  &[readonly] {
+    background-color: transparent;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}

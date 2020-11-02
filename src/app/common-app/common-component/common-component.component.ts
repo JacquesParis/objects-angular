@@ -13,8 +13,8 @@ export class CommonComponentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  public trackByFunc(item: IDataEntity) {
-    return item.id;
+  public trackByFunc(item: { id?: string; updatedId?: string }) {
+    return item.id + '_' + item.updatedId;
   }
 
   get labelClass() {

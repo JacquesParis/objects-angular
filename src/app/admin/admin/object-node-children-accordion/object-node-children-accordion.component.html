@@ -4,8 +4,8 @@
     <accordion [isAnimated]="true">
       <accordion-group
         [isOpen]="isOpen(child)"
+        (isOpenChange)="setOpen(child, $event)"
         *ngFor="let child of children; let index = index; trackBy: trackByFunc"
-        (isOpenChange)="checkLoadedChilds(child, $event)"
       >
         <button
           class="btn btn-link btn-block clearfix"
@@ -18,10 +18,10 @@
           ></div>
           <span
             class="badge badge-secondary float-right pull-right"
-            [innerHTML]="child.treeType.name"
+            [innerHTML]="child.treeNode.objectType.name"
           ></span>
         </button>
-        <div>
+        <div *ngIf="isOpen(child) && child.isReady">
           <div class="position-relative hideAccordion">
             <button
               type="button"

@@ -1,3 +1,4 @@
+import { RestEntityListService } from './../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { EditableFormService } from '@jacquesparis/objects-angular-forms';
 import { Component, OnInit } from '@angular/core';
 import { ObjectsCommonService } from '../../objects-client/services/objects-common.service';
@@ -14,12 +15,18 @@ export class ObjectTypesListComponent extends AbstractRestEntityListComponent<
 > {
   constructor(
     protected objectsCommonService: ObjectsCommonService,
-    protected editableFormService: EditableFormService
+    protected editableFormService: EditableFormService,
+    protected restEntityListService: RestEntityListService
   ) {
-    super(objectsCommonService, editableFormService, EntityName.objectType);
+    super(
+      objectsCommonService,
+      editableFormService,
+      restEntityListService,
+      EntityName.objectType
+    );
   }
 
   get objectTypes(): ObjectTypeImpl[] {
-    return this.objectsCommonService.objectTypesArray;
+    return this.objectsCommonService.objectTypes;
   }
 }

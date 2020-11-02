@@ -1,8 +1,6 @@
-import { ObjectNodesListService } from './object-nodes-list.service';
-import { ObjectTree } from './../../../objects-client/models/object-tree';
 import { OBJECT_TREE_TOKEN } from './../../admin.const';
 import { Component, Inject, OnInit } from '@angular/core';
-import { ObjectNodeImpl } from '@jacquesparis/objects-client';
+import { ObjectNodeImpl, ObjectTreeImpl } from '@jacquesparis/objects-client';
 
 export enum ObjectNodesListMode {
   fullScreen = 'fullScreen',
@@ -15,11 +13,8 @@ export enum ObjectNodesListMode {
 })
 export class ObjectNodesListComponent implements OnInit {
   public viewMode = ObjectNodesListMode.fullScreen;
-  get objectRoot(): ObjectNodeImpl {
-    return this.objectTree[0];
-  }
 
-  constructor(@Inject(OBJECT_TREE_TOKEN) public objectTree: ObjectTree) {}
+  constructor(@Inject(OBJECT_TREE_TOKEN) public objectTree: ObjectTreeImpl) {}
 
   ngOnInit(): void {}
 }

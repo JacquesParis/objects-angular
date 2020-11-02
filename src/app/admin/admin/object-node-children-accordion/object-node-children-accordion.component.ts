@@ -1,14 +1,14 @@
-import { ObjectNodesListService } from './../object-nodes-list/object-nodes-list.service';
-import { ObjectTree } from '../../../objects-client/models/object-tree';
+import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
+import { AbstractRestEntityListComponent } from './../../../objects-client/abstract-rest-entity/abstract-rest-entity-list.component';
+import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { Component, OnInit, Input } from '@angular/core';
 import {
   EntityName,
   ObjectNodeImpl,
   ObjectSubTypeImpl,
+  ObjectTreeImpl,
   ObjectTypeImpl,
 } from '@jacquesparis/objects-client';
-import { AbstractRestEntityListComponent } from 'src/app/objects-client/abstract-rest-entity/abstract-rest-entity-list.component';
-import { ObjectsCommonService } from 'src/app/objects-client/services/objects-common.service';
 import { EditableFormService } from '@jacquesparis/objects-angular-forms';
 import * as _ from 'lodash-es';
 
@@ -20,33 +20,21 @@ import * as _ from 'lodash-es';
 export class ObjectNodeChildrenAccordionComponent
   extends AbstractRestEntityListComponent<ObjectNodeImpl>
   implements OnInit {
-  @Input() objectTree: ObjectTree;
+  @Input() objectTree: ObjectTreeImpl;
   @Input() objectSubType: ObjectSubTypeImpl;
   constructor(
     protected objectsCommonService: ObjectsCommonService,
     protected editableFormService: EditableFormService,
-    protected objectNodesListService: ObjectNodesListService
+    protected restEntityListService: RestEntityListService
   ) {
     super(
       objectsCommonService,
       editableFormService,
+      restEntityListService,
       EntityName.objectNode,
       EntityName.objectNode,
       EntityName.objectType
     );
-  }
-
-  public isOpen(child: ObjectTree): boolean {
-    return this.objectNodesListService.isOpen(child.id);
-  }
-  public setOpen(child: ObjectTree, value = true, parents: ObjectTree[] = []) {
-    for (const parent of parents) {
-      this.setOpen(parent, value);
-    }
-    if (child.parentId === this.objectNode.id && value && !child.childsLoaded) {
-      this.objectsCommonService.loadSubTree(child);
-    }
-    this.objectNodesListService.setOpen(child.id, value);
   }
 
   public ngOnInit() {
@@ -58,24 +46,23 @@ export class ObjectNodeChildrenAccordionComponent
   }
 
   public getObjectNode(id) {
-    return this.objectsCommonService.getObjectNode(id);
+    return this.objectsCommonService.getObjectNodeById(id);
   }
 
   get objectType(): ObjectTypeImpl {
-    return this.objectSubType.objectType;
+    return this.objectsCommonService.getObjectTypeById(
+      this.objectSubType.subObjectTypeId
+    );
   }
 
-  get children(): ObjectTree[] {
-    return this.objectTree.childrenByType[this.objectType.id] || [];
+  get children(): ObjectTreeImpl[] {
+    return this.objectTree.childrenByType(this.objectType.id);
   }
 
-  get newTree(): ObjectTree {
-    return new ObjectTree(this.newEntity, [this.newEntity], {
-      [this.objectType.id]: this.objectType,
-    });
-  }
-
-  public checkLoadedChilds(objectTree: ObjectTree, open) {
-    this.setOpen(objectTree, open);
+  get newTree(): ObjectTreeImpl {
+    return this.objectsCommonService.newEntity<ObjectTreeImpl>(
+      EntityName.objectTree,
+      { parentEntity: this.objectTree, entityType: this.objectType }
+    );
   }
 }

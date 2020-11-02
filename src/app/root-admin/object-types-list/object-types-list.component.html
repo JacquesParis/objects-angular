@@ -1,5 +1,9 @@
 <accordion [isAnimated]="true">
-  <accordion-group *ngFor="let objectType of objectTypes; trackBy: trackByFunc">
+  <accordion-group
+    [isOpen]="isOpen(objectType)"
+    (isOpenChange)="setOpen(objectType, $event)"
+    *ngFor="let objectType of objectTypes; trackBy: trackByFunc"
+  >
     <button
       class="btn btn-link btn-block clearfix"
       accordion-heading
