@@ -1,3 +1,4 @@
+import { SHOULD_BE_LOGIN_RESOLVE } from './../app.route';
 import { ObjectsCommonService } from './../objects-client/services/objects-common.service';
 import { getParentStateName } from '../app.const';
 import { Ng2StateDeclaration, StateService } from '@uirouter/angular';
@@ -31,6 +32,7 @@ const adminObjectsListState = {
   url: '/list/:ownerType/:ownerName/:namespaceType/:namespaceName',
   component: ObjectNodesListComponent,
   resolve: [
+    SHOULD_BE_LOGIN_RESOLVE,
     {
       token: OBJECT_TREE_TOKEN,
       deps: [ObjectsCommonService, StateService],

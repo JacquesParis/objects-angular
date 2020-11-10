@@ -1,6 +1,15 @@
 <div>
   <h5 for="children">{{ objectSubType.name }}</h5>
-  <div name="children">
+
+  <div
+    name="children"
+    class="alert alert-danger"
+    role="alert"
+    *ngIf="!objectType"
+  >
+    This type of Object does not exist anymore.
+  </div>
+  <div name="children" *ngIf="objectType">
     <accordion [isAnimated]="true">
       <accordion-group
         [isOpen]="isOpen(child)"
@@ -47,12 +56,12 @@
             </nav>
 
             <ng-template #parentNode let-node="node" let-parents="parents">
-              <ng-container *ngIf="getObjectNode(node.parentNodeId)"
+              <ng-container *ngIf="getObjectNodeById(node.parentNodeId)"
                 ><ng-container
                   *ngTemplateOutlet="
                     parentNode;
                     context: {
-                      node: getObjectNode(node.parentNodeId),
+                      node: getObjectNodeById(node.parentNodeId),
                       parents: parents.concat(node)
                     }
                   "

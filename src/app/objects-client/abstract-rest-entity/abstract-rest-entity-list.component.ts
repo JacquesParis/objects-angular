@@ -4,12 +4,18 @@ import { EditableFormService } from '@jacquesparis/objects-angular-forms';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 import { ObjectsCommonService } from '../services/objects-common.service';
-import { EntityName } from '@jacquesparis/objects-client';
+import {
+  EntityName,
+  ObjectNodeImpl,
+  ObjectTypeImpl,
+} from '@jacquesparis/objects-client';
 export class AbstractRestEntityListComponent<
   T extends RestEntityImpl<T>
 > extends CommonComponentComponent {
   public newEntity: T;
   public inCreation = false;
+  private objectNodesById: { [id: string]: ObjectNodeImpl } = {};
+  private objectTypesById: { [id: string]: ObjectTypeImpl } = {};
 
   constructor(
     protected objectsCommonService: ObjectsCommonService,
@@ -20,6 +26,24 @@ export class AbstractRestEntityListComponent<
     protected entityTypeName?: EntityName
   ) {
     super();
+  }
+
+  public getObjectNodeById(id) {
+    if (!(id in this.objectNodesById)) {
+      this.objectNodesById[id] = this.objectsCommonService.getObjectNodeById(
+        id
+      );
+    }
+    return this.objectNodesById[id];
+  }
+
+  public getObjectTypeById(id): ObjectTypeImpl {
+    if (!(id in this.objectTypesById)) {
+      this.objectTypesById[id] = this.objectsCommonService.getObjectTypeById(
+        id
+      );
+    }
+    return this.objectTypesById[id];
   }
 
   public createNewEntity() {

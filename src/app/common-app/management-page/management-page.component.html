@@ -1,0 +1,6 @@
+<app-nav (sizeChanged)="calculateMarginTop($event)">
+  <ng-content navItem select="[navItem]"></ng-content>
+</app-nav>
+<div [style.margin-top.px]="bodyMargingTop" *ngIf="afterInit">
+  <ng-content select="[pageBody]"></ng-content>
+</div>

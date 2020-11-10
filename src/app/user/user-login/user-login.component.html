@@ -1,0 +1,44 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+    <form>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          [name]="'email'"
+          [(ngModel)]="credentials.email"
+          class="form-control"
+          id="email"
+          placeholder="Enter email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          [name]="'password'"
+          [(ngModel)]="credentials.password"
+          id="password"
+          placeholder="Password"
+        />
+      </div>
+      <div class="form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="rememberMe"
+          [name]="'rememberMe'"
+          [(ngModel)]="rememberMe"
+        />
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2" (click)="login()">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>

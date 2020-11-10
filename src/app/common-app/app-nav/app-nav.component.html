@@ -1,0 +1,21 @@
+<ul
+  class="nav nav-tabs fixed-top"
+  appResize
+  (sizeChanged)="sizeChanged.emit($event)"
+>
+  <li class="nav-item mt-1 ml-1">
+    <a class="nav-link" [uiSrefActive]="'active'" [uiSref]="welcomeRootName"
+      >Home</a
+    >
+  </li>
+  <ng-content select="[navItem]"></ng-content>
+  <li class="nav-item mt-1 ml-1" *ngIf="!isUserLogued">
+    <a class="nav-link" [appUiRouterState]="loginState">Login</a>
+  </li>
+  <li class="nav-item mt-1 ml-1" *ngIf="!isUserLogued">
+    <a class="nav-link" [appUiRouterState]="registerState">Register</a>
+  </li>
+  <li class="nav-item mt-1 ml-1" *ngIf="isUserLogued">
+    <a class="nav-link" [appUiRouterState]="accountState">Account</a>
+  </li>
+</ul>

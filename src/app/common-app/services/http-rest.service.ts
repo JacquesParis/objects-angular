@@ -4,6 +4,7 @@ import {
   IRestService,
   IRestQueryParam,
   IRestResponse,
+  IRestHeaders,
 } from '@jacquesparis/objects-client';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash-es';
@@ -41,7 +42,8 @@ export class HttpRestService implements IRestService {
   constructor(protected httpClient: HttpClient) {}
   public async get<T>(
     uri: string,
-    queryParams?: IRestQueryParam
+    queryParams?: IRestQueryParam,
+    headers?: IRestHeaders
   ): Promise<IRestResponse<T>> {
     const response: IRestResponse<T> = { result: null, status: null };
     const options: any = { responseType: 'json', observe: 'response' };
@@ -58,6 +60,9 @@ export class HttpRestService implements IRestService {
         }
       });
     }
+    if (headers) {
+      options.headers = headers;
+    }
     try {
       const httpResponse: HttpResponse<T> = (await ((this.httpClient.get(
         uri,
@@ -73,27 +78,45 @@ export class HttpRestService implements IRestService {
     return response;
   }
 
-  public async put<T>(uri: string, entity: T): Promise<IRestResponse<T>> {
-    return this.patchOdPushOrPost('put', uri, entity) as Promise<
+  public async put<T>(
+    uri: string,
+    entity: T,
+    headers?: IRestHeaders
+  ): Promise<IRestResponse<T>> {
+    return this.patchOdPushOrPost('put', uri, entity, headers) as Promise<
       IRestResponse<T>
     >;
   }
 
-  public patch<T>(uri: string, entity: T): Promise<IRestResponse<T>> {
-    return this.patchOdPushOrPost('patch', uri, entity) as Promise<
+  public patch<T>(
+    uri: string,
+    entity: T,
+    headers?: IRestHeaders
+  ): Promise<IRestResponse<T>> {
+    return this.patchOdPushOrPost('patch', uri, entity, headers) as Promise<
       IRestResponse<T>
     >;
   }
 
-  public post<T>(uri: string, entity: T): Promise<IRestResponse<T>> {
-    return this.patchOdPushOrPost('post', uri, entity) as Promise<
+  public post<T>(
+    uri: string,
+    entity: T,
+    headers?: IRestHeaders
+  ): Promise<IRestResponse<T>> {
+    return this.patchOdPushOrPost('post', uri, entity, headers) as Promise<
       IRestResponse<T>
     >;
   }
 
-  public async delete<T>(uri: string): Promise<IRestResponse<void>> {
+  public async delete<T>(
+    uri: string,
+    headers?: IRestHeaders
+  ): Promise<IRestResponse<void>> {
     const response: IRestResponse<void> = { result: null, status: null };
     const options: any = { responseType: 'json', observe: 'events' };
+    if (headers) {
+      options.headers = headers;
+    }
     try {
       const httpResponse: HttpResponse<void> = (await ((this.httpClient.delete(
         uri,
@@ -112,13 +135,17 @@ export class HttpRestService implements IRestService {
   protected async patchOdPushOrPost<T>(
     type: 'patch' | 'put' | 'post',
     uri: string,
-    entity: T
+    entity: T,
+    headers: IRestHeaders
   ): Promise<IRestResponse<T>> {
     const response: IRestResponse<T> = { result: null, status: null };
     const options: any = {
       responseType: 'json',
       observe: 'events',
     };
+    if (headers) {
+      options.headers = headers;
+    }
     try {
       const postData: any = entity;
       const postUri = uri;

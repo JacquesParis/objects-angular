@@ -16,7 +16,10 @@
         >Some HTML here</span
       >
     </button>
-    <app-object-type-card [entity]="objectType"></app-object-type-card>
+    <app-object-type-card
+      [entity]="objectType"
+      *ngIf="isOpen(objectType)"
+    ></app-object-type-card>
   </accordion-group>
   <accordion-group *ngIf="inCreation" [isOpen]="true">
     <button

@@ -10,9 +10,10 @@ import { AbstractRestEntityListComponent } from '../../objects-client/abstract-r
   templateUrl: './object-types-list.component.html',
   styleUrls: ['./object-types-list.component.scss'],
 })
-export class ObjectTypesListComponent extends AbstractRestEntityListComponent<
-  ObjectTypeImpl
-> {
+export class ObjectTypesListComponent
+  extends AbstractRestEntityListComponent<ObjectTypeImpl>
+  implements OnInit {
+  public objectTypes: ObjectTypeImpl[];
   constructor(
     protected objectsCommonService: ObjectsCommonService,
     protected editableFormService: EditableFormService,
@@ -26,7 +27,8 @@ export class ObjectTypesListComponent extends AbstractRestEntityListComponent<
     );
   }
 
-  get objectTypes(): ObjectTypeImpl[] {
-    return this.objectsCommonService.objectTypes;
+  ngOnInit() {
+    super.ngOnInit();
+    this.objectTypes = this.objectsCommonService.objectTypes;
   }
 }

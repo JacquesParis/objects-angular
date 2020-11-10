@@ -22,6 +22,9 @@ export class ObjectNodeChildrenAccordionComponent
   implements OnInit {
   @Input() objectTree: ObjectTreeImpl;
   @Input() objectSubType: ObjectSubTypeImpl;
+  public objectType: ObjectTypeImpl;
+  public children: ObjectTreeImpl[];
+  public objectNode: ObjectNodeImpl;
   constructor(
     protected objectsCommonService: ObjectsCommonService,
     protected editableFormService: EditableFormService,
@@ -39,24 +42,13 @@ export class ObjectNodeChildrenAccordionComponent
 
   public ngOnInit() {
     super.ngOnInit();
-  }
-
-  get objectNode(): ObjectNodeImpl {
-    return this.objectTree.treeNode;
-  }
-
-  public getObjectNode(id) {
-    return this.objectsCommonService.getObjectNodeById(id);
-  }
-
-  get objectType(): ObjectTypeImpl {
-    return this.objectsCommonService.getObjectTypeById(
+    this.objectType = this.getObjectTypeById(
       this.objectSubType.subObjectTypeId
     );
-  }
-
-  get children(): ObjectTreeImpl[] {
-    return this.objectTree.childrenByType(this.objectType.id);
+    if (this.objectType) {
+      this.children = this.objectTree.childrenByType(this.objectType.id);
+    }
+    this.objectNode = this.objectTree.treeNode;
   }
 
   get newTree(): ObjectTreeImpl {

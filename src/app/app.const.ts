@@ -5,6 +5,28 @@ export function buildStateName(
   return parentStateName + ':' + stateName;
 }
 
+export function buildStateAndRootHref(
+  parentStateName: string,
+  stateName: string
+): { stateName: string; url: string; href: string } {
+  return {
+    stateName: buildStateName(parentStateName, stateName),
+    url: '/' + stateName,
+    href: '#/' + stateName,
+  };
+}
+
+export function buildStateAndHref(
+  parentStateAndHref: { stateName: string; url: string; href: string },
+  stateName: string
+): { stateName: string; url: string; href: string } {
+  return {
+    stateName: buildStateName(parentStateAndHref.stateName, stateName),
+    url: '/' + stateName,
+    href: parentStateAndHref.href + '/' + stateName,
+  };
+}
+
 export function getParentStateName(stateName: string): string {
   const parentParts = stateName.split(':');
   parentParts.pop();
