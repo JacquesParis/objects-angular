@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
   <div class="card-body">
     <h5 class="card-title" [innerHTML]="title"></h5>
     <lib-editable-json-schema-form
@@ -13,11 +13,12 @@
     </lib-editable-json-schema-form>
   </div>
 </div>
-<div *ngIf="!hideChildren" class="ml-3">
+<div *ngIf="!hideChildren">
   <ng-container *ngFor="let subType of subTypes">
     <app-object-node-children-accordion
       [objectSubType]="subType"
       [objectTree]="objectTree"
+      *ngIf="subType.objectType"
     ></app-object-node-children-accordion>
   </ng-container>
 </div>

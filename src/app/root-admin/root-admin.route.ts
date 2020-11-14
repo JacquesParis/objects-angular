@@ -20,7 +20,7 @@ const rootAdminState: Ng2StateDeclaration = {
   name: ROOT_ADMIN_ROUTE_NAME,
   url: '/root-admin',
   component: RootAdminComponent,
-  redirectTo: ROOT_ADMIN_OBJECTS_TYPES_LIST_ROUTE_NAME,
+  redirectTo: ROOT_ADMIN_OBJECTS_LIST_ROUTE_NAME,
   resolve: [SHOULD_BE_LOGIN_RESOLVE],
 };
 

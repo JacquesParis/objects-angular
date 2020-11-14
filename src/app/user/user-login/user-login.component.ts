@@ -20,12 +20,10 @@ export class UserLoginComponent implements OnInit {
     password: '',
   };
 
-  public rememberMe = true;
-
   ngOnInit() {}
   public async login() {
     try {
-      await this.userService.login(this.credentials as any, this.rememberMe);
+      await this.userService.login(this.credentials as any);
       if (this.userService.nextLogInStateName) {
         this.stateService.go(this.userService.nextLogInStateName);
         this.userService.nextLogInStateName = null;

@@ -1,4 +1,4 @@
-<div>
+<div class="mb-3">
   <h5 for="subTypes">Sous-types</h5>
   <div name="subTypes">
     <accordion [isAnimated]="true">
@@ -42,7 +42,7 @@
 
     <button
       type="button"
-      class="btn btn-primary mr-2 mt-2"
+      class="btn btn-primary mr-2 mt-2 btn-sm"
       *ngIf="!inCreation"
       (click)="createNewEntity()"
       [disabled]="disabledAction"

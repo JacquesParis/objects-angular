@@ -1,7 +1,7 @@
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
 import { AbstractRestEntityListComponent } from './../../../objects-client/abstract-rest-entity/abstract-rest-entity-list.component';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import {
   EntityName,
   ObjectNodeImpl,
@@ -19,12 +19,13 @@ import * as _ from 'lodash-es';
 })
 export class ObjectNodeChildrenAccordionComponent
   extends AbstractRestEntityListComponent<ObjectNodeImpl>
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() objectTree: ObjectTreeImpl;
   @Input() objectSubType: ObjectSubTypeImpl;
   public objectType: ObjectTypeImpl;
   public children: ObjectTreeImpl[];
   public objectNode: ObjectNodeImpl;
+  private changeSubscriber: () => void;
   constructor(
     protected objectsCommonService: ObjectsCommonService,
     protected editableFormService: EditableFormService,
@@ -39,20 +40,42 @@ export class ObjectNodeChildrenAccordionComponent
       EntityName.objectType
     );
   }
+  public newTree: ObjectTreeImpl;
 
   public ngOnInit() {
     super.ngOnInit();
     this.objectType = this.getObjectTypeById(
       this.objectSubType.subObjectTypeId
     );
-    if (this.objectType) {
-      this.children = this.objectTree.childrenByType(this.objectType.id);
-    }
     this.objectNode = this.objectTree.treeNode;
+    this.changeSubscriber = this.objectTree.onChange((): void => {
+      this.changedValue();
+    });
+    this.changedValue();
   }
 
-  get newTree(): ObjectTreeImpl {
-    return this.objectsCommonService.newEntity<ObjectTreeImpl>(
+  private changedValue() {
+    if (
+      this.objectTree.treeNode &&
+      this.objectsCommonService.getObjectNodeById(
+        this.objectTree.treeNode.id
+      ) &&
+      this.objectType
+    ) {
+      this.children = this.objectTree.childrenByType(this.objectType.id);
+    }
+  }
+
+  public ngOnDestroy() {
+    super.ngOnDestroy();
+    if (this.changeSubscriber) {
+      this.changeSubscriber();
+    }
+  }
+
+  public createNewEntity() {
+    super.createNewEntity();
+    this.newTree = this.objectsCommonService.newEntity<ObjectTreeImpl>(
       EntityName.objectTree,
       { parentEntity: this.objectTree, entityType: this.objectType }
     );

@@ -19,14 +19,11 @@ export class UserService {
     );
   }
 
-  public login(
-    credentials: {
-      email: string;
-      password: string;
-    },
-    rememberMe?: boolean
-  ): Promise<AppUserImpl> {
-    return this.appUserService.login(credentials, rememberMe);
+  public login(credentials: {
+    email: string;
+    password: string;
+  }): Promise<AppUserImpl> {
+    return this.appUserService.login(credentials);
   }
 
   logout(): Promise<void> {
