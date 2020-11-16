@@ -8,7 +8,12 @@ export class ConfigurationService {
     return 'root';
   }
   getServer(): string {
-    return 'http://' + location.hostname + ':3000/api';
+    return (
+      'http://' +
+      location.hostname +
+      ('localhost' === location.hostname ? ':3000' : '') +
+      '/api'
+    );
   }
 
   constructor() {}
