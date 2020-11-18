@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ConfigurationService {
   getRootObjectTypeName(): string {
-    return 'root';
+    return 'Root';
   }
   getServer(): string {
     return (
