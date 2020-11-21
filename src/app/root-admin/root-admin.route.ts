@@ -35,7 +35,7 @@ const rootAdminObjectTypesListState = {
 const rootAdminObjectsListStateRsolve = (
   objectsCommonService: ObjectsCommonService
 ): Promise<ObjectTreeImpl> => {
-  return objectsCommonService.getOwnerTree('Root', 'root');
+  return objectsCommonService.getOwnerTree('Repository', 'root');
 };
 
 const rootAdminObjectsListState = {
