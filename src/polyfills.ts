@@ -16,7 +16,11 @@
 
 /***************************************************************************************************
  * BROWSER POLYFILLS
+ * BROWSER POLYFILLS
  */
+declare var require: any;
+(window as any).global = window;
+(window as any).process = require('process/browser');
 
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
@@ -55,9 +59,17 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import 'zone.js/dist/zone';  // Included with Angular CLI.
-
+import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+(window as any).global = window;
+// @ts-ignore
+window.Buffer = window.Buffer || [];
+(window as any).process = {
+  env: { DEBUG: undefined },
+  version: [],
+  cwd: () => '',
+};

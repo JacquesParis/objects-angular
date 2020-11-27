@@ -6,6 +6,7 @@ import { USER_STATES } from './user.route';
 import { UIRouterModule } from '@uirouter/angular';
 import { CommonAppModule } from './../common-app/common-app.module';
 import { NgModule } from '@angular/core';
+import { JsonFormComponent } from '@jacquesparis/objects-angular-forms';
 
 @NgModule({
   imports: [

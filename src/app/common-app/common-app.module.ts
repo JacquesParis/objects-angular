@@ -3,7 +3,10 @@ import { UIRouterModule } from '@uirouter/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ObjectsAngularFormsModule } from '@jacquesparis/objects-angular-forms';
+import {
+  JsonFormComponent,
+  ObjectsAngularFormsModule,
+} from '@jacquesparis/objects-angular-forms';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { SchemaFormModule } from 'ngx-schema-form';
 import { Bootstrap4FrameworkModule } from 'angular6-json-schema-form';
