@@ -63,6 +63,9 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3",
-    "umd-compat-loader": "^2.1.2"
+    "umd-compat-loader": "^2.1.2",
+    "@ngx-formly/schematics": "^5.10.6",
+    "@ngx-formly/core": "^5.0.0",
+    "@ngx-formly/bootstrap": "^5.0.0"
   }
 }
