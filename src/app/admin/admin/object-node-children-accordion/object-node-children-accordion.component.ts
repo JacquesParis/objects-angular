@@ -50,8 +50,8 @@ export class ObjectNodeChildrenAccordionComponent
     );
     this.objectNode = this.objectTree.treeNode;
     this.creationAvailable =
-      !!this.objectNode.entityCtx?.actions?.creations &&
-      !!this.objectNode.entityCtx?.actions?.creations[this.objectType.id];
+      !!this.objectTree.entityCtx?.actions?.creations &&
+      !!this.objectTree.entityCtx?.actions?.creations[this.objectType.id];
     this.changeSubscriber = this.objectTree.onChange((): void => {
       this.changedValue();
     });
@@ -84,7 +84,7 @@ export class ObjectNodeChildrenAccordionComponent
       {
         parentEntity: this.objectTree,
         entityType: this.objectType,
-        entityDefinition: this.objectNode.entityCtx?.actions?.creations[
+        entityDefinition: this.objectTree.entityCtx?.actions?.creations[
           this.objectType.id
         ],
       }

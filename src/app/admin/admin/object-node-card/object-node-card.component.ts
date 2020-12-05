@@ -41,12 +41,17 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
     this.entity = this.objectTree.treeNode;
     this.treeType = this.objectTree.treeNode.objectType;
     this.title = this.entity.name + ' (' + this.treeType.name + ')';
-    await super.ngOnInit();
-    const objectChildTypes = this.entity.entityCtx?.actions?.reads
-      ? this.entity.entityCtx?.actions?.reads
-      : [];
-    this.subTypes = this.objectTree.treeNode.objectType.objectSubTypes.filter(
+    let objectChildTypes = [];
+    if (
+      this.objectTree.entityCtx &&
+      this.objectTree.entityCtx.actions &&
+      this.objectTree.entityCtx.actions.reads
+    ) {
+      objectChildTypes = this.objectTree.entityCtx.actions.reads;
+    }
+    this.subTypes = this.entity.objectType.objectSubTypes.filter(
       (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
     );
+    await super.ngOnInit();
   }
 }
