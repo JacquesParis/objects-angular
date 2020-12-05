@@ -7,7 +7,11 @@ import {
 } from '@jacquesparis/objects-client';
 import { Component, Input } from '@angular/core';
 import { AbstractRestEntityComponent } from '../../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
-import { IObjectNode } from '@jacquesparis/objects-model';
+import {
+  IObjectNode,
+  IObjectType,
+  IObjectSubType,
+} from '@jacquesparis/objects-model';
 
 @Component({
   selector: 'app-object-node-card',
@@ -22,23 +26,27 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
   @Input() hideNode = false;
   @Input() hideChildren = false;
 
-  get title() {
-    return this.entity.name + ' (' + this.treeType.name + ')';
-  }
+  public title: string;
 
-  get entity(): ObjectNodeImpl {
-    return this.objectTree.treeNode;
-  }
+  public entity: ObjectNodeImpl;
 
-  get treeType() {
-    return this.objectTree.treeNode.objectType;
-  }
+  public treeType: IObjectType;
+  public subTypes: IObjectSubType[] = [];
 
   constructor(protected objectsCommonService: ObjectsCommonService) {
     super(EntityName.objectNode, objectsCommonService);
   }
 
-  get subTypes() {
-    return this.objectTree.treeNode.objectType.objectSubTypes;
+  async ngOnInit() {
+    this.entity = this.objectTree.treeNode;
+    this.treeType = this.objectTree.treeNode.objectType;
+    this.title = this.entity.name + ' (' + this.treeType.name + ')';
+    await super.ngOnInit();
+    const objectChildTypes = this.entity.entityCtx?.actions?.reads
+      ? this.entity.entityCtx?.actions?.reads
+      : [];
+    this.subTypes = this.objectTree.treeNode.objectType.objectSubTypes.filter(
+      (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
+    );
   }
 }

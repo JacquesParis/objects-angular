@@ -90,6 +90,9 @@ export class ObjectsCommonService {
   }
 
   public getSchema(entityName: EntityName, entity?: IRestEntity): IJsonSchema {
+    if (entity?.entityDefinition) {
+      return entity.entityDefinition;
+    }
     switch (entityName) {
       case EntityName.objectType:
         return this.objectsTypeService.entityDefinition;
@@ -114,8 +117,10 @@ export class ObjectsCommonService {
       [specifity: string]: any;
       parentEntity?: IRestEntity;
       entityType?: IRestEntity;
+      entityDefinition?: IJsonSchema;
     }
   ): T {
+    let impl: T;
     switch (entityName) {
       case EntityName.objectType:
         return (new ObjectTypeImpl(this.objectsTypeService) as unknown) as T;
@@ -130,6 +135,7 @@ export class ObjectsCommonService {
           parentNodeUri: entitySpeficities.parentEntity.uri,
           objectTypeId: entitySpeficities.entityType.id,
           objectTypeUri: entitySpeficities.entityType.uri,
+          entityCtx: { entityDefinition: entitySpeficities.entityDefinition },
         }) as unknown) as T;
       case EntityName.objectTree:
         return (new ObjectTreeImpl(this.objectTreesService, {

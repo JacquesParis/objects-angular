@@ -19,6 +19,7 @@ export abstract class AbstractRestEntityComponent<
   implements OnInit {
   abstract entity: EntityWrapper;
   public schema: IJsonSchema;
+  public isReady: boolean = false;
   public layout: IJsonLayoutProperty[] = [];
   @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
@@ -30,11 +31,13 @@ export abstract class AbstractRestEntityComponent<
     super();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.entity.waitForReady();
     this.schema = this.objectsCommonService.getSchema(
       this.entityTypeName,
       this.entity
     );
+    this.isReady = true;
   }
 
   get saveValueMethod(): (value) => Promise<void> {

@@ -109,7 +109,7 @@
       <button
         type="button"
         class="btn btn-primary mr-2 mt-2 btn-sm"
-        *ngIf="!inCreation"
+        *ngIf="creationAvailable && !inCreation"
         [disabled]="disabledAction"
         (click)="createNewEntity()"
       >

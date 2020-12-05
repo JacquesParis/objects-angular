@@ -26,6 +26,7 @@ export class ObjectNodeChildrenAccordionComponent
   public children: ObjectTreeImpl[];
   public objectNode: ObjectNodeImpl;
   private changeSubscriber: () => void;
+  creationAvailable: boolean = false;
   constructor(
     protected objectsCommonService: ObjectsCommonService,
     protected editableFormService: EditableFormService,
@@ -48,6 +49,9 @@ export class ObjectNodeChildrenAccordionComponent
       this.objectSubType.subObjectTypeId
     );
     this.objectNode = this.objectTree.treeNode;
+    this.creationAvailable =
+      !!this.objectNode.entityCtx?.actions?.creations &&
+      !!this.objectNode.entityCtx?.actions?.creations[this.objectType.id];
     this.changeSubscriber = this.objectTree.onChange((): void => {
       this.changedValue();
     });
@@ -77,7 +81,13 @@ export class ObjectNodeChildrenAccordionComponent
     super.createNewEntity();
     this.newTree = this.objectsCommonService.newEntity<ObjectTreeImpl>(
       EntityName.objectTree,
-      { parentEntity: this.objectTree, entityType: this.objectType }
+      {
+        parentEntity: this.objectTree,
+        entityType: this.objectType,
+        entityDefinition: this.objectNode.entityCtx?.actions?.creations[
+          this.objectType.id
+        ],
+      }
     );
   }
 }
