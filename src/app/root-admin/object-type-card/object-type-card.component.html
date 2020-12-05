@@ -1,19 +1,22 @@
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title" [innerHTML]="entity.name"></h5>
-    <lib-editable-json-schema-form
-      [entity]="entity"
-      [saveValue]="saveValueMethod"
-      [schema]="schema"
-      [layout]="layout"
-      (onCancel)="cancelAction()"
-      [deleteValue]="deleteValueMethod"
-    >
-    </lib-editable-json-schema-form>
+<div *ngIf="isReady">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title" [innerHTML]="entity.name"></h5>
+
+      <lib-editable-json-schema-form
+        [entity]="entity"
+        [saveValue]="saveValueMethod"
+        [schema]="schema"
+        [layout]="layout"
+        (onCancel)="cancelAction()"
+        [deleteValue]="deleteValueMethod"
+      >
+      </lib-editable-json-schema-form>
+    </div>
   </div>
-</div>
-<div class="mt-2" *ngIf="!entity.isNewEntity">
-  <app-object-sub-types-accordion
-    [objectType]="entity"
-  ></app-object-sub-types-accordion>
+  <div class="mt-2" *ngIf="!entity.isNewEntity">
+    <app-object-sub-types-accordion
+      [objectType]="entity"
+    ></app-object-sub-types-accordion>
+  </div>
 </div>

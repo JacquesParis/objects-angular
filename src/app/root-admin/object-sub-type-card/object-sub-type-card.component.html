@@ -1,9 +1,15 @@
-<div class="card">
+<div class="card" *ngIf="isReady">
   <div class="card-body">
     <h5 class="card-title" [innerHTML]="entity.name"></h5>
 
-    <lib-editable-json-schema-form [entity]="entity" [saveValue]="saveValueMethod" [schema]="schema" [layout]="layout"
-      (onCancel)="cancelAction()" [deleteValue]="deleteValueMethod">
+    <lib-editable-json-schema-form
+      [entity]="entity"
+      [saveValue]="saveValueMethod"
+      [schema]="schema"
+      [layout]="layout"
+      (onCancel)="cancelAction()"
+      [deleteValue]="deleteValueMethod"
+    >
     </lib-editable-json-schema-form>
   </div>
 </div>
