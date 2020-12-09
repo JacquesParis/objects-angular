@@ -1,7 +1,15 @@
 <div *ngIf="isReady">
   <div class="card mb-3">
     <div class="card-body">
-      <h5 class="card-title" [innerHTML]="title"></h5>
+      <h5 class="card-title">
+        <span [innerHTML]="title"></span
+        ><span
+          class="badge badge-secondary ml-3"
+          (click)="openWebSite()"
+          *ngIf="hasWebSite"
+          >See Web Site</span
+        >
+      </h5>
       <lib-editable-json-schema-form
         *ngIf="!hideNode"
         [entity]="entity"

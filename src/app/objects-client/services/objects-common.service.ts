@@ -117,7 +117,7 @@ export class ObjectsCommonService {
       [specifity: string]: any;
       parentEntity?: IRestEntity;
       entityType?: IRestEntity;
-      entityDefinition?: IJsonSchema;
+      jsonSchema?: IJsonSchema;
     }
   ): T {
     let impl: T;
@@ -135,7 +135,7 @@ export class ObjectsCommonService {
           parentNodeUri: entitySpeficities.parentEntity.uri,
           objectTypeId: entitySpeficities.entityType.id,
           objectTypeUri: entitySpeficities.entityType.uri,
-          entityCtx: { entityDefinition: entitySpeficities.entityDefinition },
+          entityCtx: { jsonSchema: entitySpeficities.jsonSchema },
         }) as unknown) as T;
       case EntityName.objectTree:
         return (new ObjectTreeImpl(this.objectTreesService, {
@@ -149,11 +149,51 @@ export class ObjectsCommonService {
     }
   }
 
+  public async getTreeByUri(uri: string) {
+    return await this.objectTreesService.get(uri);
+  }
+
+  public async getTree(
+    ownerType: string,
+    ownerName: string,
+    namespaceType: string,
+    namespaceName: string,
+    treeType: string,
+    treeName: string
+  ): Promise<ObjectTreeImpl> {
+    const ownerTreeType =
+      ownerType +
+      '$$' +
+      ownerName +
+      '$$' +
+      namespaceType +
+      '$$' +
+      namespaceName +
+      '$$' +
+      treeType;
+    if (!(ownerTreeType in this._objectTrees)) {
+      this._objectTrees[ownerTreeType] = {};
+    }
+    if (!(treeName in this._objectTrees[ownerTreeType])) {
+      this._objectTrees[ownerTreeType][
+        treeName
+      ] = await this.objectTreesService.getRootTree(
+        ownerType,
+        ownerName,
+        namespaceType,
+        namespaceName,
+        treeType,
+        treeName
+      );
+    }
+    return this._objectTrees[ownerTreeType][treeName];
+  }
+
   public async getNamespaceTree(
-    ownerType: any,
-    ownerName: any,
-    namespaceType: any,
-    namespaceName: any
+    ownerType: string,
+    ownerName: string,
+    namespaceType: string,
+    namespaceName: string
   ): Promise<ObjectTreeImpl> {
     const ownerTreeType = ownerType + '$$' + ownerName + '$$' + namespaceType;
     if (!(ownerTreeType in this._objectTrees)) {
@@ -173,8 +213,8 @@ export class ObjectsCommonService {
   }
 
   public async getOwnerTree(
-    ownerType: any,
-    ownerName: any
+    ownerType: string,
+    ownerName: string
   ): Promise<ObjectTreeImpl> {
     if (!(ownerType in this._objectTrees)) {
       this._objectTrees[ownerType] = {};

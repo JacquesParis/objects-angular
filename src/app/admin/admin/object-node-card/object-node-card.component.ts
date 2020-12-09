@@ -1,3 +1,5 @@
+import { VIEW_ROUTE_NAME } from './../../../view/view.const';
+import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
 import {
   ObjectNodeImpl,
@@ -32,8 +34,12 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
 
   public treeType: IObjectType;
   public subTypes: IObjectSubType[] = [];
+  hasWebSite: boolean = false;
 
-  constructor(protected objectsCommonService: ObjectsCommonService) {
+  constructor(
+    protected objectsCommonService: ObjectsCommonService,
+    protected stateService: StateService
+  ) {
     super(EntityName.objectNode, objectsCommonService);
   }
 
@@ -53,5 +59,14 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
       (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
     );
     await super.ngOnInit();
+    if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
+      this.hasWebSite = true;
+    }
+  }
+
+  public openWebSite() {
+    this.stateService.go(VIEW_ROUTE_NAME, {
+      dataTree: this.objectTree,
+    });
   }
 }

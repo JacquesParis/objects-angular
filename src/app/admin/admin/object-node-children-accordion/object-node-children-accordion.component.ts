@@ -84,7 +84,7 @@ export class ObjectNodeChildrenAccordionComponent
       {
         parentEntity: this.objectTree,
         entityType: this.objectType,
-        entityDefinition: this.objectTree.entityCtx?.actions?.creations[
+        jsonSchema: this.objectTree.entityCtx?.actions?.creations[
           this.objectType.id
         ],
       }
