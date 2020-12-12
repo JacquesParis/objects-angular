@@ -66,7 +66,8 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
 
   public openWebSite() {
     this.stateService.go(VIEW_ROUTE_NAME, {
-      dataTree: this.objectTree,
+      siteTree: this.objectTree,
+      siteId: this.objectTree.id,
     });
   }
 }

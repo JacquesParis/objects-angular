@@ -1,103 +1,140 @@
-import { viewFutureState } from './../app.lazy.route';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from './../objects-client/services/objects-common.service';
 import { OBJECT_TREE_TOKEN } from './../admin/admin.const';
 import { ViewComponent } from './view/view.component';
-import { VIEW_ROUTE_NAME, VIEW_URI_ROUTE_NAME } from './view.const';
+import {
+  VIEW_ROUTE_NAME,
+  VIEW_PAGE_ROUTE_NAME,
+  VIEW_SITE_ROUTE_NAME,
+} from './view.const';
 import {
   Ng2StateDeclaration,
   UIView,
   StateService,
   Transition,
   RedirectToResult,
-  StateParams,
 } from '@uirouter/angular';
 import { getParentStateName } from '../app.const';
 
-const viewStateResolve = async (
+const siteTreeResolve = async (
   objectsCommonService: ObjectsCommonService,
   stateService: StateService
 ): Promise<ObjectTreeImpl> => {
-  const dataTree = stateService.transition.params().dataTree;
-  if (dataTree) {
-    return dataTree;
-  } else {
-    let uri: string = stateService.transition.params().uri;
-    if (uri) {
-      if (uri.startsWith('http%')) {
-        return undefined;
-      }
-
-      return await objectsCommonService.getTreeByUri(uri);
-    }
+  const siteTree = stateService.transition.params().siteTree;
+  const siteId = stateService.transition.params().siteId;
+  if (siteTree && siteTree.id === siteId) {
+    return siteTree;
+  } else if (siteId) {
+    return objectsCommonService.getOrSearchObjectTreeById(siteId);
   }
 };
 
 const pageTreeResolve = async (
   objectsCommonService: ObjectsCommonService,
   stateService: StateService,
-  dataTree: ObjectTreeImpl
+  siteTree: ObjectTreeImpl
 ) => {
-  const pageTree = stateService.transition.params().pageTree;
-  if (pageTree) {
+  let pageTree = stateService.transition.params().pageTree;
+  const pageId = stateService.transition.params().pageId;
+  if (pageTree && pageId === pageTree.id) {
     return pageTree;
+  } else if (pageId) {
+    pageTree = await objectsCommonService.getOrSearchObjectTreeById(pageId);
+    if (pageTree) {
+      return pageTree;
+    }
   }
-  if (dataTree) {
-    await dataTree.waitForReady();
-    return dataTree.welcomePage;
+
+  const siteId = stateService.transition.params().siteId;
+  if (!siteTree && siteId) {
+    siteTree = await objectsCommonService.getOrSearchObjectTreeById(siteId);
+  }
+
+  if (siteTree) {
+    await siteTree.waitForReady();
+    if (siteTree.welcomePage) {
+      return siteTree.welcomePage;
+    }
   }
 };
 
 const viewStateRedirectTo = async (
   transition: Transition
 ): Promise<RedirectToResult> => {
-  const uri: string = transition.params().uri;
-  if (!uri) {
-    const dataTree: ObjectTreeImpl = transition.params().dataTree;
-    if (dataTree && dataTree.aliasUri) {
+  const siteId: string = transition.params().siteId;
+  if (!siteId) {
+    const siteTree: ObjectTreeImpl = transition.params().siteTree;
+    if (siteTree) {
       return {
-        state: VIEW_URI_ROUTE_NAME,
+        state: VIEW_SITE_ROUTE_NAME,
         params: {
-          uri: dataTree.aliasUri,
-          dataTree: transition.params().dataTree,
+          siteId: siteTree.id,
+          siteTree: transition.params().siteTree,
           pageTree: transition.params().pageTree,
         },
       };
     }
-    if (document.head.querySelector('[name~=dataTree][content]')['content']) {
+    if (document.head.querySelector('[name~=siteTreeId][content]')['content']) {
       return {
-        state: VIEW_URI_ROUTE_NAME,
+        state: VIEW_SITE_ROUTE_NAME,
         params: {
-          uri: document.head.querySelector('[name~=dataTree][content]')[
+          siteId: document.head.querySelector('[name~=siteTreeId][content]')[
             'content'
           ],
         },
       };
     }
   }
-  if (uri.startsWith('http%')) {
-    return {
-      state: VIEW_URI_ROUTE_NAME,
-      params: {
-        uri: decodeURIComponent(uri),
-        dataTree: transition.params().dataTree,
-        pageTree: transition.params().pageTree,
-      },
-    };
-  }
 
-  if (!transition.params().pageTree && transition.params().dataTree) {
-    await transition.params().dataTree.waitForReady();
-    if (transition.params().dataTree.welcomePage) {
+  const pageId: string = transition.params().pageId;
+
+  if (!pageId) {
+    const pageTree = transition.params().pageTree;
+    if (pageTree) {
       return {
-        state: VIEW_URI_ROUTE_NAME,
+        state: VIEW_PAGE_ROUTE_NAME,
         params: {
-          uri: transition.params().uri,
-          dataTree: transition.params().dataTree,
-          pageTree: transition.params().dataTree.welcomePage,
+          siteId: siteId,
+          pageId: pageTree.id,
+          siteTree: transition.params().siteTree,
+          pageTree: pageTree,
+          siteName: transition.params().siteTree.treeNode.name,
+          pageName: pageTree.treeNode.name,
         },
       };
     }
+
+    const siteTree: ObjectTreeImpl = transition.params().siteTree;
+    if (siteTree) {
+      await siteTree.waitForReady();
+      if (siteTree.welcomePage) {
+        return {
+          state: VIEW_PAGE_ROUTE_NAME,
+          params: {
+            siteId: siteTree.id,
+            pageId: siteTree.welcomePage.id,
+            siteTree: siteTree,
+            pageTree: siteTree.welcomePage,
+            siteName: siteTree.treeNode.name,
+            pageName: siteTree.welcomePage.treeNode.name,
+          },
+        };
+      }
+    }
+  }
+
+  if (pageId && siteId && transition.to().name !== VIEW_PAGE_ROUTE_NAME) {
+    return {
+      state: VIEW_PAGE_ROUTE_NAME,
+      params: {
+        siteId: siteId,
+        pageId: pageId,
+        siteTree: transition.params().siteTree,
+        pageTree: transition.params().pageTree,
+        siteName: transition.params().siteTree.treeNode.name,
+        pageName: transition.params().pageName,
+      },
+    };
   }
 
   return undefined;
@@ -109,35 +146,48 @@ const viewState: Ng2StateDeclaration = {
   url: '/view',
   component: UIView,
   params: {
-    dataTree: { value: undefined },
+    siteTree: { value: undefined },
     pageTree: { value: undefined },
   },
   redirectTo: viewStateRedirectTo,
 };
 
-const viewUriState: Ng2StateDeclaration = {
-  parent: getParentStateName(VIEW_URI_ROUTE_NAME),
-  name: VIEW_URI_ROUTE_NAME,
-  url: '/{uri}',
-  component: ViewComponent,
+const viewSiteState: Ng2StateDeclaration = {
+  parent: getParentStateName(VIEW_SITE_ROUTE_NAME),
+  name: VIEW_SITE_ROUTE_NAME,
+  url: '/{siteId}',
+  component: UIView,
   params: {
-    uri: { type: 'string' },
-    dataTree: { value: undefined },
+    siteTree: { value: undefined },
     pageTree: { value: undefined },
   },
   resolve: [
     {
-      token: OBJECT_TREE_TOKEN,
+      token: 'siteTree',
       deps: [ObjectsCommonService, StateService],
-      resolveFn: viewStateResolve,
+      resolveFn: siteTreeResolve,
     },
+  ],
+  redirectTo: viewStateRedirectTo,
+};
+
+const viewPageState: Ng2StateDeclaration = {
+  parent: getParentStateName(VIEW_PAGE_ROUTE_NAME),
+  name: VIEW_PAGE_ROUTE_NAME,
+  url: '/{pageId}/{siteName}/{pageName}',
+  component: ViewComponent,
+  params: {
+    siteTree: { value: undefined },
+    pageTree: { value: undefined },
+  },
+  resolve: [
     {
       token: 'pageTree',
-      deps: [ObjectsCommonService, StateService, OBJECT_TREE_TOKEN],
+      deps: [ObjectsCommonService, StateService, 'siteTree'],
       resolveFn: pageTreeResolve,
     },
   ],
   redirectTo: viewStateRedirectTo,
 };
 
-export const VIEW_STATES = [viewState, viewUriState];
+export const VIEW_STATES = [viewState, viewSiteState, viewPageState];

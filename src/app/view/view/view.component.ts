@@ -13,16 +13,16 @@ export class ViewComponent implements OnInit {
   public ready: boolean = false;
   public templateTree: ObjectTreeImpl;
   constructor(
-    @Inject(OBJECT_TREE_TOKEN) public dataTree: ObjectTreeImpl,
+    @Inject('siteTree') public siteTree: ObjectTreeImpl,
     @Inject('pageTree') public pageTree: ObjectTreeImpl,
     protected objectsCommonService: ObjectsCommonService,
     protected stateService: StateService
   ) {}
 
   async ngOnInit() {
-    await this.dataTree.waitForReady();
-    await this.dataTree.treeNode.waitForReady();
-    this.templateTree = this.dataTree.treeNode.webSiteObjectTree;
+    await this.siteTree.waitForReady();
+    await this.siteTree.treeNode.waitForReady();
+    this.templateTree = this.siteTree.treeNode.webSiteObjectTree;
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
 

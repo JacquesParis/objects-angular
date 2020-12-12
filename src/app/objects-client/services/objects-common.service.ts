@@ -76,6 +76,18 @@ export class ObjectsCommonService {
     return this.objectTreesService.getCachedObjectById(id);
   }
 
+  public getOrSearchObjectTypeById(id): Promise<ObjectTypeImpl> {
+    return this.objectsTypeService.getCachedOrRemoteObjectById(id);
+  }
+
+  public getOrSearchObjectNodeById(id): Promise<ObjectNodeImpl> {
+    return this.objectNodesService.getCachedOrRemoteObjectById(id);
+  }
+
+  public getOrSearchObjectTreeById(id): Promise<ObjectTreeImpl> {
+    return this.objectTreesService.getCachedOrRemoteObjectById(id);
+  }
+
   get objectTypesByName(): { [name: string]: ObjectTypeImpl } {
     return _.mapKeys(this.objectTypes, (objectType: ObjectTypeImpl, index) => {
       return objectType.name;
@@ -135,7 +147,10 @@ export class ObjectsCommonService {
           parentNodeUri: entitySpeficities.parentEntity.uri,
           objectTypeId: entitySpeficities.entityType.id,
           objectTypeUri: entitySpeficities.entityType.uri,
-          entityCtx: { jsonSchema: entitySpeficities.jsonSchema },
+          entityCtx: {
+            jsonSchema: entitySpeficities.jsonSchema,
+            entityType: EntityName.objectNode,
+          },
         }) as unknown) as T;
       case EntityName.objectTree:
         return (new ObjectTreeImpl(this.objectTreesService, {

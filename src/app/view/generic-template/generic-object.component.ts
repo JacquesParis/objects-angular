@@ -1,10 +1,13 @@
+import { StateService } from '@uirouter/angular';
 import { ObjectTreeImpl, ObjectNodeImpl } from '@jacquesparis/objects-client';
 import { IObjectNode } from '@jacquesparis/objects-model';
 export interface IGenericObjectComponent {
+  stateService: StateService;
   ready: boolean;
-  initComponent(): void;
   siteTree: ObjectTreeImpl;
   siteNode: ObjectNodeImpl;
+  siteTemplateTree: ObjectTreeImpl;
+  siteTemplateNode: ObjectNodeImpl;
   pageTree: ObjectTreeImpl;
   pageNode: ObjectNodeImpl;
   templateTree: ObjectTreeImpl;
@@ -12,6 +15,7 @@ export interface IGenericObjectComponent {
   templateNode: ObjectNodeImpl;
   dataNode: ObjectNodeImpl;
   params: any;
+  initComponent(): void;
 }
 
 export interface WebSiteTemplate extends IObjectNode {
@@ -20,12 +24,17 @@ export interface WebSiteTemplate extends IObjectNode {
 
 export abstract class GenericObjectComponent
   implements IGenericObjectComponent {
+  public stateService: StateService;
   public ready = false;
   public templateReady = false;
   public templateTree: ObjectTreeImpl;
   public siteTree: ObjectTreeImpl;
   public get siteNode(): ObjectNodeImpl {
     return this.siteTree.treeNode;
+  }
+  public siteTemplateTree: ObjectTreeImpl;
+  public get siteTemplateNode(): ObjectNodeImpl {
+    return this.siteTemplateTree.treeNode;
   }
   public pageTree: ObjectTreeImpl;
   public get pageNode(): ObjectNodeImpl {
@@ -42,4 +51,5 @@ export abstract class GenericObjectComponent
   public initComponent(): void {
     this.templateReady = true;
   }
+  public abstract gotoToPage(page: ObjectTreeImpl, event): void;
 }

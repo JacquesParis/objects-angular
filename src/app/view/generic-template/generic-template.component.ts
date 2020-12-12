@@ -1,3 +1,4 @@
+import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
 import { OBJECT_TREE_TOKEN } from './../../admin/admin.const';
 import { StateService } from '@uirouter/angular';
 import { DynamicTemplateDirective } from './dynamic-template.dircetive';
@@ -35,12 +36,13 @@ export class GenericTemplateComponent implements OnInit {
   @ViewChild(DynamicTemplateDirective)
   dynamicTemplatePlaceholder: DynamicTemplateDirective;
   protected componentRef: ComponentRef<IGenericObjectComponent>;
+  public siteTemplateTree: ObjectTreeImpl;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     protected compiler: Compiler,
     private stateService: StateService,
-    @Inject(OBJECT_TREE_TOKEN) public siteTree: ObjectTreeImpl,
+    @Inject('siteTree') public siteTree: ObjectTreeImpl,
     @Inject('pageTree') public pageTree: ObjectTreeImpl
   ) {}
 
@@ -66,6 +68,19 @@ export class GenericTemplateComponent implements OnInit {
     await this.dataTree.treeNode.waitForReady();
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
+
+    this.siteTemplateTree = this.siteTree.treeNode.webSiteObjectTree;
+    if (this.siteTemplateTree) {
+      this.siteTemplateTree.waitForReady();
+      this.siteTemplateTree.treeNode.waitForReady();
+    }
+    this.siteTree.waitForReady();
+    this.siteTree.treeNode.waitForReady();
+    if (this.pageTree) {
+      this.pageTree.waitForReady();
+      this.pageTree.treeNode.waitForReady();
+    }
+
     if (this.pageTree) {
       await this.pageTree.waitForReady();
       await this.pageTree.treeNode.waitForReady();
@@ -81,7 +96,26 @@ export class GenericTemplateComponent implements OnInit {
           '<div class="template-holder" *ngIf="templateReady">' +
           template +
           '</div>',
-      })(class extends GenericObjectComponent {});
+      })(
+        class extends GenericObjectComponent {
+          public gotoToPage(page: ObjectTreeImpl, event) {
+            if (page) {
+              this.stateService.go(VIEW_PAGE_ROUTE_NAME, {
+                siteId: this.siteTree.id,
+                pageId: page.id,
+                pageName: page.treeNode.name,
+                siteTree: this.siteTree,
+                pageTree: page,
+                siteName: this.siteTree.treeNode.name,
+              });
+            }
+            if (event) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }
+        }
+      );
       const tmpModule = NgModule({
         imports: [CommonAppModule],
         declarations: [
@@ -115,6 +149,8 @@ export class GenericTemplateComponent implements OnInit {
     this.componentRef.instance.dataTree = this.dataTree;
     this.componentRef.instance.siteTree = this.siteTree;
     this.componentRef.instance.pageTree = this.pageTree;
+    this.componentRef.instance.siteTemplateTree = this.siteTemplateTree;
+    this.componentRef.instance.stateService = this.stateService;
     this.componentRef.instance.ready = true;
 
     /*    if (!('initComponent' in this.componentRef.instance)) {
