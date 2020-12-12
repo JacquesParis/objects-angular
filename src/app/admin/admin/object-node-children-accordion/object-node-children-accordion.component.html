@@ -32,7 +32,7 @@
             ></div>
             <span
               class="badge badge-secondary float-right pull-right"
-              [innerHTML]="child.treeNode.objectType.name"
+              [innerHTML]="child.treeNode.objectTypeId"
             ></span>
           </button>
           <div *ngIf="isOpen(child) && child.treeNode && child.isReady">

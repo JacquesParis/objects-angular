@@ -1,3 +1,4 @@
+import { RestEntityListService } from './rest-entity-list.service';
 import { OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
 import {
@@ -26,7 +27,8 @@ export abstract class AbstractRestEntityComponent<
   @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
   constructor(
     protected entityTypeName: EntityName,
-    protected objectsCommonService: ObjectsCommonService
+    protected objectsCommonService: ObjectsCommonService,
+    protected restEntityListService: RestEntityListService
   ) {
     super();
   }
@@ -49,6 +51,12 @@ export abstract class AbstractRestEntityComponent<
   }
 
   protected async onNewEntityCreated(): Promise<void> {
+    if (this.entity?.entityCtx?.entityType && this.entity?.id)
+      this.restEntityListService.setOpen(
+        this.entity.entityCtx.entityType,
+        this.entity.id,
+        true
+      );
     return;
   }
 

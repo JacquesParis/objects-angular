@@ -1,3 +1,4 @@
+import { RestEntityListService } from './../abstract-rest-entity/rest-entity-list.service';
 import { AbstractRestEntityComponent } from '../abstract-rest-entity/abstract-rest-entity.component';
 import { ObjectSubTypeImpl, EntityName } from '@jacquesparis/objects-client';
 import { IObjectSubType } from '@jacquesparis/objects-model';
@@ -10,8 +11,15 @@ export abstract class AbstractObjectSubTypeComponent
   implements OnInit {
   entity: ObjectSubTypeImpl;
 
-  constructor(protected objectsCommonService: ObjectsCommonService) {
-    super(EntityName.objectSubType, objectsCommonService);
+  constructor(
+    protected objectsCommonService: ObjectsCommonService,
+    protected restEntityListService: RestEntityListService
+  ) {
+    super(
+      EntityName.objectSubType,
+      objectsCommonService,
+      restEntityListService
+    );
   }
   /*
   ngOnInit() {

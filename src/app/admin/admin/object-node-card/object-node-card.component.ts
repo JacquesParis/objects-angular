@@ -1,3 +1,4 @@
+import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { VIEW_ROUTE_NAME } from './../../../view/view.const';
 import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
@@ -38,15 +39,17 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
 
   constructor(
     protected objectsCommonService: ObjectsCommonService,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected restEntityListService: RestEntityListService
   ) {
-    super(EntityName.objectNode, objectsCommonService);
+    super(EntityName.objectNode, objectsCommonService, restEntityListService);
   }
 
   async ngOnInit() {
     this.entity = this.objectTree.treeNode;
     this.treeType = this.objectTree.treeNode.objectType;
-    this.title = this.entity.name + ' (' + this.treeType.name + ')';
+    this.title =
+      this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
     let objectChildTypes = [];
     if (
       this.objectTree.entityCtx &&
@@ -55,9 +58,11 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
     ) {
       objectChildTypes = this.objectTree.entityCtx.actions.reads;
     }
-    this.subTypes = this.entity.objectType.objectSubTypes.filter(
-      (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
-    );
+    if (this.entity.objectType) {
+      this.subTypes = this.entity.objectType.objectSubTypes.filter(
+        (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
+      );
+    }
     await super.ngOnInit();
     if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
       this.hasWebSite = true;

@@ -1,3 +1,4 @@
+import { RestEntityListService } from './../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ObjectTypeImpl, EntityName } from '@jacquesparis/objects-client';
 import { IObjectType } from '@jacquesparis/objects-model';
@@ -17,7 +18,10 @@ export class ObjectTypeCardComponent extends AbstractRestEntityComponent<
 > {
   @Input() entity: ObjectTypeImpl;
 
-  constructor(protected objectsCommonService: ObjectsCommonService) {
-    super(EntityName.objectType, objectsCommonService);
+  constructor(
+    protected objectsCommonService: ObjectsCommonService,
+    protected restEntityListService: RestEntityListService
+  ) {
+    super(EntityName.objectType, objectsCommonService, restEntityListService);
   }
 }

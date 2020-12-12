@@ -86,9 +86,10 @@ export class GenericTemplateComponent implements OnInit {
       await this.pageTree.treeNode.waitForReady();
     }
     const template =
-      this.templateTree.treeNode.template ||
+      this.templateTree.treeNode.contentGenericTemplate?.template ||
       'Missing template for {{dataTree.treeNode.name}}';
-    const templateId = this.hashCode(template);
+    const scss = this.templateTree.treeNode.contentGenericTemplate?.scss || '';
+    const templateId = this.hashCode(template + scss);
 
     if (!(templateId in GenericTemplateComponent.templates)) {
       const tmpCmp: any = Component({
@@ -96,6 +97,7 @@ export class GenericTemplateComponent implements OnInit {
           '<div class="template-holder" *ngIf="templateReady">' +
           template +
           '</div>',
+        styles: [scss],
       })(
         class extends GenericObjectComponent {
           public gotoToPage(page: ObjectTreeImpl, event) {
