@@ -5,7 +5,7 @@ import {
   IEntityPropertiesWrapper,
   EntityName,
 } from '@jacquesparis/objects-client';
-import { IRestEntity } from '@jacquesparis/objects-model';
+import { IEntityMethod, IRestEntity } from '@jacquesparis/objects-model';
 import {
   IJsonSchema,
   IJsonLayoutProperty,
@@ -22,6 +22,7 @@ export abstract class AbstractRestEntityComponent<
   public schema: IJsonSchema;
   public isReady: boolean = false;
   public layout: IJsonLayoutProperty[] = [];
+  public actions: IEntityMethod[] = [];
   @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
@@ -33,30 +34,28 @@ export abstract class AbstractRestEntityComponent<
     super();
   }
 
+  public saveValueMethod: (value) => Promise<void>;
+
+  public deleteValueMethod: () => Promise<void>;
+
+  public runActionMethod: (method: IEntityMethod, args) => Promise<void>;
+
   async ngOnInit() {
     await this.entity.waitForReady();
     this.schema = this.objectsCommonService.getSchema(
       this.entityTypeName,
       this.entity
     );
+    this.saveValueMethod = this.saveValue.bind(this);
+    this.deleteValueMethod = this.deleteValue.bind(this);
+    this.runActionMethod = this.runAction.bind(this);
+    this.actions = this.entity.entityCtx?.actions?.methods
+      ? this.entity.entityCtx.actions.methods
+      : [];
     this.isReady = true;
   }
 
-  get saveValueMethod(): (value) => Promise<void> {
-    return this.saveValue.bind(this);
-  }
-
-  get deleteValueMethod(): () => Promise<void> {
-    return this.deleteValue.bind(this);
-  }
-
   protected async onNewEntityCreated(): Promise<void> {
-    if (this.entity?.entityCtx?.entityType && this.entity?.id)
-      this.restEntityListService.setOpen(
-        this.entity.entityCtx.entityType,
-        this.entity.id,
-        true
-      );
     return;
   }
 
@@ -70,6 +69,13 @@ export abstract class AbstractRestEntityComponent<
     if (isNew) {
       await this.onNewEntityCreated();
     }
+    this.schema = this.objectsCommonService.getSchema(
+      this.entityTypeName,
+      this.entity
+    );
+    this.actions = this.entity.entityCtx?.actions?.methods
+      ? this.entity.entityCtx.actions.methods
+      : [];
     this.onSave.emit();
     return;
   }
@@ -83,5 +89,9 @@ export abstract class AbstractRestEntityComponent<
 
   public cancelAction() {
     this.onCancel.emit();
+  }
+
+  public async runAction(method: IEntityMethod, args): Promise<any> {
+    return this.entity.runAction(method, args);
   }
 }

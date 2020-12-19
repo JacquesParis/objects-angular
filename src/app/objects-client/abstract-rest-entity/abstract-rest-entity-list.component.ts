@@ -63,7 +63,7 @@ export class AbstractRestEntityListComponent<
   }
 
   public isOpen(child: T): boolean {
-    return this.restEntityListService.isOpen(this.entityName, child.id);
+    return this.restEntityListService.isOpen(this.entityName, child);
   }
   public async setOpen(child: any, value = true, parents: T[] = []) {
     for (const parent of parents) {

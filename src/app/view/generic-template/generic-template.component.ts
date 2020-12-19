@@ -1,9 +1,11 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
 import { OBJECT_TREE_TOKEN } from './../../admin/admin.const';
 import { StateService } from '@uirouter/angular';
 import { DynamicTemplateDirective } from './dynamic-template.dircetive';
 import { CommonAppModule } from './../../common-app/common-app.module';
 import {
+  ChangeDetectorRef,
   Compiler,
   Component,
   ComponentFactory,
@@ -41,9 +43,11 @@ export class GenericTemplateComponent implements OnInit {
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     protected compiler: Compiler,
-    private stateService: StateService,
     @Inject('siteTree') public siteTree: ObjectTreeImpl,
-    @Inject('pageTree') public pageTree: ObjectTreeImpl
+    @Inject('pageTree') public pageTree: ObjectTreeImpl,
+    public sanitization: DomSanitizer,
+    public stateService: StateService,
+    public changeDetectorRef: ChangeDetectorRef
   ) {}
 
   hashCode(str, seed = 0) {
@@ -98,26 +102,7 @@ export class GenericTemplateComponent implements OnInit {
           template +
           '</div>',
         styles: [scss],
-      })(
-        class extends GenericObjectComponent {
-          public gotoToPage(page: ObjectTreeImpl, event) {
-            if (page) {
-              this.stateService.go(VIEW_PAGE_ROUTE_NAME, {
-                siteId: this.siteTree.id,
-                pageId: page.id,
-                pageName: page.treeNode.name,
-                siteTree: this.siteTree,
-                pageTree: page,
-                siteName: this.siteTree.treeNode.name,
-              });
-            }
-            if (event) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-          }
-        }
-      );
+      })(class extends GenericObjectComponent {});
       const tmpModule = NgModule({
         imports: [CommonAppModule],
         declarations: [
@@ -143,6 +128,22 @@ export class GenericTemplateComponent implements OnInit {
     this.componentRef = viewContainerRef.createComponent<IGenericObjectComponent>(
       GenericTemplateComponent.templates[templateId]
     );
+
+    const controller =
+      this.templateTree.treeNode.contentGenericTemplate?.controller || '{}';
+    try {
+      const ctrl = eval(controller);
+      if (!ctrl.init) {
+        ctrl.init = (component: IGenericObjectComponent) => {
+          console.log('Initialising ' + component.dataNode.name + ' display');
+          component.ready = true;
+        };
+      }
+      this.componentRef.instance.ctrl = ctrl;
+    } catch (error) {}
+    this.componentRef.instance.stateService = this.stateService;
+    this.componentRef.instance.sanitization = this.sanitization;
+    this.componentRef.instance.changeDetectorRef = this.changeDetectorRef;
     /*
     this.componentRef.instance.thingObject = object;
     this.componentRef.instance.typeConfig = config;*/
@@ -152,8 +153,7 @@ export class GenericTemplateComponent implements OnInit {
     this.componentRef.instance.siteTree = this.siteTree;
     this.componentRef.instance.pageTree = this.pageTree;
     this.componentRef.instance.siteTemplateTree = this.siteTemplateTree;
-    this.componentRef.instance.stateService = this.stateService;
-    this.componentRef.instance.ready = true;
+    this.componentRef.instance.ctrl.init(this.componentRef.instance);
 
     /*    if (!('initComponent' in this.componentRef.instance)) {
       this.componentRef.instance['initComponent'] = () => {

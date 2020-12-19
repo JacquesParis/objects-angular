@@ -1,14 +1,25 @@
 <div *ngIf="isReady">
+  <div>
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="refresh()"
+    >
+      Refresh
+    </button>
+    <button
+      type="button"
+      (click)="openWebSite()"
+      *ngIf="hasWebSite"
+      class="btn btn-outline-secondary btn-sm"
+    >
+      See Web Site
+    </button>
+  </div>
   <div class="card mb-3">
     <div class="card-body">
       <h5 class="card-title">
-        <span [innerHTML]="title"></span
-        ><span
-          class="badge badge-secondary ml-3"
-          (click)="openWebSite()"
-          *ngIf="hasWebSite"
-          >See Web Site</span
-        >
+        <span [innerHTML]="title"></span>
       </h5>
       <lib-editable-json-schema-form
         *ngIf="!hideNode"
@@ -18,6 +29,8 @@
         [layout]="layout"
         (onCancel)="cancelAction()"
         [deleteValue]="deleteValueMethod"
+        [actions]="actions"
+        [runAction]="runActionMethod"
       >
       </lib-editable-json-schema-form>
     </div>
