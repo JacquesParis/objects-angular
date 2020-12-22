@@ -91,7 +91,7 @@ export class GenericTemplateComponent implements OnInit {
     }
     const template =
       this.templateTree.treeNode.contentGenericTemplate?.template ||
-      'Missing template for {{dataTree.treeNode.name}}';
+      'Missing template for {{dataTree.treeNode.name}} {{templateTree.treeNode.name}}';
     const scss = this.templateTree.treeNode.contentGenericTemplate?.scss || '';
     const templateId = this.hashCode(template + scss);
 
