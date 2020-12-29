@@ -20,7 +20,7 @@ export interface IGenericObjectComponent {
   templateNode: ObjectNodeImpl;
   dataNode: ObjectNodeImpl;
   ctrl: {
-    init(component: IGenericObjectComponent): void;
+    init(component: IGenericObjectComponent): Promise<void>;
   };
   params: any;
   initComponent(): void;
@@ -69,9 +69,7 @@ export class GenericObjectComponent implements IGenericObjectComponent {
     this.templateReady = true;
   }
   public ctrl = {
-    init: (component: IGenericObjectComponent) => {
-      component.ready = true;
-    },
+    init: async (component: IGenericObjectComponent): Promise<void> => {},
   };
   public gotoToPage(page: ObjectTreeImpl, event) {
     if (page) {

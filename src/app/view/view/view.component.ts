@@ -25,6 +25,12 @@ export class ViewComponent implements OnInit {
     this.templateTree = this.siteTree.treeNode.webSiteObjectTree;
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
+    console.log(
+      'display siteTree',
+      this.siteTree.treeNode.name,
+      'templateTree',
+      this.templateTree.treeNode.name
+    );
 
     /*    this.templateTree = await this.objectsCommonService.getTreeByUri(
       this.dataTree.treeNode.webSiteObjectTreeUri

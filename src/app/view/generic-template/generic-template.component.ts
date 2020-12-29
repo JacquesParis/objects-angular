@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
 import { OBJECT_TREE_TOKEN } from './../../admin/admin.const';
@@ -75,15 +76,11 @@ export class GenericTemplateComponent implements OnInit {
 
     this.siteTemplateTree = this.siteTree.treeNode.webSiteObjectTree;
     if (this.siteTemplateTree) {
-      this.siteTemplateTree.waitForReady();
-      this.siteTemplateTree.treeNode.waitForReady();
+      await this.siteTemplateTree.waitForReady();
+      await this.siteTemplateTree.treeNode.waitForReady();
     }
-    this.siteTree.waitForReady();
-    this.siteTree.treeNode.waitForReady();
-    if (this.pageTree) {
-      this.pageTree.waitForReady();
-      this.pageTree.treeNode.waitForReady();
-    }
+    await this.siteTree.waitForReady();
+    await this.siteTree.treeNode.waitForReady();
 
     if (this.pageTree) {
       await this.pageTree.waitForReady();
@@ -93,7 +90,7 @@ export class GenericTemplateComponent implements OnInit {
       this.templateTree.treeNode.contentGenericTemplate?.template ||
       'Missing template for {{dataTree.treeNode.name}} {{templateTree.treeNode.name}}';
     const scss = this.templateTree.treeNode.contentGenericTemplate?.scss || '';
-    const templateId = this.hashCode(template + scss);
+    const templateId = this.hashCode(template + scss); //+ Math.ceil(Math.random() * 100000000);
 
     if (!(templateId in GenericTemplateComponent.templates)) {
       const tmpCmp: any = Component({
@@ -123,7 +120,7 @@ export class GenericTemplateComponent implements OnInit {
     }
 
     const viewContainerRef = this.dynamicTemplatePlaceholder.viewContainer;
-    viewContainerRef.clear();
+    //  viewContainerRef.clear();
 
     this.componentRef = viewContainerRef.createComponent<IGenericObjectComponent>(
       GenericTemplateComponent.templates[templateId]
@@ -134,13 +131,25 @@ export class GenericTemplateComponent implements OnInit {
     try {
       const ctrl = eval(controller);
       if (!ctrl.init) {
-        ctrl.init = (component: IGenericObjectComponent) => {
+        ctrl.init = async (
+          component: IGenericObjectComponent
+        ): Promise<void> => {
           console.log('Initialising ' + component.dataNode.name + ' display');
-          component.ready = true;
         };
       }
+      //  ctrl.ctrl = this.componentRef.instance;
       this.componentRef.instance.ctrl = ctrl;
     } catch (error) {}
+    console.log(
+      'dataNode',
+      this.dataTree.treeNode.name,
+      'templateTree',
+      this.templateTree.treeNode.name,
+      'siteNode',
+      this.siteTree.treeNode.name,
+      'pageNode',
+      this.pageTree.treeNode.name
+    );
     this.componentRef.instance.stateService = this.stateService;
     this.componentRef.instance.sanitization = this.sanitization;
     this.componentRef.instance.changeDetectorRef = this.changeDetectorRef;
@@ -153,7 +162,8 @@ export class GenericTemplateComponent implements OnInit {
     this.componentRef.instance.siteTree = this.siteTree;
     this.componentRef.instance.pageTree = this.pageTree;
     this.componentRef.instance.siteTemplateTree = this.siteTemplateTree;
-    this.componentRef.instance.ctrl.init(this.componentRef.instance);
+    await this.componentRef.instance.ctrl.init(this.componentRef.instance);
+    this.componentRef.instance.ready = true;
 
     /*    if (!('initComponent' in this.componentRef.instance)) {
       this.componentRef.instance['initComponent'] = () => {

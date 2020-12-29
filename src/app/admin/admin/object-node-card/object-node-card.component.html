@@ -30,18 +30,85 @@
         (onCancel)="cancelAction()"
         [deleteValue]="deleteValueMethod"
         [actions]="actions"
+        [crud]="crud"
         [runAction]="runActionMethod"
       >
       </lib-editable-json-schema-form>
     </div>
   </div>
   <div *ngIf="!hideChildren">
-    <ng-container *ngFor="let subType of subTypes">
-      <app-object-node-children-accordion
-        [objectSubType]="subType"
-        [objectTree]="objectTree"
-        *ngIf="subType.objectType"
-      ></app-object-node-children-accordion>
-    </ng-container>
+    <tabset #tabSet>
+      <tab heading="Content list">
+        <app-object-node-children-list
+          [objectTree]="objectTree"
+          [tabSet]="tabSet"
+        ></app-object-node-children-list>
+      </tab>
+      <tab heading="Basic Title 1">
+        <ng-container *ngFor="let subType of subTypes">
+          <app-object-node-children-accordion
+            [objectSubType]="subType"
+            [objectTree]="objectTree"
+            *ngIf="subType.objectType"
+          ></app-object-node-children-accordion>
+        </ng-container>
+      </tab>
+    </tabset>
+
+    <!--
+         <ul class="nav nav-tabs" id="{{ entity.id }}myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link active"
+          id="{{ entity.id }}list-tab"
+          data-toggle="tab"
+          href="#{{ entity.id }}list"
+          role="tab"
+          [attr.aria-controls]="entity.id + 'list'"
+          aria-selected="true"
+          >Content list</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          #tabType
+          class="nav-link"
+          id="{{ entity.id }}type-tab"
+          data-toggle="tab"
+          href="#{{ entity.id }}type"
+          role="tab"
+          [attr.aria-controls]="entity.id + 'type'"
+          aria-selected="false"
+          >Content types</a
+        >
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div
+        class="tab-pane fade show active"
+        id="{{ entity.id }}list"
+        role="tabpanel"
+        [attr.aria-labelledby]="entity.id + 'list-tab'"
+      >
+        <app-object-node-children-list
+          [objectTree]="objectTree"
+          [tabType]="tabType"
+        ></app-object-node-children-list>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="{{ entity.id }}type"
+        role="tabpanel"
+        [attr.aria-labelledby]="entity.id + 'type-tab'"
+      >
+        <ng-container *ngFor="let subType of subTypes">
+          <app-object-node-children-accordion
+            [objectSubType]="subType"
+            [objectTree]="objectTree"
+            *ngIf="subType.objectType"
+          ></app-object-node-children-accordion>
+        </ng-container>
+      </div>
+    </div>-->
   </div>
 </div>

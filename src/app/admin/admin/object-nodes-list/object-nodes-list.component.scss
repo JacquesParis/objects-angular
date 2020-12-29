@@ -3,19 +3,42 @@
     display: none;
     overflow: hidden;
   }
+  .fullScreen {
+    position: absolute;
+    top: 2.9rem;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow: auto;
+
+    .hideAccordion {
+      display: block;
+    }
+    .panel-collapse.collapse.in {
+      &.show {
+        display: block;
+        position: fixed;
+        top: 2.9rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        background-color: white;
+        overflow-y: auto;
+      }
+    }
+  }
 }
+/*
 .fullScreen::ng-deep {
   .hideAccordion {
     display: block;
   }
   .panel-collapse.collapse.in {
-    /*display: none;
-    position: relative;
-    transition: top 2s, left 2s, right 2s, bottom 2s, position 2s;*/
     &.show {
       display: block;
       position: fixed;
-      top: 3rem;
+      top: 2.9rem;
       left: 0;
       right: 0;
       bottom: 0;
@@ -25,3 +48,4 @@
     }
   }
 }
+*/

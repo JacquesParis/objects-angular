@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { VIEW_ROUTE_NAME } from './../../../view/view.const';
 import { StateService } from '@uirouter/angular';
@@ -8,26 +10,38 @@ import {
   ObjectTypeImpl,
   ObjectTreeImpl,
 } from '@jacquesparis/objects-client';
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  OnInit,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
 import { AbstractRestEntityComponent } from '../../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
 import {
   IObjectNode,
   IObjectType,
   IObjectSubType,
 } from '@jacquesparis/objects-model';
+import * as _ from 'lodash-es';
+import { OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-object-node-card',
   templateUrl: './object-node-card.component.html',
   styleUrls: ['./object-node-card.component.scss'],
 })
-export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
-  IObjectNode,
-  ObjectNodeImpl
-> {
+export class ObjectNodeCardComponent
+  extends AbstractRestEntityComponent<IObjectNode, ObjectNodeImpl>
+  implements OnInit, OnDestroy, OnChanges {
   @Input() objectTree: ObjectTreeImpl;
   @Input() hideNode = false;
   @Input() hideChildren = false;
+  @ViewChildren(TabsetComponent) tabSet!: QueryList<TabsetComponent>;
 
   public title: string;
 
@@ -43,6 +57,11 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
     protected restEntityListService: RestEntityListService
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    super.ngOnChanges(changes);
+    this.selectTab();
   }
 
   async ngOnInit() {
@@ -63,10 +82,41 @@ export class ObjectNodeCardComponent extends AbstractRestEntityComponent<
         (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
       );
     }
+
     await super.ngOnInit();
     if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
       this.hasWebSite = true;
     }
+    this.registerSubscription(
+      this.restEntityListService.subscribe(EntityName.objectNode, () => {
+        this.selectTab();
+      })
+    );
+  }
+
+  selectTab() {
+    if (this.tabSet && this.tabSet.first) {
+      if (
+        _.some(this.objectTree.children, (child) =>
+          this.restEntityListService.isOpen(
+            EntityName.objectNode,
+            child.treeNode
+          )
+        )
+      ) {
+        if (!this.tabSet.first.tabs[1].active) {
+          this.tabSet.first.tabs[1].active = true;
+        }
+      } else {
+        if (!this.tabSet.first.tabs[0].active) {
+          this.tabSet.first.tabs[0].active = true;
+        }
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   public refresh() {

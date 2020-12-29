@@ -1,5 +1,11 @@
 import { RestEntityListService } from './rest-entity-list.service';
-import { OnInit, EventEmitter, Output } from '@angular/core';
+import {
+  OnInit,
+  EventEmitter,
+  Output,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
 import {
   IEntityPropertiesWrapper,
@@ -17,12 +23,16 @@ export abstract class AbstractRestEntityComponent<
     EntityWrapper extends IEntityPropertiesWrapper<Entity>
   >
   extends CommonComponentComponent
-  implements OnInit {
+  implements OnInit, OnChanges {
   abstract entity: EntityWrapper;
   public schema: IJsonSchema;
   public isReady: boolean = false;
   public layout: IJsonLayoutProperty[] = [];
   public actions: IEntityMethod[] = [];
+  public crud: { delete: boolean; update: boolean } = {
+    delete: false,
+    update: false,
+  };
   @Output() public onCancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onSave: EventEmitter<void> = new EventEmitter<void>();
   @Output() public onDelete: EventEmitter<void> = new EventEmitter<void>();
@@ -40,7 +50,19 @@ export abstract class AbstractRestEntityComponent<
 
   public runActionMethod: (method: IEntityMethod, args) => Promise<void>;
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    if (this.entity) {
+      await this.initEntity();
+    }
+  }
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    this.isReady = false;
+    if (this.entity) {
+      await this.initEntity();
+    }
+  }
+
+  async initEntity() {
     await this.entity.waitForReady();
     this.schema = this.objectsCommonService.getSchema(
       this.entityTypeName,
@@ -52,6 +74,12 @@ export abstract class AbstractRestEntityComponent<
     this.actions = this.entity.entityCtx?.actions?.methods
       ? this.entity.entityCtx.actions.methods
       : [];
+    this.crud = this.entity.entityCtx?.aclCtx?.rights
+      ? this.entity.entityCtx.aclCtx.rights
+      : {
+          delete: false,
+          update: false,
+        };
     this.isReady = true;
   }
 

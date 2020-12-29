@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { IDataEntity } from '@jacquesparis/objects-model';
 import {
   Component,
@@ -8,10 +9,19 @@ import {
 } from '@angular/core';
 
 export class CommonComponentComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   constructor() {}
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
+  }
 
   ngOnInit(): void {}
+
+  public registerSubscription(sub: Subscription) {
+    this.subscriptions.push(sub);
+  }
 
   public trackByFunc(item: { id?: string; updatedId?: string }) {
     return item.id + '_' + item.updatedId;
