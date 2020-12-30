@@ -1,15 +1,33 @@
-<div class="d-flex justify-content-center align-content-stretch flex-wrap">
+<div
+  class=""
+  cdkDropList
+  [id]="'dropList' + objectTree.treeNode.id"
+  [cdkDropListData]="objectTree.children"
+  [cdkDropListConnectedTo]="['dropList' + objectTree.treeNode.id]"
+  (cdkDropListDropped)="onChildDrop($event)"
+>
   <div
-    class="card col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2"
+    class="card"
     *ngFor="let child of objectTree.children"
+    cdkDrag
+    [ngStyle]="{
+      cursor: 'move'
+    }"
   >
     <div class="card-body">
-      <h6 class="card-title">{{ child.treeNode.name }}</h6>
-      <h6 class="card-subtitle mb-2 text-muted">
-        {{ child.treeNode.objectTypeId }}
-      </h6>
-      <a class="btn btn-sm btn-outline-secondary" (click)="setOpen(child, true)"
-        >View</a
+      <span class="card-title"
+        ><h6 class="d-inline">{{ child.treeNode.name }}</h6>
+        <h6
+          class="d-inline text-muted mx-2"
+          [ngStyle]="{ 'font-size': 'small' }"
+        >
+          {{ child.treeNode.objectTypeId }}
+        </h6>
+        <a
+          class="btn btn-sm btn-outline-secondary"
+          (click)="setOpen(child, true)"
+          >View</a
+        ></span
       >
     </div>
   </div>

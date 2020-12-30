@@ -7,6 +7,7 @@ import { UIRouterModule } from '@uirouter/angular';
 import { ADMIN_STATES } from './admin.route';
 import { ObjectNodeCardComponent } from './admin/object-node-card/object-node-card.component';
 import { ObjectNodeChildrenAccordionComponent } from './admin/object-node-children-accordion/object-node-children-accordion.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 @NgModule({
@@ -24,6 +25,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
       states: ADMIN_STATES,
     }),
     TabsModule.forRoot(),
+    DragDropModule,
   ],
 })
 export class AdminModule {}

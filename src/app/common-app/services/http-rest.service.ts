@@ -1,5 +1,11 @@
+import { WELCOME_STATE_NAME } from './../../app.const';
+import { StateService } from '@uirouter/angular';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import {
   IRestService,
   IRestQueryParam,
@@ -39,7 +45,10 @@ export class HttpRestError extends Error {
   providedIn: 'root',
 })
 export class HttpRestService implements IRestService {
-  constructor(protected httpClient: HttpClient) {}
+  constructor(
+    protected httpClient: HttpClient,
+    protected stateService: StateService
+  ) {}
   public async get<T>(
     uri: string,
     queryParams?: IRestQueryParam,
@@ -73,6 +82,10 @@ export class HttpRestService implements IRestService {
       response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
+      if (401 === error.status) {
+        this.stateService.go(WELCOME_STATE_NAME);
+        return;
+      }
       throw new HttpRestError(error);
     }
     return response;
@@ -127,6 +140,10 @@ export class HttpRestService implements IRestService {
       response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
+      if (401 === error.status) {
+        this.stateService.go(WELCOME_STATE_NAME);
+        return;
+      }
       throw new HttpRestError(error);
     }
     return response;
@@ -159,6 +176,10 @@ export class HttpRestService implements IRestService {
       response.result = httpResponse.body;
       response.status = httpResponse.status;
     } catch (error) {
+      if (401 === error.status) {
+        this.stateService.go(WELCOME_STATE_NAME);
+        return;
+      }
       throw new HttpRestError(error);
     }
     return response;

@@ -48,7 +48,7 @@ export abstract class AbstractRestEntityComponent<
 
   public deleteValueMethod: () => Promise<void>;
 
-  public runActionMethod: (method: IEntityMethod, args) => Promise<void>;
+  public runActionMethod: (methodId: string, args) => Promise<void>;
 
   async ngOnInit(): Promise<void> {
     if (this.entity) {
@@ -119,7 +119,7 @@ export abstract class AbstractRestEntityComponent<
     this.onCancel.emit();
   }
 
-  public async runAction(method: IEntityMethod, args): Promise<any> {
-    return this.entity.runAction(method, args);
+  public async runAction(methodId: string, args): Promise<any> {
+    return this.entity.runAction(methodId, args);
   }
 }
