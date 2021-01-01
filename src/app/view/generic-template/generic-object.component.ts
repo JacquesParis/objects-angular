@@ -73,6 +73,7 @@ export class GenericObjectComponent implements IGenericObjectComponent {
   };
   public gotoToPage(page: ObjectTreeImpl, event) {
     if (page) {
+      window.scrollTo(0, 0);
       this.stateService.go(VIEW_PAGE_ROUTE_NAME, {
         siteId: this.siteTree.id,
         pageId: page.id,

@@ -9,18 +9,22 @@ import {
 } from '@angular/core';
 
 export class CommonComponentComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+  private subscriptions: (() => void)[] = [];
   constructor() {}
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
-      sub.unsubscribe();
+      sub();
     }
   }
 
   ngOnInit(): void {}
 
-  public registerSubscription(sub: Subscription) {
-    this.subscriptions.push(sub);
+  public registerSubscription(sub: Subscription | (() => void)) {
+    if (sub instanceof Subscription) {
+      this.subscriptions.push(sub.unsubscribe.bind(sub));
+    } else {
+      this.subscriptions.push(sub);
+    }
   }
 
   public trackByFunc(item: { id?: string; updatedId?: string }) {

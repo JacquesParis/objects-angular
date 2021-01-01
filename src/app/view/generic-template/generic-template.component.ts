@@ -69,6 +69,16 @@ export class GenericTemplateComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(
+      'dataNode',
+      this.dataTree?.treeNode?.name,
+      'templateTree',
+      this.templateTree?.treeNode?.name,
+      'siteNode',
+      this.siteTree?.treeNode?.name,
+      'pageNode',
+      this.pageTree?.treeNode?.name
+    );
     await this.dataTree.waitForReady();
     await this.dataTree.treeNode.waitForReady();
     await this.templateTree.waitForReady();
@@ -78,6 +88,7 @@ export class GenericTemplateComponent implements OnInit {
     if (this.siteTemplateTree) {
       await this.siteTemplateTree.waitForReady();
       await this.siteTemplateTree.treeNode.waitForReady();
+      console.log('siteTemplateTree', this.siteTemplateTree?.treeNode?.name);
     }
     await this.siteTree.waitForReady();
     await this.siteTree.treeNode.waitForReady();
@@ -140,16 +151,6 @@ export class GenericTemplateComponent implements OnInit {
       //  ctrl.ctrl = this.componentRef.instance;
       this.componentRef.instance.ctrl = ctrl;
     } catch (error) {}
-    console.log(
-      'dataNode',
-      this.dataTree.treeNode.name,
-      'templateTree',
-      this.templateTree.treeNode.name,
-      'siteNode',
-      this.siteTree.treeNode.name,
-      'pageNode',
-      this.pageTree.treeNode.name
-    );
     this.componentRef.instance.stateService = this.stateService;
     this.componentRef.instance.sanitization = this.sanitization;
     this.componentRef.instance.changeDetectorRef = this.changeDetectorRef;

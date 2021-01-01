@@ -19,13 +19,12 @@ import * as _ from 'lodash-es';
 })
 export class ObjectNodeChildrenAccordionComponent
   extends AbstractRestEntityListComponent<ObjectNodeImpl>
-  implements OnInit, OnDestroy {
+  implements OnInit {
   @Input() objectTree: ObjectTreeImpl;
   @Input() objectSubType: ObjectSubTypeImpl;
   public objectType: ObjectTypeImpl;
   public children: ObjectTreeImpl[];
   public objectNode: ObjectNodeImpl;
-  private changeSubscriber: () => void;
   creationAvailable: boolean = false;
   constructor(
     protected objectsCommonService: ObjectsCommonService,
@@ -52,9 +51,11 @@ export class ObjectNodeChildrenAccordionComponent
     this.creationAvailable =
       !!this.objectTree.entityCtx?.actions?.creations &&
       !!this.objectTree.entityCtx?.actions?.creations[this.objectType.id];
-    this.changeSubscriber = this.objectTree.onChange((): void => {
-      this.changedValue();
-    });
+    this.registerSubscription(
+      this.objectTree.onChange((): void => {
+        this.changedValue();
+      })
+    );
     this.changedValue();
   }
 
@@ -67,13 +68,6 @@ export class ObjectNodeChildrenAccordionComponent
       this.objectType
     ) {
       this.children = this.objectTree.childrenByType(this.objectType.id);
-    }
-  }
-
-  public ngOnDestroy() {
-    super.ngOnDestroy();
-    if (this.changeSubscriber) {
-      this.changeSubscriber();
     }
   }
 

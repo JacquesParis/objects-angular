@@ -16,7 +16,15 @@
   >
     <div class="card-body">
       <span class="card-title"
-        ><h6 class="d-inline">{{ child.treeNode.name }}</h6>
+        ><h5
+          class="d-inline"
+          [ngStyle]="{
+            cursor: 'pointer'
+          }"
+          (click)="setOpen(child, true)"
+        >
+          {{ child.treeNode.name }}
+        </h5>
         <h6
           class="d-inline text-muted mx-2"
           [ngStyle]="{ 'font-size': 'small' }"

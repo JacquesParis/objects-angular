@@ -53,6 +53,12 @@ export abstract class AbstractRestEntityComponent<
   async ngOnInit(): Promise<void> {
     if (this.entity) {
       await this.initEntity();
+      this.registerSubscription(
+        this.entity.onChange((): void => {
+          this.isReady = false;
+          this.initEntity();
+        })
+      );
     }
   }
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
