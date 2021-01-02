@@ -4,6 +4,7 @@ import {
   ROOT_STATE_NAME,
   WELCOME_STATE_NAME,
   buildStateName,
+  getRootState,
 } from './app.const';
 import { UIView, Ng2StateDeclaration, StateService } from '@uirouter/angular';
 import { AppComponent } from './app.component';
@@ -51,6 +52,7 @@ const rootAppState: Ng2StateDeclaration = {
   parent: getParentStateName(WELCOME_STATE_NAME),
   url: '',
   component: AppComponent,
+  redirectTo: getRootState(),
 };
 
 const rootApp2State: Ng2StateDeclaration = {

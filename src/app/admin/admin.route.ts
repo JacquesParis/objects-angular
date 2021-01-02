@@ -1,3 +1,4 @@
+import { getOwnerName } from 'src/app/app.const';
 import { SHOULD_BE_LOGIN_RESOLVE } from './../app.route';
 import { ObjectsCommonService } from './../objects-client/services/objects-common.service';
 import { getParentStateName } from '../app.const';
@@ -21,7 +22,7 @@ const adminState: Ng2StateDeclaration = {
     state: ADMIN_OWNER_ROUTE_NAME,
     params: {
       ownerType: 'Tenant',
-      ownerName: 'Démo',
+      ownerName: getOwnerName(),
     },
   },
 };

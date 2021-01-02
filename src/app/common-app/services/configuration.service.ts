@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { getServer, getSiteId } from 'src/app/app.const';
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +9,11 @@ export class ConfigurationService {
     return 'Root';
   }
   getServer(): string {
-    return (
-      'http://' +
-      location.hostname +
-      ('localhost' === location.hostname ? ':3000' : '') +
-      '/api'
-    );
+    return getServer();
+  }
+
+  getSiteId(): string {
+    return getSiteId();
   }
 
   constructor() {}

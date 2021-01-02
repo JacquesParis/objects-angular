@@ -1,6 +1,6 @@
+import { getSiteId, uriDecode } from 'src/app/app.const';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { ObjectsCommonService } from './../objects-client/services/objects-common.service';
-import { OBJECT_TREE_TOKEN } from './../admin/admin.const';
 import { ViewComponent } from './view/view.component';
 import {
   VIEW_ROUTE_NAME,
@@ -20,12 +20,16 @@ const siteTreeResolve = async (
   objectsCommonService: ObjectsCommonService,
   stateService: StateService
 ): Promise<ObjectTreeImpl> => {
-  const siteTree = stateService.transition.params().siteTree;
-  const siteId = stateService.transition.params().siteId;
-  if (siteTree && siteTree.id === siteId) {
+  let siteTree = stateService.transition.params().siteTree;
+  let siteId = uriDecode(stateService.transition.params().siteId);
+  if (!siteId || 'default' === siteId) {
+    siteId = getSiteId();
+  }
+  if (siteTree) {
     return siteTree;
   } else if (siteId) {
-    return objectsCommonService.getOrSearchObjectTreeById(siteId);
+    siteTree = await objectsCommonService.getOrSearchObjectTreeById(siteId);
+    return siteTree;
   }
 };
 
@@ -36,16 +40,19 @@ const pageTreeResolve = async (
 ) => {
   let pageTree = stateService.transition.params().pageTree;
   const pageId = stateService.transition.params().pageId;
-  if (pageTree && pageId === pageTree.id) {
+  if (pageTree) {
     return pageTree;
-  } else if (pageId) {
+  } else if (pageId && 'default' !== pageId) {
     pageTree = await objectsCommonService.getOrSearchObjectTreeById(pageId);
     if (pageTree) {
       return pageTree;
     }
   }
 
-  const siteId = stateService.transition.params().siteId;
+  let siteId = uriDecode(stateService.transition.params().siteId);
+  if (!siteId || 'default' === siteId) {
+    siteId = getSiteId();
+  }
   if (!siteTree && siteId) {
     siteTree = await objectsCommonService.getOrSearchObjectTreeById(siteId);
   }
@@ -61,34 +68,39 @@ const pageTreeResolve = async (
 const viewStateRedirectTo = async (
   transition: Transition
 ): Promise<RedirectToResult> => {
-  const siteId: string = transition.params().siteId;
-  if (!siteId) {
-    const siteTree: ObjectTreeImpl = transition.params().siteTree;
-    if (siteTree) {
+  if (transition.to().name !== VIEW_PAGE_ROUTE_NAME) {
+    const siteId: string = uriDecode(transition.params().siteId);
+    if (!siteId) {
+      const siteTree: ObjectTreeImpl = transition.params().siteTree;
+      if (siteTree) {
+        return {
+          state: VIEW_PAGE_ROUTE_NAME,
+          params: {
+            siteId: siteTree.id,
+            siteTree: transition.params().siteTree,
+            pageTree: transition.params().pageTree,
+            pageId: transition.params().pageId || 'default',
+            siteName: transition.params().siteTree?.treeNode?.name || 'default',
+            pageName: transition.params().pageTree?.treeNode?.name || 'default',
+          },
+        };
+      }
+
       return {
-        state: VIEW_SITE_ROUTE_NAME,
+        state: VIEW_PAGE_ROUTE_NAME,
         params: {
-          siteId: siteTree.id,
-          siteTree: transition.params().siteTree,
-          pageTree: transition.params().pageTree,
-        },
-      };
-    }
-    if (document.head.querySelector('[name~=siteTreeId][content]')['content']) {
-      return {
-        state: VIEW_SITE_ROUTE_NAME,
-        params: {
-          siteId: document.head.querySelector('[name~=siteTreeId][content]')[
-            'content'
-          ],
+          siteId: getSiteId(),
+          pageId: 'default',
+          siteName: 'default',
+          pageName: 'default',
         },
       };
     }
   }
-
+  /*
   const pageId: string = transition.params().pageId;
 
-  if (!pageId) {
+  if (!pageId || 'default' === pageId) {
     const pageTree = transition.params().pageTree;
     if (pageTree) {
       return {
@@ -104,7 +116,7 @@ const viewStateRedirectTo = async (
       };
     }
 
-    const siteTree: ObjectTreeImpl = transition.params().siteTree;
+    let siteTree: ObjectTreeImpl = transition.params().siteTree;
     if (siteTree) {
       await siteTree.waitForReady();
       if (siteTree.welcomePage) {
@@ -128,14 +140,14 @@ const viewStateRedirectTo = async (
       state: VIEW_PAGE_ROUTE_NAME,
       params: {
         siteId: siteId,
-        pageId: pageId,
+        pageId: pageId || 'default',
         siteTree: transition.params().siteTree,
         pageTree: transition.params().pageTree,
-        siteName: transition.params().siteTree.treeNode.name,
-        pageName: transition.params().pageName,
+        siteName: transition.params().siteTree?.treeNode?.name || 'default',
+        pageName: transition.params().pageName || 'default',
       },
     };
-  }
+  }*/
 
   return undefined;
 };
@@ -149,7 +161,13 @@ const viewState: Ng2StateDeclaration = {
     siteTree: { value: undefined },
     pageTree: { value: undefined },
   },
-  redirectTo: viewStateRedirectTo,
+  redirectTo: {
+    state: VIEW_PAGE_ROUTE_NAME,
+    params: {
+      siteId: 'default',
+      pageId: 'default',
+    },
+  },
 };
 
 const viewSiteState: Ng2StateDeclaration = {
@@ -168,13 +186,13 @@ const viewSiteState: Ng2StateDeclaration = {
       resolveFn: siteTreeResolve,
     },
   ],
-  redirectTo: viewStateRedirectTo,
+  //  redirectTo: viewStateRedirectTo,
 };
 
 const viewPageState: Ng2StateDeclaration = {
   parent: getParentStateName(VIEW_PAGE_ROUTE_NAME),
   name: VIEW_PAGE_ROUTE_NAME,
-  url: '/{pageId}/{siteName}/{pageName}',
+  url: '/{pageId}',
   component: ViewComponent,
   params: {
     siteTree: { value: undefined },
@@ -187,7 +205,7 @@ const viewPageState: Ng2StateDeclaration = {
       resolveFn: pageTreeResolve,
     },
   ],
-  redirectTo: viewStateRedirectTo,
+  // redirectTo: viewStateRedirectTo,
 };
 
 export const VIEW_STATES = [viewState, viewSiteState, viewPageState];
