@@ -12,10 +12,6 @@ import {
 import { ViewComponent } from './view/view.component';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 
-export function createCompiler(compilerFactory: CompilerFactory) {
-  return compilerFactory.createCompiler();
-}
-
 @NgModule({
   imports: [
     CommonAppModule,
@@ -28,18 +24,6 @@ export function createCompiler(compilerFactory: CompilerFactory) {
     DynamicTemplateDirective,
     GenericTemplateComponent,
   ],
-  providers: [
-    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
-    {
-      provide: CompilerFactory,
-      useClass: JitCompilerFactory,
-      deps: [COMPILER_OPTIONS],
-    },
-    {
-      provide: Compiler,
-      useFactory: createCompiler,
-      deps: [CompilerFactory],
-    },
-  ],
+  providers: [],
 })
 export class ViewModule {}

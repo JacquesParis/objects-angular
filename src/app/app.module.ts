@@ -1,6 +1,11 @@
-import { ObjectsAngularFormsModule } from '@jacquesparis/objects-angular-forms';
+import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {
+  Compiler,
+  CompilerFactory,
+  COMPILER_OPTIONS,
+  NgModule,
+} from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
@@ -20,6 +25,9 @@ import {
   DefaultWidgetRegistry,
 } from 'ngx-schema-form';
 
+export function createCompiler(compilerFactory: CompilerFactory) {
+  return compilerFactory.createCompiler();
+}
 @NgModule({
   declarations: [AppComponent, WelcomeComponent],
   entryComponents: [WelcomeComponent],
@@ -38,7 +46,22 @@ import {
     AccordionModule.forRoot(),
     BrowserAnimationsModule,
   ],
-  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
+  providers: [
+    { provide: WidgetRegistry, useClass: DefaultWidgetRegistry },
+    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
+    {
+      provide: CompilerFactory,
+      useClass: JitCompilerFactory,
+      deps: [COMPILER_OPTIONS],
+    },
+    {
+      provide: Compiler,
+      useFactory: createCompiler,
+      deps: [CompilerFactory],
+    },
+  ],
   bootstrap: [WelcomeComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(compiler: Compiler) {}
+}
