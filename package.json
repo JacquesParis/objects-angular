@@ -1,6 +1,6 @@
 {
   "name": "objectsites",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms && npm --save install ../objects-model ../objects-client ../objects-website ../objects-angular-lib/dist/objects-angular-forms",
-    "update": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms && npm --save install @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms"
+    "update": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms && npm --save install @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms",
+    "lib": "npm run update && npm run build && git add -A && git commit --amend --no-edit && git push -f origin HEAD && npm publish dist --access=public"
   },
   "browser": {
     "fs": false,
@@ -32,10 +33,10 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@fortawesome/fontawesome-free": "^5.15.2",
-    "@jacquesparis/objects-angular-forms": "file:../objects-angular-lib/dist/objects-angular-forms",
-    "@jacquesparis/objects-client": "file:../objects-client",
-    "@jacquesparis/objects-model": "file:../objects-model",
-    "@jacquesparis/objects-website": "file:../objects-website",
+    "@jacquesparis/objects-angular-forms": "^1.0.21",
+    "@jacquesparis/objects-client": "^1.0.18",
+    "@jacquesparis/objects-model": "^1.0.16",
+    "@jacquesparis/objects-website": "^1.0.16",
     "@types/json-logic-js": "^1.2.1",
     "@types/leaflet": "^1.5.23",
     "@uirouter/angular": "^6.0.1",
