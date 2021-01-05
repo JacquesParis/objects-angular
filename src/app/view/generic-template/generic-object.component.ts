@@ -31,6 +31,8 @@ export interface WebSiteTemplate extends IObjectNode {
 }
 
 export class GenericObjectComponent implements IGenericObjectComponent {
+  public document: Document = document;
+  public window: Window = window;
   constructor() {}
   public sanitization: DomSanitizer;
   public stateService: StateService;
@@ -68,7 +70,11 @@ export class GenericObjectComponent implements IGenericObjectComponent {
   public initComponent(): void {
     this.templateReady = true;
   }
+  public refresh() {
+    this.changeDetectorRef.detectChanges();
+  }
   public ctrl = {
+    ctrl: this,
     init: async (component: IGenericObjectComponent): Promise<void> => {},
   };
   public gotoToPage(page: ObjectTreeImpl, event) {
@@ -99,5 +105,24 @@ export class GenericObjectComponent implements IGenericObjectComponent {
           'data:' + controlValue?.type + ';base64,' + controlValue?.base64
         )
       : controlValue?.uri;
+  }
+
+  public getImgBackground(controlValue: {
+    base64?: string;
+    type?: string;
+    uri?: string;
+  }): SafeResourceUrl {
+    return controlValue?.base64 && controlValue?.type
+      ? this.sanitization.bypassSecurityTrustStyle(
+          "url('" +
+            'data:' +
+            controlValue.type +
+            ';base64,' +
+            controlValue.base64 +
+            "')"
+        )
+      : this.sanitization.bypassSecurityTrustStyle(
+          "url('" + controlValue?.uri + "')"
+        );
   }
 }

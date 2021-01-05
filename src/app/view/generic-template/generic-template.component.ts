@@ -148,6 +148,7 @@ export class GenericTemplateComponent implements OnInit {
           console.log('Initialising ' + component.dataNode.name + ' display');
         };
       }
+      ctrl.ctrl = this.componentRef.instance;
       //  ctrl.ctrl = this.componentRef.instance;
       this.componentRef.instance.ctrl = ctrl;
     } catch (error) {}
