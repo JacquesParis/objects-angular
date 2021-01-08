@@ -13,7 +13,7 @@ export function buildStateAndRootHref(
   return {
     stateName: buildStateName(parentStateName, stateName),
     url: '/' + stateName,
-    href: getBaseUri() + '#/' + stateName,
+    href: location.origin + getBaseUri() + '#/' + stateName,
   };
 }
 
