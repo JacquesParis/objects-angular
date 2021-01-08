@@ -19,7 +19,7 @@ const shouldBeLoginResolve = async (
   const user = await userService.isUserLoguedIn();
   if (!user) {
     userService.nextLogInStateName = stateService.transition.to().name;
-    location.hash = USER_LOGIN_ROUTE_NAME_AND_HREF.href;
+    location.href = USER_LOGIN_ROUTE_NAME_AND_HREF.href;
     return Promise.reject();
   }
   return;

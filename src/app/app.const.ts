@@ -13,7 +13,7 @@ export function buildStateAndRootHref(
   return {
     stateName: buildStateName(parentStateName, stateName),
     url: '/' + stateName,
-    href: '#/' + stateName,
+    href: getBaseUri() + '#/' + stateName,
   };
 }
 
@@ -94,6 +94,20 @@ export function getServer(): string {
     ('localhost' === location.hostname ? ':3000' : '') +
     '/api'
   );
+}
+
+export function getBaseUri(): string {
+  if (
+    document.head.querySelector('[name~="objectTrees:baseUri"][content]') &&
+    document.head.querySelector('[name~="objectTrees:baseUri"][content]')[
+      'content'
+    ]
+  ) {
+    return document.head.querySelector(
+      '[name~="objectTrees:baseUri"][content]'
+    )['content'];
+  }
+  return '/';
 }
 
 export function uriDecode(param: string) {
