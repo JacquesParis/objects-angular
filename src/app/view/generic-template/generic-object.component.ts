@@ -77,7 +77,19 @@ export class GenericObjectComponent implements IGenericObjectComponent {
     ctrl: this,
     init: async (component: IGenericObjectComponent): Promise<void> => {},
   };
-  public gotoToPage(page: ObjectTreeImpl, event) {
+  public getPageHref(page: ObjectTreeImpl): string {
+    if (page) {
+      return this.stateService.href(VIEW_PAGE_ROUTE_NAME, {
+        siteId: this.siteTree.id,
+        pageId: page.id,
+        pageName: page.treeNode.name,
+        siteTree: this.siteTree,
+        pageTree: page,
+        siteName: this.siteTree.treeNode.name,
+      });
+    }
+  }
+  public goToPage(page: ObjectTreeImpl, event) {
     if (page) {
       window.scrollTo(0, 0);
       this.stateService.go(VIEW_PAGE_ROUTE_NAME, {
