@@ -137,4 +137,88 @@ export class GenericObjectComponent implements IGenericObjectComponent {
           "url('" + controlValue?.uri + "')"
         );
   }
+
+  getColSizes(
+    minWidth: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    maxWith: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    breakSize: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl',
+    keepProportion = false
+  ) {
+    const sizes = {
+      xs: 576,
+      sm: 768,
+      md: 992,
+      lg: 1200,
+      xl: 1400,
+    };
+    const breakingSize =
+      'none' === breakSize
+        ? sizes.xs
+        : Math.min(
+            ...Object.values(sizes).filter((size) => size > sizes[breakSize])
+          );
+    let returnedSizes = {};
+    for (const size in sizes) {
+      if (sizes[size] < breakingSize) {
+        returnedSizes[size] = 12;
+      } else {
+        returnedSizes[size] = Math.round(
+          minWidth +
+            ((maxWith - minWidth) * (sizes[size] - breakingSize)) /
+              (sizes.xl - breakingSize)
+        );
+        if (keepProportion) {
+          returnedSizes[size] =
+            Math.round(returnedSizes[size] / maxWith) * maxWith;
+        }
+      }
+    }
+    return returnedSizes;
+  }
+
+  getColClass(
+    minWidth: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    maxWith: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    breakSize: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl',
+    keepProportion = false
+  ) {
+    const colSizes = this.getColSizes(
+      minWidth,
+      maxWith,
+      breakSize,
+      keepProportion
+    );
+    const returnedClasses = [];
+    for (const size in colSizes) {
+      returnedClasses.push('col-' + size + '-' + colSizes[size]);
+    }
+    return returnedClasses.join(' ').replace('col-xs', 'col');
+  }
+
+  getColFloatClass(
+    minWidth: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    maxWith: 1 | 2 | 3 | 4 | 6 | 8 | 9 | 12,
+    breakSize: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl',
+    side: string = 'left',
+    keepProportion = false
+  ) {
+    const colSizes = this.getColSizes(
+      minWidth,
+      maxWith,
+      breakSize,
+      keepProportion
+    );
+    const returnedClasses = [];
+    for (const size in colSizes) {
+      const sizeClass = 'xs' === size ? '' : '-' + size;
+      returnedClasses.push(
+        'col' +
+          sizeClass +
+          '-' +
+          colSizes[size] +
+          (colSizes[size] !== 12 ? ' float' + sizeClass + '-' + side : '')
+      );
+    }
+    return returnedClasses.join(' ');
+  }
 }

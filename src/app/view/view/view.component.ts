@@ -22,7 +22,7 @@ export class ViewComponent implements OnInit {
   async ngOnInit() {
     await this.siteTree.waitForReady();
     await this.siteTree.treeNode.waitForReady();
-    this.templateTree = this.siteTree.treeNode.webSiteObjectTree;
+    this.templateTree = this.siteTree.treeNode.webSiteTree;
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
     console.log(
@@ -32,6 +32,7 @@ export class ViewComponent implements OnInit {
       this.templateTree.treeNode.name
     );
 
+    window.scrollTo(0, 0);
     /*    this.templateTree = await this.objectsCommonService.getTreeByUri(
       this.dataTree.treeNode.webSiteObjectTreeUri
     );

@@ -84,7 +84,7 @@ export class GenericTemplateComponent implements OnInit {
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
 
-    this.siteTemplateTree = this.siteTree.treeNode.webSiteObjectTree;
+    this.siteTemplateTree = this.siteTree.treeNode.webSiteTree;
     if (this.siteTemplateTree) {
       await this.siteTemplateTree.waitForReady();
       await this.siteTemplateTree.treeNode.waitForReady();
