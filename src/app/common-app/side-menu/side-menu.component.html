@@ -1,0 +1,47 @@
+<div class="" [style.height]="height" class="position-relative">
+  <div class="side-menu-container">
+    <div
+      class="col-md-3 float-left col-12 pl-0 pr-0 bg-dark text-light collapse width show sidebar left-sidebar"
+      [id]="leftMenuId"
+      #leftSidebar
+    >
+      <div class="sidebar-content border-0">
+        <a
+          href="#"
+          [attr.data-target]="'#' + leftMenuId"
+          data-toggle="collapse"
+          class="text-right float-right"
+          (click)="hideLeftSide()"
+        >
+          <i-bs
+            name="chevron-bar-left"
+            class="py-2 p-1 bg-dark text-light"
+          ></i-bs
+        ></a>
+
+        <ng-content select="[app-side-menu-left-part]"></ng-content>
+      </div>
+    </div>
+    <main
+      class="float-left col px-0 main"
+      [class.col-md-9]="isLeftSidebarShown"
+    >
+      <a
+        href="#"
+        [attr.data-target]="'#' + leftMenuId"
+        data-toggle="collapse"
+        [class.d-none]="isLeftSidebarShown"
+        (click)="showLeftSide()"
+        class="float-left"
+      >
+        <i-bs
+          name="chevron-bar-right"
+          class="py-2 p-1 bg-light text-dark"
+        ></i-bs
+      ></a>
+      <div class="main part">
+        <ng-content select="[app-side-menu-main-part]"></ng-content>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { getOwnerName } from 'src/app/app.const';
+import { CommonComponent } from './../common-component/common-component.component';
 import {
   USER_ACCOUNT_ROUTE_NAME_AND_HREF,
   USER_REGISTRATION_ROUTE_NAME_AND_HREF,
@@ -14,13 +16,15 @@ import {
   EventEmitter,
   Output,
 } from '@angular/core';
+import { ADMIN_ROUTE_NAME } from 'src/app/admin/admin.const';
+import { VIEW_ROUTE_NAME } from 'src/app/view/view.const';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './app-nav.component.html',
   styleUrls: ['./app-nav.component.scss'],
 })
-export class AppNavComponent implements OnInit, OnDestroy {
+export class AppNavComponent extends CommonComponent implements OnInit {
   @Output() public sizeChanged: EventEmitter<{
     width: number;
     height: number;
@@ -29,36 +33,37 @@ export class AppNavComponent implements OnInit, OnDestroy {
   public registerState = USER_REGISTRATION_ROUTE_NAME_AND_HREF;
   public accountState = USER_ACCOUNT_ROUTE_NAME_AND_HREF;
   public welcomeRootName = WELCOME_STATE_NAME;
+  public adminStateName = ADMIN_ROUTE_NAME;
+  public viewStateName = VIEW_ROUTE_NAME;
   isUserLogued: boolean;
   user: AppUserImpl;
-  // tslint:disable-next-line: ban-types
-  regitered: Function;
+  public hasAdmin: boolean;
 
   constructor(
     private userService: UserService,
     private transitionService: TransitionService
-  ) {}
+  ) {
+    super();
+  }
 
   async ngOnInit() {
+    super.ngOnInit();
     await this.checkUserStatus();
-    this.regitered = this.transitionService.onSuccess(
-      {},
-      (transition: Transition): HookResult => {
-        this.checkUserStatus();
-        return true;
-      }
+    this.registerSubscription(
+      this.transitionService.onSuccess(
+        {},
+        (transition: Transition): HookResult => {
+          this.checkUserStatus();
+          return true;
+        }
+      )
     );
+    this.hasAdmin = !!getOwnerName();
   }
 
   private async checkUserStatus() {
     const isUserLogued = await this.userService.isUserLoguedIn();
     this.isUserLogued = !!isUserLogued;
     this.user = (this.isUserLogued ? isUserLogued : null) as AppUserImpl;
-  }
-
-  ngOnDestroy() {
-    if (this.regitered) {
-      this.regitered();
-    }
   }
 }

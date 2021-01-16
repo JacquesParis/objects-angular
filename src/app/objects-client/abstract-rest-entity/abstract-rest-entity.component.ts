@@ -6,7 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
+import { CommonComponent } from '../../common-app/common-component/common-component.component';
 import {
   IEntityPropertiesWrapper,
   EntityName,
@@ -22,7 +22,7 @@ export abstract class AbstractRestEntityComponent<
     Entity extends IRestEntity,
     EntityWrapper extends IEntityPropertiesWrapper<Entity>
   >
-  extends CommonComponentComponent
+  extends CommonComponent
   implements OnInit, OnChanges {
   abstract entity: EntityWrapper;
   public schema: IJsonSchema;

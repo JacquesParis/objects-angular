@@ -1,0 +1,48 @@
+<div
+  [style.cursor]="'pointer'"
+  (click)="switchCollapsed(treeChild)"
+  [attr.aria-expanded]="!isCollapsed(treeChild)"
+  [attr.aria-controls]="'treeNode_' + treeChild.treeNode.id"
+>
+  <span class="align-middle text-nowrap">
+    <i-bs
+      *ngIf="mayOpen(treeChild)"
+      name="arrow-right-short"
+      width="1rem"
+      height="1rem"
+      class="align-middle text-light py-2 p-1"
+    ></i-bs>
+    <i-bs
+      *ngIf="isFinalChild(treeChild)"
+      name="file-earmark"
+      width="1rem"
+      height="1rem"
+      class="align-middle text-light py-2 p-1"
+    ></i-bs>
+    <i-bs
+      *ngIf="isLoading(treeChild)"
+      name="hourglass-split"
+      width="1rem"
+      height="1rem"
+      class="align-middle text-light py-2 p-1"
+    ></i-bs>
+    <a (click)="displayNode()"> {{ treeChild.treeNode.name }}</a>
+  </span>
+</div>
+
+<div
+  [id]="'treeNode_' + treeChild.treeNode.id"
+  [collapse]="isCollapsed(treeChild)"
+  [isAnimated]="true"
+>
+  <div
+    class="well well-lg card card-block card-header"
+    *ngIf="mayDisplay(treeChild)"
+  >
+    <div
+      app-admin-node-tree-field
+      [treeChild]="child"
+      *ngFor="let child of treeChild.children"
+    ></div>
+  </div>
+</div>

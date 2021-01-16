@@ -1,3 +1,8 @@
+import { AdminNodeViewComponent } from './admin-node/admin-node-view/admin-node-view.component';
+import { AdminNodeComponent } from './admin-node/admin-node.component';
+import { AdminNodeTreeFieldComponent } from './admin-node-tree/admin-node-tree-field/admin-node-tree-field.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { AdminFramesComponent } from './admin-frames/admin-frames.component';
 import { ObjectNodeChildrenListComponent } from './admin/object-node-children-list/object-node-children-list.component';
 import { NgModule } from '@angular/core';
 import { AdminComponent } from './admin/admin.component';
@@ -10,6 +15,8 @@ import { ObjectNodeChildrenAccordionComponent } from './admin/object-node-childr
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { AdminNodeTreeComponent } from './admin-node-tree/admin-node-tree.component';
+import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-list.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -17,6 +24,12 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     ObjectNodeCardComponent,
     ObjectNodeChildrenAccordionComponent,
     ObjectNodeChildrenListComponent,
+    AdminFramesComponent,
+    AdminNodeTreeComponent,
+    AdminNodeTreeFieldComponent,
+    AdminNodeComponent,
+    AdminNodeListComponent,
+    AdminNodeViewComponent,
   ],
   exports: [ObjectNodesListComponent, ObjectNodeCardComponent],
   imports: [
@@ -26,6 +39,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     }),
     TabsModule.forRoot(),
     DragDropModule,
+    CollapseModule,
   ],
 })
 export class AdminModule {}

@@ -1,7 +1,7 @@
 import { RestEntityListService } from './rest-entity-list.service';
 import { OnInit } from '@angular/core';
 import { EditableFormService } from '@jacquesparis/objects-angular-forms';
-import { CommonComponentComponent } from '../../common-app/common-component/common-component.component';
+import { CommonComponent } from '../../common-app/common-component/common-component.component';
 import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
 import { ObjectsCommonService } from '../services/objects-common.service';
 import {
@@ -11,7 +11,7 @@ import {
 } from '@jacquesparis/objects-client';
 export class AbstractRestEntityListComponent<
   T extends RestEntityImpl<T>
-> extends CommonComponentComponent {
+> extends CommonComponent {
   public newEntity: T;
   public inCreation = false;
   private objectNodesById: { [id: string]: ObjectNodeImpl } = {};

@@ -1,0 +1,39 @@
+<div *ngIf="objectTree; else noTree">
+  <div class="container-fluid">
+    <div class="page-header">
+      <h2 class="display-4 font-weight-light">
+        {{ objectTree.treeNode.name }}
+      </h2>
+    </div>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [uiSrefActive]="'active'"
+          [uiSref]="nodeViewStateName"
+          [uiParams]="params"
+          >Data</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="0 < objectTree.children.length">
+        <a
+          class="nav-link"
+          [uiSrefActive]="'active'"
+          [uiSref]="nodeListStateName"
+          [uiParams]="params"
+          >Contents</a
+        >
+      </li>
+    </ul>
+    <ui-view></ui-view>
+  </div>
+</div>
+<ng-template #noTree>
+  <div class="container">
+    <div class="page-header">
+      <h2 class="display-4 font-weight-light">Administration</h2>
+    </div>
+    <p class="lead">Please select the data to edit in the right side menu</p>
+  </div>
+  <hr />
+</ng-template>

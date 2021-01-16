@@ -1,3 +1,4 @@
+import { ManagementPageService } from './management-page.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,12 +9,13 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 export class ManagementPageComponent implements OnInit, AfterViewInit {
   public afterInit = false;
   public bodyMargingTop: number;
-  constructor() {}
+  constructor(private managementPageService: ManagementPageService) {}
   ngOnInit(): void {}
 
   calculateMarginTop(size: { width: number; height: number }) {
     if (size?.height && size?.height !== this.bodyMargingTop) {
       this.bodyMargingTop = size?.height;
+      this.managementPageService.margingTop = this.bodyMargingTop;
     }
   }
 

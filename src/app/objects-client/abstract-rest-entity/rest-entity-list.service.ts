@@ -17,14 +17,27 @@ export class RestEntityListService {
 
   public isOpen(entityName: string, child: IRestEntity): boolean {
     const isOpen = !!this._isOpen[entityName + '_' + child.id];
-    if (isOpen && child.waitForReady) {
-      child.waitForReady();
+    if (isOpen && child.waitForReady && !child.isReady) {
+      child.waitForReady().then(() => {
+        if (entityName in this._Subscriptions) {
+          this._Subscriptions[entityName].next();
+        }
+      });
       if (child?.treeNode?.waitForReady) {
         child.treeNode.waitForReady();
       }
     }
     return isOpen;
   }
+
+  public switchOpen(entityName: string, childId: string) {
+    this.setOpen(
+      entityName,
+      childId,
+      !this._isOpen[entityName + '_' + childId]
+    );
+  }
+
   public setOpen(entityName: string, childId: string, value = true) {
     let previsousValue = this._isOpen[entityName + '_' + childId];
     this._isOpen[entityName + '_' + childId] = value;

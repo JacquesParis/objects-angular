@@ -1,0 +1,42 @@
+<div
+  class=""
+  cdkDropList
+  [id]="'dropList' + objectTree.treeNode.id"
+  [cdkDropListData]="objectTree.children"
+  [cdkDropListConnectedTo]="['dropList' + objectTree.treeNode.id]"
+  (cdkDropListDropped)="onChildDrop($event)"
+>
+  <div
+    class="card border-top-0"
+    *ngFor="let child of objectTree.children"
+    cdkDrag
+    [ngStyle]="{
+      cursor: 'move'
+    }"
+  >
+    <div class="card-body">
+      <span class="card-title"
+        ><h5
+          class="d-inline"
+          [ngStyle]="{
+            cursor: 'pointer'
+          }"
+          (click)="displayNode(child)"
+        >
+          {{ child.treeNode.name }}
+        </h5>
+        <h6
+          class="d-inline text-muted mx-2"
+          [ngStyle]="{ 'font-size': 'small' }"
+        >
+          {{ child.treeNode.objectTypeId }}
+        </h6>
+        <a
+          class="btn btn-sm btn-outline-secondary float-right"
+          (click)="displayNode(child)"
+          >View Data</a
+        ></span
+      >
+    </div>
+  </div>
+</div>

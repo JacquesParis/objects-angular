@@ -1,5 +1,4 @@
 import { Subscription } from 'rxjs';
-import { IDataEntity } from '@jacquesparis/objects-model';
 import {
   Component,
   OnInit,
@@ -8,8 +7,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
-export class CommonComponentComponent implements OnInit, OnDestroy {
-  private subscriptions: (() => void)[] = [];
+export class CommonComponent implements OnInit, OnDestroy {
+  private subscriptions: ((() => void) | Function)[] = [];
   constructor() {}
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
@@ -19,7 +18,7 @@ export class CommonComponentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  public registerSubscription(sub: Subscription | (() => void)) {
+  public registerSubscription(sub: Subscription | (() => void) | Function) {
     if (sub instanceof Subscription) {
       this.subscriptions.push(sub.unsubscribe.bind(sub));
     } else {

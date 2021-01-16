@@ -11,13 +11,26 @@ import {
   NgxBootstrapIconsModule,
   Trash,
   PlusCircle,
+  ChevronBarLeft,
+  ChevronBarRight,
+  ArrowRightShort,
+  ArrowBarUp,
+  HourglassSplit,
+  FileEarmark,
 } from 'ngx-bootstrap-icons';
 import { AppNavComponent } from './app-nav/app-nav.component';
 import { UiRouterStateDirective } from './ui-router-state/ui-router-state.directive';
 import { ManagementPageComponent } from './management-page/management-page.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 const icons = {
   Trash,
   PlusCircle,
+  ChevronBarLeft,
+  ChevronBarRight,
+  ArrowRightShort,
+  ArrowBarUp,
+  HourglassSplit,
+  FileEarmark,
 };
 
 @NgModule({
@@ -26,6 +39,7 @@ const icons = {
     UiRouterStateDirective,
     ManagementPageComponent,
     ElementResizeDirective,
+    SideMenuComponent,
   ],
   imports: [
     UIRouterModule,
@@ -48,6 +62,7 @@ const icons = {
     AppNavComponent,
     UiRouterStateDirective,
     ManagementPageComponent,
+    SideMenuComponent,
   ],
 })
 export class CommonAppModule {}

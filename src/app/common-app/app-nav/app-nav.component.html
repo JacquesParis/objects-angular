@@ -1,21 +1,46 @@
-<ul
-  class="nav nav-tabs fixed-top"
+<nav
+  class="navbar navbar-expand-sm navbar-light bg-light fixed-top"
   appResize
   (sizeChanged)="sizeChanged.emit($event)"
 >
-  <li class="nav-item mt-1 ml-1">
-    <a class="nav-link" [uiSrefActive]="'active'" [uiSref]="welcomeRootName"
-      >Home</a
-    >
-  </li>
-  <ng-content select="[navItem]"></ng-content>
-  <li class="nav-item mt-1 ml-1" *ngIf="!isUserLogued">
-    <a class="nav-link" [appUiRouterState]="loginState">Login</a>
-  </li>
-  <li class="nav-item mt-1 ml-1" *ngIf="!isUserLogued">
-    <a class="nav-link" [appUiRouterState]="registerState">Register</a>
-  </li>
-  <li class="nav-item mt-1 ml-1" *ngIf="isUserLogued">
-    <a class="nav-link" [appUiRouterState]="accountState">Account</a>
-  </li>
-</ul>
+  <a class="navbar-brand" href="#">Administration</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNavAltMarkup"
+    aria-controls="navbarNavAltMarkup"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-link" [uiSrefActive]="'active'" [uiSref]="welcomeRootName"
+        >Home</a
+      >
+      <ng-content select="[navLink]"></ng-content>
+      <a
+        class="nav-link"
+        [uiSref]="adminStateName"
+        [uiSrefActive]="'active'"
+        *ngIf="isUserLogued && hasAdmin"
+        >Account</a
+      >
+
+      <a class="nav-link" [appUiRouterState]="accountState" *ngIf="isUserLogued"
+        >Identity</a
+      >
+      <a class="nav-link" [appUiRouterState]="loginState" *ngIf="!isUserLogued"
+        >Login</a
+      >
+      <a
+        class="nav-link"
+        [appUiRouterState]="registerState"
+        *ngIf="!isUserLogued"
+        >Register</a
+      >
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,20 @@
+<div class="card border-top-0" *ngIf="isReady">
+  <div class="card-body">
+    <h5 class="card-title">
+      <span [innerHTML]="title"></span>
+    </h5>
+    <lib-editable-json-schema-form
+      *ngIf="!hideNode"
+      [entity]="entity"
+      [saveValue]="saveValueMethod"
+      [schema]="schema"
+      [layout]="layout"
+      (onCancel)="cancelAction()"
+      [deleteValue]="deleteValueMethod"
+      [actions]="actions"
+      [crud]="crud"
+      [runAction]="runActionMethod"
+    >
+    </lib-editable-json-schema-form>
+  </div>
+</div>

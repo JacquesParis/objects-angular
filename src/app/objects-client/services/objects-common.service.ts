@@ -167,6 +167,11 @@ export class ObjectsCommonService {
   public async getTreeByUri(uri: string) {
     return await this.objectTreesService.get(uri);
   }
+  public async getTreeById(id: string) {
+    return await this.objectTreesService.get(
+      this.objectTreesService.getUri(id)
+    );
+  }
 
   public async getTree(
     ownerType: string,

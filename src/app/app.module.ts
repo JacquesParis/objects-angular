@@ -24,6 +24,7 @@ import {
   WidgetRegistry,
   DefaultWidgetRegistry,
 } from 'ngx-schema-form';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
@@ -44,6 +45,7 @@ export function createCompiler(compilerFactory: CompilerFactory) {
     CommonAppModule,
     RootAdminModule,
     AccordionModule.forRoot(),
+    CollapseModule.forRoot(),
     BrowserAnimationsModule,
   ],
   providers: [
