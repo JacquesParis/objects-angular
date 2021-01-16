@@ -26,6 +26,29 @@ import {
 } from 'ngx-schema-form';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
+import {
+  NgxBootstrapIconsModule,
+  Trash,
+  PlusCircle,
+  ChevronBarLeft,
+  ChevronBarRight,
+  ArrowRightShort,
+  ArrowBarUp,
+  HourglassSplit,
+  FileEarmark,
+} from 'ngx-bootstrap-icons';
+
+const icons = {
+  Trash,
+  PlusCircle,
+  ChevronBarLeft,
+  ChevronBarRight,
+  ArrowRightShort,
+  ArrowBarUp,
+  HourglassSplit,
+  FileEarmark,
+};
+
 export function createCompiler(compilerFactory: CompilerFactory) {
   return compilerFactory.createCompiler();
 }
@@ -47,6 +70,7 @@ export function createCompiler(compilerFactory: CompilerFactory) {
     AccordionModule.forRoot(),
     CollapseModule.forRoot(),
     BrowserAnimationsModule,
+    NgxBootstrapIconsModule.pick(icons),
   ],
   providers: [
     { provide: WidgetRegistry, useClass: DefaultWidgetRegistry },

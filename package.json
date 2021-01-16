@@ -26,6 +26,7 @@
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "@jacquesparis/objects-angular-forms": "file:../objects-angular-lib/dist/objects-angular-forms",
     "@jacquesparis/objects-client": "file:../objects-client",
     "@jacquesparis/objects-model": "file:../objects-model",
