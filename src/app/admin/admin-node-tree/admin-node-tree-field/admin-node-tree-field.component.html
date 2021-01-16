@@ -1,8 +1,16 @@
 <div
-  [style.cursor]="'pointer'"
   (click)="switchCollapsed(treeChild)"
   [attr.aria-expanded]="!isCollapsed(treeChild)"
   [attr.aria-controls]="'treeNode_' + treeChild.treeNode.id"
+  [style.cursor]="
+    mayOpen(treeChild)
+      ? isCollapsed(treeChild)
+        ? 'zoom-in'
+        : 'zoom-out'
+      : isFinalChild(treeChild)
+      ? 'pointer'
+      : 'default'
+  "
 >
   <span class="align-middle text-nowrap">
     <i-bs
@@ -26,7 +34,9 @@
       height="1rem"
       class="align-middle text-light py-2 p-1"
     ></i-bs>
-    <a (click)="displayNode()"> {{ treeChild.treeNode.name }}</a>
+    <a (click)="displayNode($event)" [style.cursor]="'pointer'">
+      {{ treeChild.treeNode.name }}</a
+    >
   </span>
 </div>
 

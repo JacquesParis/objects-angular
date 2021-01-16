@@ -48,7 +48,9 @@ export class AdminNodeListComponent
     super.ngOnInit();
   }
 
-  public async displayNode(child: ObjectTreeImpl) {
+  public async displayNode(child: ObjectTreeImpl, event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
     this.stateService.go(
       ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
       _.merge({}, this.stateService.params, { treeId: child.treeNode.id })

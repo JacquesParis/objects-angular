@@ -68,7 +68,9 @@ export class AdminNodeTreeFieldComponent
     return !this.treeChild.isReady;
   }
 
-  displayNode() {
+  displayNode(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
     this.stateService.go(ADMIN_OWNER_NODE_VIEW_ROUTE_NAME, {
       treeId: this.treeChild.id,
     });

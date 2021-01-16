@@ -33,7 +33,8 @@
         </h6>
         <a
           class="btn btn-sm btn-outline-secondary float-right"
-          (click)="displayNode(child)"
+          [style.cursor]="'pointer'"
+          (click)="displayNode(child, $event)"
           >View Data</a
         ></span
       >
