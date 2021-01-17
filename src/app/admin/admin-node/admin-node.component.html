@@ -1,11 +1,11 @@
 <div *ngIf="objectTree; else noTree">
-  <div *ngIf="parentTree" class="mt-2">
-    <div
-      class="btn-toolbar top-nav"
-      role="toolbar"
-      aria-label="Toolbar with button groups"
-    >
-      <div class="btn-group btn-group-sm top-nav-inside" role="group">
+  <div
+    *ngIf="parentTree"
+    class="mt-2 position-fixed w-100 bg-white"
+    style="z-index: 9"
+  >
+    <div class="top-navbar">
+      <div class="btn-group btn-group-sm top-navbar-inside" role="group">
         <button
           type="button"
           class="btn btn-light px-1 w-nav text-truncate text-left"
@@ -36,31 +36,30 @@
             {{ nextTree.treeNode.name }}
           </ng-container>
         </button>
-      </div>
-      <div class="btn-group" role="group" aria-label="Third group">
-        <div class="btn-group" role="group">
-          <button
-            id="subNodeNav"
-            type="button"
-            class="btn btn-light dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            [disabled]="0 === objectTree.children.length"
-          ></button>
-          <div class="dropdown-menu" aria-labelledby="subNodeNav">
-            <a
-              class="dropdown-item"
-              (click)="displayNode(child, $event)"
-              *ngFor="let child of objectTree.children"
-              >{{ child.treeNode.name }}</a
-            >
-          </div>
+
+        <button
+          id="subNodeNav"
+          type="button"
+          class="btn btn-light dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          [disabled]="0 === objectTree.children.length"
+        >
+          <i-bs name="box-arrow-down" class="align-middle"></i-bs>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="subNodeNav">
+          <a
+            class="dropdown-item"
+            (click)="displayNode(child, $event)"
+            *ngFor="let child of objectTree.children"
+            >{{ child.treeNode.name }}</a
+          >
         </div>
       </div>
     </div>
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid pt-4">
     <div class="page-header">
       <h2 class="display-4 font-weight-light text-truncate">
         {{ objectTree.treeNode.name }}

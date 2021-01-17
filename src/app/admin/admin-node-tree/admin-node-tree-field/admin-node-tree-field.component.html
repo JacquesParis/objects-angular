@@ -67,10 +67,7 @@
   [collapse]="isCollapsed(treeChild)"
   [isAnimated]="true"
 >
-  <div
-    class="well well-lg card card-block card-header"
-    *ngIf="mayDisplay(treeChild)"
-  >
+  <div class="subtree" *ngIf="mayDisplay(treeChild)">
     <div
       app-admin-node-tree-field
       [treeChild]="child"

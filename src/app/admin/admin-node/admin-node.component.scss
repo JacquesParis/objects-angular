@@ -1,10 +1,16 @@
 .w-nav {
   width: 33%;
 }
-.top-nav-inside {
-  width: calc(100% - 60px);
+
+.top-navbar-inside {
+  width: 100%;
 }
-.top-nav {
-  width: 90%;
+.top-navbar {
+  position: relative;
+  width: 85%;
   margin: auto;
+}
+
+.display-4 {
+  line-height: 1.4;
 }

@@ -14,14 +14,14 @@
       <div class="sidebar-content border-0">
         <button
           type="button"
-          class="btn btn-light mt-2 px-0 btn-sm position-absolute"
+          class="btn btn-light mt-2 px-0 btn-sm position-fixed btn-sm"
           (click)="hideLeftSide()"
           [attr.data-target]="'#' + leftMenuId"
           data-toggle="collapse"
           [style.border-bottom-right-radius]="0"
           [style.border-top-right-radius]="0"
           [style.right]="0"
-          [style.z-index]="1"
+          [style.z-index]="10"
         >
           <i-bs name="chevron-bar-left"></i-bs>
         </button>
@@ -33,13 +33,14 @@
       <div class="main part">
         <button
           type="button"
-          class="btn btn-light float-left mt-2 px-0"
+          class="btn btn-light float-left mt-2 px-0 btn-sm position-fixed"
           (click)="showLeftSide()"
           [attr.data-target]="'#' + leftMenuId"
           data-toggle="collapse"
           [class.d-none]="isLeftSidebarShown"
           [style.border-bottom-left-radius]="0"
           [style.border-top-left-radius]="0"
+          [style.z-index]="10"
         >
           <i-bs name="chevron-bar-right"></i-bs>
         </button>
