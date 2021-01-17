@@ -1,8 +1,69 @@
 <div *ngIf="objectTree; else noTree">
+  <div *ngIf="parentTree" class="mt-2">
+    <div
+      class="btn-toolbar top-nav"
+      role="toolbar"
+      aria-label="Toolbar with button groups"
+    >
+      <div class="btn-group btn-group-sm top-nav-inside" role="group">
+        <button
+          type="button"
+          class="btn btn-light px-1 w-nav text-truncate text-left"
+          (click)="displayNode(previousTree, $event)"
+          [disabled]="!previousTree"
+        >
+          <i-bs name="box-arrow-left" class="align-middle"></i-bs>
+          <ng-container *ngIf="previousTree">
+            {{ previousTree.treeNode.name }}
+          </ng-container>
+        </button>
+        <button
+          type="button"
+          class="btn btn-light px-1 w-nav text-truncate text-left"
+          (click)="displayNode(parentTree, $event)"
+        >
+          <i-bs name="box-arrow-up" class="align-middle"></i-bs>
+          {{ parentTree.treeNode.name }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-light px-1 w-nav text-truncate text-left"
+          [disabled]="!nextTree"
+          (click)="displayNode(nextTree, $event)"
+        >
+          <i-bs name="box-arrow-right" class="align-middle"></i-bs>
+          <ng-container *ngIf="nextTree">
+            {{ nextTree.treeNode.name }}
+          </ng-container>
+        </button>
+      </div>
+      <div class="btn-group" role="group" aria-label="Third group">
+        <div class="btn-group" role="group">
+          <button
+            id="subNodeNav"
+            type="button"
+            class="btn btn-light dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            [disabled]="0 === objectTree.children.length"
+          ></button>
+          <div class="dropdown-menu" aria-labelledby="subNodeNav">
+            <a
+              class="dropdown-item"
+              (click)="displayNode(child, $event)"
+              *ngFor="let child of objectTree.children"
+              >{{ child.treeNode.name }}</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container-fluid">
     <div class="page-header">
-      <h2 class="display-4 font-weight-light">
-        {{ objectTree.treeNode.name }}<i class="fas fa-coffee"></i>
+      <h2 class="display-4 font-weight-light text-truncate">
+        {{ objectTree.treeNode.name }}
       </h2>
     </div>
     <ul class="nav nav-tabs">
@@ -29,11 +90,5 @@
   </div>
 </div>
 <ng-template #noTree>
-  <div class="container">
-    <div class="page-header">
-      <h2 class="display-4 font-weight-light">Administration</h2>
-    </div>
-    <p class="lead">Please select the data to edit in the right side menu</p>
-  </div>
-  <hr />
+  <app-admin-welcome></app-admin-welcome>
 </ng-template>

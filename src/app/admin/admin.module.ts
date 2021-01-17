@@ -1,3 +1,4 @@
+import { AdminWelcomeComponent } from './admin-frames/admin-welcome/admin-welcome.component';
 import { AdminNodeViewComponent } from './admin-node/admin-node-view/admin-node-view.component';
 import { AdminNodeComponent } from './admin-node/admin-node.component';
 import { AdminNodeTreeFieldComponent } from './admin-node-tree/admin-node-tree-field/admin-node-tree-field.component';
@@ -30,6 +31,7 @@ import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-
     AdminNodeComponent,
     AdminNodeListComponent,
     AdminNodeViewComponent,
+    AdminWelcomeComponent,
   ],
   exports: [ObjectNodesListComponent, ObjectNodeCardComponent],
   imports: [

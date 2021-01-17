@@ -21,7 +21,7 @@
           [ngStyle]="{
             cursor: 'pointer'
           }"
-          (click)="displayNode(child)"
+          (click)="displayNode(child, $event)"
         >
           {{ child.treeNode.name }}
         </h5>

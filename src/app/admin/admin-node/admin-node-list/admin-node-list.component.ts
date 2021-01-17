@@ -49,8 +49,10 @@ export class AdminNodeListComponent
   }
 
   public async displayNode(child: ObjectTreeImpl, event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.stateService.go(
       ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
       _.merge({}, this.stateService.params, { treeId: child.treeNode.id })

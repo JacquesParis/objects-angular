@@ -1,47 +1,51 @@
-<div class="" [style.height]="height" class="position-relative">
+<div
+  class=""
+  [style.height]="height"
+  style="overflow: hidden"
+  class="position-relative"
+  #component
+>
   <div class="side-menu-container">
     <div
-      class="col-md-3 float-left col-12 pl-0 pr-0 bg-dark text-light collapse width show sidebar left-sidebar"
+      class="col-md-3 float-left col-12 pl-0 pr-0 bg-dark text-light collapse width sidebar left-sidebar"
       [id]="leftMenuId"
       #leftSidebar
     >
       <div class="sidebar-content border-0">
-        <a
-          href="#"
+        <button
+          type="button"
+          class="btn btn-light mt-2 px-0 btn-sm position-absolute"
+          (click)="hideLeftSide()"
           [attr.data-target]="'#' + leftMenuId"
           data-toggle="collapse"
-          class="text-right float-right"
-          (click)="hideLeftSide()"
+          [style.border-bottom-right-radius]="0"
+          [style.border-top-right-radius]="0"
+          [style.right]="0"
+          [style.z-index]="1"
         >
-          <i-bs
-            name="chevron-bar-left"
-            class="py-2 p-1 bg-dark text-light"
-          ></i-bs
-        ></a>
+          <i-bs name="chevron-bar-left"></i-bs>
+        </button>
 
         <ng-content select="[app-side-menu-left-part]"></ng-content>
       </div>
     </div>
-    <main
-      class="float-left col px-0 main"
-      [class.col-md-9]="isLeftSidebarShown"
-    >
-      <a
-        href="#"
-        [attr.data-target]="'#' + leftMenuId"
-        data-toggle="collapse"
-        [class.d-none]="isLeftSidebarShown"
-        (click)="showLeftSide()"
-        class="float-left"
-      >
-        <i-bs
-          name="chevron-bar-right"
-          class="py-2 p-1 bg-light text-dark"
-        ></i-bs
-      ></a>
+    <div class="float-left col px-0 main" [class.col-md-9]="isLeftSidebarShown">
       <div class="main part">
+        <button
+          type="button"
+          class="btn btn-light float-left mt-2 px-0"
+          (click)="showLeftSide()"
+          [attr.data-target]="'#' + leftMenuId"
+          data-toggle="collapse"
+          [class.d-none]="isLeftSidebarShown"
+          [style.border-bottom-left-radius]="0"
+          [style.border-top-left-radius]="0"
+        >
+          <i-bs name="chevron-bar-right"></i-bs>
+        </button>
+
         <ng-content select="[app-side-menu-main-part]"></ng-content>
       </div>
-    </main>
+    </div>
   </div>
 </div>

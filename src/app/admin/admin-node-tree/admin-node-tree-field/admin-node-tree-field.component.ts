@@ -1,3 +1,4 @@
+import { SideMenuService } from './../../../common-app/side-menu/side-menu.service';
 import { StateService } from '@uirouter/angular';
 import {
   ADMIN_OWNER_NODE_ROUTE_NAME,
@@ -21,7 +22,8 @@ export class AdminNodeTreeFieldComponent
   constructor(
     protected restEntityListService: RestEntityListService,
     public changeDetectorRef: ChangeDetectorRef,
-    public stateService: StateService
+    public stateService: StateService,
+    protected sideMenuService: SideMenuService
   ) {
     super();
     /*
@@ -42,10 +44,14 @@ export class AdminNodeTreeFieldComponent
     );
   }
   switchCollapsed() {
-    this.restEntityListService.switchOpen(
-      EntityName.objectTree,
-      this.treeChild.id
-    );
+    if (this.isFinalChild()) {
+      this.displayNode();
+    } else {
+      this.restEntityListService.switchOpen(
+        EntityName.objectTree,
+        this.treeChild.id
+      );
+    }
   }
 
   mayDisplay(): boolean {
@@ -68,9 +74,12 @@ export class AdminNodeTreeFieldComponent
     return !this.treeChild.isReady;
   }
 
-  displayNode(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+  displayNode(event?: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.sideMenuService.showMainContent();
     this.stateService.go(ADMIN_OWNER_NODE_VIEW_ROUTE_NAME, {
       treeId: this.treeChild.id,
     });

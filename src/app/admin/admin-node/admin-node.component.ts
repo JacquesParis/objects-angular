@@ -57,6 +57,9 @@ export class AdminNodeComponent
   public params: { [paramName: string]: any };
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
   public nodeListStateName = ADMIN_OWNER_NODE_LIST_ROUTE_NAME;
+  public parentTree: ObjectTreeImpl;
+  public previousTree: ObjectTreeImpl;
+  nextTree: ObjectTreeImpl;
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -73,17 +76,44 @@ export class AdminNodeComponent
     super.ngOnChanges(changes);
   }
 
+  calculateParentAndBrother() {
+    this.parentTree = this.objectsCommonService.getObjectTreeById(
+      this.objectTree.treeNode.parentNodeId
+    );
+    if (this.parentTree) {
+      const index = this.parentTree.children
+        .map((child) => child.id)
+        .indexOf(this.objectTree.id);
+      if (0 < index) {
+        this.previousTree = this.parentTree.children[index - 1];
+      }
+      if (index < this.parentTree.children.length - 1) {
+        this.nextTree = this.parentTree.children[index + 1];
+      }
+    }
+  }
+
+  public async displayNode(child: ObjectTreeImpl, event: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.stateService.go(
+      ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+      _.merge({}, this.stateService.params, { treeId: child.treeNode.id })
+    );
+  }
+
   async ngOnInit() {
     if (this.objectTree) {
+      this.calculateParentAndBrother();
       this.params = this.stateService.params;
 
       this.entity = this.objectTree.treeNode;
-      if (!this.objectTree.ready) {
-        await this.objectTree.waitForReady();
-      }
-      if (!this.entity.isReady) {
-        await this.entity.waitForReady();
-      }
+      await this.objectTree.waitForReady();
+
+      await this.entity.waitForReady();
+
       this.treeType = this.objectTree.treeNode.objectType;
       this.title =
         this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';

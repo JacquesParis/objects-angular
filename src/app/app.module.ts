@@ -36,6 +36,14 @@ import {
   ArrowBarUp,
   HourglassSplit,
   FileEarmark,
+  Folder,
+  Folder2Open,
+  BoxArrowUp,
+  BoxArrowLeft,
+  BoxArrowRight,
+  ArrowUpLeft,
+  ChevronRight,
+  ChevronDown,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -47,6 +55,14 @@ const icons = {
   ArrowBarUp,
   HourglassSplit,
   FileEarmark,
+  Folder,
+  Folder2Open,
+  BoxArrowUp,
+  BoxArrowLeft,
+  BoxArrowRight,
+  ArrowUpLeft,
+  ChevronRight,
+  ChevronDown,
 };
 
 export function createCompiler(compilerFactory: CompilerFactory) {
