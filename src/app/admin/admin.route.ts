@@ -1,3 +1,4 @@
+import { AdminWelcomeComponent } from './admin-frames/admin-welcome/admin-welcome.component';
 import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-list.component';
 import { AdminNodeViewComponent } from './admin-node/admin-node-view/admin-node-view.component';
 import { getOwnerName } from 'src/app/app.const';
@@ -15,6 +16,8 @@ import {
   ADMIN_NAMESPACE_NODE_ROUTE_NAME,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
+  ADMIN_OWNER_WELCOME_ROUTE_NAME,
+  ADMIN_NAMESPACE_WELCOME_ROUTE_NAME,
 } from './admin.const';
 import { AdminComponent } from './admin/admin.component';
 import { ObjectTreeImpl, EntityName } from '@jacquesparis/objects-client';
@@ -29,17 +32,18 @@ const adminState: Ng2StateDeclaration = {
   url: '/admin',
   component: AdminComponent,
   redirectTo: {
-    state: ADMIN_OWNER_ROUTE_NAME,
+    state: ADMIN_OWNER_WELCOME_ROUTE_NAME,
     params: {
       ownerType: 'Tenant',
       ownerName: getOwnerName(),
     },
   },
 };
-const adminOwnerState = {
+const adminOwnerState: Ng2StateDeclaration = {
   parent: getParentStateName(ADMIN_OWNER_ROUTE_NAME),
   name: ADMIN_OWNER_ROUTE_NAME,
   url: '/owner/:ownerType/:ownerName',
+  abstract: true,
   component: AdminFramesComponent,
   resolve: [
     SHOULD_BE_LOGIN_RESOLVE,
@@ -57,6 +61,13 @@ const adminOwnerState = {
       },
     },
   ],
+};
+
+const adminOwnerWelcomeState: Ng2StateDeclaration = {
+  parent: getParentStateName(ADMIN_OWNER_WELCOME_ROUTE_NAME),
+  name: ADMIN_OWNER_WELCOME_ROUTE_NAME,
+  url: '',
+  component: AdminWelcomeComponent,
 };
 
 const adminOwnerNodeState: Ng2StateDeclaration = {
@@ -165,6 +176,12 @@ const adminNamespaceState = {
   ],
 };
 
+const adminNamespaceWelcomeState: Ng2StateDeclaration = {
+  parent: getParentStateName(ADMIN_NAMESPACE_WELCOME_ROUTE_NAME),
+  name: ADMIN_NAMESPACE_WELCOME_ROUTE_NAME,
+  url: '',
+  component: AdminWelcomeComponent,
+};
 const adminNamespaceNodeState: Ng2StateDeclaration = _.merge(
   {},
   adminOwnerNodeState,
@@ -182,4 +199,6 @@ export const ADMIN_STATES = [
   adminNamespaceNodeState,
   adminOwnerNodeViewState,
   adminOwnerNodeListState,
+  adminOwnerWelcomeState,
+  adminNamespaceWelcomeState,
 ];
