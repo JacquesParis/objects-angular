@@ -107,6 +107,16 @@ export class AdminNodeComponent
     );
   }
 
+  public refresh(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.objectsCommonService.getTreeByUri(this.objectTree.uri);
+
+    this.objectsCommonService.getNodeByUri(this.entity.uri);
+  }
+
   public async createNode(typeId: string, event: MouseEvent) {
     if (event) {
       event.preventDefault();
@@ -162,10 +172,6 @@ export class AdminNodeComponent
 
   ngOnDestroy() {
     super.ngOnDestroy();
-  }
-
-  public refresh() {
-    this.objectsCommonService.getTreeByUri(this.objectTree.uri);
   }
 
   public openWebSite() {

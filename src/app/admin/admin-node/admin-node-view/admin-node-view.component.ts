@@ -65,9 +65,13 @@ export class AdminNodeViewComponent
         this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
 
       await super.ngOnInit();
-
-      this.changeDetectorRef.detectChanges();
     }
+  }
+
+  async initEntity() {
+    await super.initEntity();
+
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnDestroy() {

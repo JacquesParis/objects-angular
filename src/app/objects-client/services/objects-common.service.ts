@@ -177,8 +177,11 @@ export class ObjectsCommonService {
     }
   }
 
-  public async getTreeByUri(uri: string) {
+  public async getTreeByUri(uri: string): Promise<ObjectTreeImpl> {
     return await this.objectTreesService.get(uri);
+  }
+  public async getNodeByUri(uri: string): Promise<ObjectNodeImpl> {
+    return await this.objectNodesService.get(uri);
   }
   public async getTreeById(id: string) {
     return await this.objectTreesService.get(
