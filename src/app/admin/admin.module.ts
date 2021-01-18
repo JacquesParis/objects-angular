@@ -18,6 +18,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AdminNodeTreeComponent } from './admin-node-tree/admin-node-tree.component';
 import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-list.component';
+import { AdminNodeCreateComponent } from './admin-node/admin-node-create/admin-node-create.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -32,6 +33,7 @@ import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-
     AdminNodeListComponent,
     AdminNodeViewComponent,
     AdminWelcomeComponent,
+    AdminNodeCreateComponent,
   ],
   exports: [ObjectNodesListComponent, ObjectNodeCardComponent],
   imports: [

@@ -51,7 +51,7 @@ export class AdminNodeListComponent
   public async displayNode(child: ObjectTreeImpl, event: MouseEvent) {
     if (event) {
       event.preventDefault();
-      event.stopPropagation();
+      // event.stopPropagation();
     }
     this.stateService.go(
       ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,

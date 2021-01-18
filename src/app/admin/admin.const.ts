@@ -23,6 +23,15 @@ export const ADMIN_OWNER_NODE_LIST_ROUTE_NAME = buildStateName(
   'list'
 );
 
+export const ADMIN_OWNER_NODE_CREATE_ROUTE_NAME = buildStateName(
+  ADMIN_OWNER_NODE_ROUTE_NAME,
+  'create'
+);
+export const ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME = buildStateName(
+  ADMIN_OWNER_NODE_CREATE_ROUTE_NAME,
+  'type'
+);
+
 export const ADMIN_NAMESPACE_ROUTE_NAME = buildStateName(
   ADMIN_OWNER_ROUTE_NAME,
   'namespace-list'
@@ -49,3 +58,4 @@ export const ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME = buildStateName(
 
 export const OBJECT_TREE_TOKEN = 'objectTree';
 export const OBJECT_NODE_TOKEN = 'objectNode';
+export const OBJECT_NODE_TYPE_TOKEN = 'objectTypeId';

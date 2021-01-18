@@ -129,6 +129,7 @@ export class ObjectsCommonService {
       [specifity: string]: any;
       parentEntity?: IRestEntity;
       entityType?: IRestEntity;
+      entityTypeId?: string;
       jsonSchema?: IJsonSchema;
     }
   ): T {
@@ -142,16 +143,28 @@ export class ObjectsCommonService {
           objectTypeUri: entitySpeficities.parentEntity.uri,
         }) as unknown) as T;
       case EntityName.objectNode:
-        return (new ObjectNodeImpl(this.objectNodesService, {
-          parentNodeId: entitySpeficities.parentEntity.id,
-          parentNodeUri: entitySpeficities.parentEntity.uri,
-          objectTypeId: entitySpeficities.entityType.id,
-          objectTypeUri: entitySpeficities.entityType.uri,
-          entityCtx: {
-            jsonSchema: entitySpeficities.jsonSchema,
-            entityType: EntityName.objectNode,
-          },
-        }) as unknown) as T;
+        if (entitySpeficities.entityType) {
+          return (new ObjectNodeImpl(this.objectNodesService, {
+            parentNodeId: entitySpeficities.parentEntity.id,
+            parentNodeUri: entitySpeficities.parentEntity.uri,
+            objectTypeId: entitySpeficities.entityType.id,
+            objectTypeUri: entitySpeficities.entityType.uri,
+            entityCtx: {
+              jsonSchema: entitySpeficities.jsonSchema,
+              entityType: EntityName.objectNode,
+            },
+          }) as unknown) as T;
+        } else {
+          return (new ObjectNodeImpl(this.objectNodesService, {
+            parentNodeId: entitySpeficities.parentEntity.id,
+            parentNodeUri: entitySpeficities.parentEntity.uri,
+            objectTypeId: entitySpeficities.entityTypeId,
+            entityCtx: {
+              jsonSchema: entitySpeficities.jsonSchema,
+              entityType: EntityName.objectNode,
+            },
+          }) as unknown) as T;
+        }
       case EntityName.objectTree:
         return (new ObjectTreeImpl(this.objectTreesService, {
           treeNode: this.newEntity<ObjectNodeImpl>(

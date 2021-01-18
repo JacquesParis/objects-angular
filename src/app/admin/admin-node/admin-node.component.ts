@@ -3,6 +3,7 @@ import {
   OBJECT_TREE_TOKEN,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
+  ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME,
 } from './../admin.const';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 
@@ -57,9 +58,11 @@ export class AdminNodeComponent
   public params: { [paramName: string]: any };
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
   public nodeListStateName = ADMIN_OWNER_NODE_LIST_ROUTE_NAME;
+  public nodeCreateTypeStateName = ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME;
   public parentTree: ObjectTreeImpl;
   public previousTree: ObjectTreeImpl;
-  nextTree: ObjectTreeImpl;
+  public nextTree: ObjectTreeImpl;
+  public creations: string[] = [];
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -98,9 +101,21 @@ export class AdminNodeComponent
       event.preventDefault();
       event.stopPropagation();
     }
-    this.stateService.go(
-      ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+    return this.stateService.go(
+      this.nodeViewStateName,
       _.merge({}, this.stateService.params, { treeId: child.treeNode.id })
+    );
+  }
+
+  public async createNode(typeId: string, event: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      // event.stopPropagation();
+    }
+
+    return this.stateService.go(
+      this.nodeCreateTypeStateName,
+      _.merge({}, this.stateService.params, { typeId: typeId })
     );
   }
 
@@ -108,6 +123,12 @@ export class AdminNodeComponent
     if (this.objectTree) {
       this.calculateParentAndBrother();
       this.params = this.stateService.params;
+      this.creations =
+        this.objectTree.entityCtx &&
+        this.objectTree.entityCtx.actions &&
+        this.objectTree.entityCtx.actions.creations
+          ? Object.keys(this.objectTree.entityCtx.actions.creations)
+          : [];
 
       this.entity = this.objectTree.treeNode;
       await this.objectTree.waitForReady();

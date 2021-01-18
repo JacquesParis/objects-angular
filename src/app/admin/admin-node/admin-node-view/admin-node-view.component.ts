@@ -1,24 +1,24 @@
+import { merge } from 'lodash-es';
 import { VIEW_ROUTE_NAME } from './../../../view/view.const';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
-import { OBJECT_TREE_TOKEN, OBJECT_NODE_TOKEN } from './../../admin.const';
+import {
+  OBJECT_TREE_TOKEN,
+  OBJECT_NODE_TOKEN,
+  ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+} from './../../admin.const';
 import {
   ObjectNodeImpl,
   ObjectTreeImpl,
   EntityName,
 } from '@jacquesparis/objects-client';
-import {
-  IObjectNode,
-  IObjectType,
-  IObjectSubType,
-} from '@jacquesparis/objects-model';
+import { IObjectNode } from '@jacquesparis/objects-model';
 import {
   Component,
   OnInit,
   OnDestroy,
   OnChanges,
-  Input,
   Inject,
   ChangeDetectorRef,
   SimpleChanges,
@@ -34,12 +34,9 @@ export class AdminNodeViewComponent
   extends AbstractRestEntityComponent<IObjectNode, ObjectNodeImpl>
   implements OnInit, OnDestroy, OnChanges {
   public title: string;
+  public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
 
   public entity: ObjectNodeImpl;
-
-  public treeType: IObjectType;
-  public subTypes: IObjectSubType[] = [];
-  hasWebSite: boolean = false;
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -59,33 +56,16 @@ export class AdminNodeViewComponent
   async ngOnInit() {
     if (this.objectTree) {
       this.entity = this.objectTree.treeNode;
-      if (!this.objectTree.ready) {
-        await this.objectTree.waitForReady();
-      }
-      if (!this.entity.isReady) {
-        await this.entity.waitForReady();
-      }
-      this.treeType = this.objectTree.treeNode.objectType;
+
+      await this.objectTree.waitForReady();
+
+      await this.entity.waitForReady();
+
       this.title =
         this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
-      let objectChildTypes = [];
-      if (
-        this.objectTree.entityCtx &&
-        this.objectTree.entityCtx.actions &&
-        this.objectTree.entityCtx.actions.reads
-      ) {
-        objectChildTypes = this.objectTree.entityCtx.actions.reads;
-      }
-      if (this.entity.objectType) {
-        this.subTypes = this.entity.objectType.objectSubTypes.filter(
-          (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
-        );
-      }
 
       await super.ngOnInit();
-      if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
-        this.hasWebSite = true;
-      }
+
       this.changeDetectorRef.detectChanges();
     }
   }
@@ -103,5 +83,15 @@ export class AdminNodeViewComponent
       siteTree: this.objectTree,
       siteId: this.objectTree.id,
     });
+  }
+
+  public async deleteValue(): Promise<void> {
+    const parentId = this.entity.parentNodeId;
+    super.deleteValue();
+    this.stateService.go(
+      this.nodeViewStateName,
+      merge({}, this.stateService.params, { treeId: parentId })
+    );
+    return;
   }
 }

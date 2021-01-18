@@ -55,14 +55,14 @@ export class SideMenuComponent
   showMainContent() {
     if (this.isFullLeftSide) {
       this.leftSidebar.nativeElement.classList.remove('show');
-      this.isLeftSidebarShown = false;
+      this.leftSidebarShown = false;
     }
   }
 
   showLeftSideMenu() {
     if (!this.isLeftSidebarShown) {
       this.leftSidebar.nativeElement.classList.add('show');
-      this.isLeftSidebarShown = true;
+      this.leftSidebarShown = true;
     }
   }
 
@@ -74,13 +74,10 @@ export class SideMenuComponent
     super.ngOnInit();
     if (!this.id) {
       this.id = 'panel_' + Math.ceil(Math.random() * 10000000000000000);
-      this.isLeftSidebarShown = this.defaultLeftSidebarShown;
+      this.leftSidebarShown = this.defaultLeftSidebarShown;
     } else {
       this.saveSideBarsStatus = true;
-      this.isLeftSidebarShown = LocalStorageWorker.get(
-        'onoff_' + this.id,
-        this.defaultLeftSidebarShown
-      );
+      this.getConfig('isLeftSidebarShown', this.defaultLeftSidebarShown);
     }
     this.leftMenuId = 'left_' + this.id;
   }
@@ -90,16 +87,35 @@ export class SideMenuComponent
     }
   }
 
-  public hideLeftSide() {
-    this.isLeftSidebarShown = false;
+  protected setConfig(configId: string, value: any) {
+    this[configId] = value;
     if (this.saveSideBarsStatus) {
-      LocalStorageWorker.add('onoff_' + this.id, this.isLeftSidebarShown);
+      LocalStorageWorker.add(
+        'onoff_' + configId + '_' + this.id,
+        this[configId]
+      );
     }
   }
-  public showLeftSide() {
-    this.isLeftSidebarShown = true;
+
+  protected getConfig(configId: string, defaultValue: any) {
     if (this.saveSideBarsStatus) {
-      LocalStorageWorker.add('onoff_' + this.id, this.isLeftSidebarShown);
+      this[configId] = LocalStorageWorker.get(
+        'onoff_' + configId + '_' + this.id,
+        defaultValue
+      );
+    } else {
+      this[configId] = defaultValue;
     }
+  }
+
+  protected set leftSidebarShown(value) {
+    this.setConfig('isLeftSidebarShown', value);
+  }
+
+  public hideLeftSide() {
+    this.leftSidebarShown = false;
+  }
+  public showLeftSide() {
+    this.leftSidebarShown = true;
   }
 }
