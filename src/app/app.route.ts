@@ -16,13 +16,7 @@ const shouldBeLoginResolve = async (
   userService: UserService,
   stateService: StateService
 ): Promise<void> => {
-  const user = await userService.isUserLoguedIn();
-  if (!user) {
-    userService.nextLogInStateName = stateService.transition.to().name;
-    location.href = USER_LOGIN_ROUTE_NAME_AND_HREF.href;
-    return Promise.reject();
-  }
-  return;
+  return userService.resolveMandatoryLogin();
 };
 
 export const SHOULD_BE_LOGIN_RESOLVE = {

@@ -24,12 +24,7 @@ export class UserLoginComponent implements OnInit {
   public async login() {
     try {
       await this.userService.login(this.credentials as any);
-      if (this.userService.nextLogInStateName) {
-        this.stateService.go(this.userService.nextLogInStateName);
-        this.userService.nextLogInStateName = null;
-      } else {
-        this.stateService.go(USER_ACCOUNT_ROUTE_NAME_AND_HREF.stateName);
-      }
+      this.userService.redirectAfterLogin();
     } catch (error) {
       this.error = error.message ? error.message : 'Unexpected error';
     }
