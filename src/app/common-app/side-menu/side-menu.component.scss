@@ -6,6 +6,18 @@
   right: 0;
 }
 
+.collapse-left {
+  border-radius: 1rem;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.collapse-right {
+  border-radius: 1rem;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
 .sidebar,
 .main {
   height: 100%;
