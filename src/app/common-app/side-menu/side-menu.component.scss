@@ -1,3 +1,11 @@
+.side-menu-holder {
+  overflow: hidden;
+  top: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
 .side-menu-container {
   position: absolute;
   top: 0;
@@ -6,14 +14,21 @@
   right: 0;
 }
 
-.collapse-left {
+.collapse-left,
+.collapse-right {
+  position: absolute;
   border-radius: 1rem;
+  z-index: 10;
+}
+
+.collapse-left {
+  left: 0;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
 
 .collapse-right {
-  border-radius: 1rem;
+  right: 0;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
@@ -21,11 +36,18 @@
 .sidebar,
 .main {
   height: 100%;
-  overflow-y: auto;
   -webkit-transition-property: width, max-width;
   transition-property: width, max-width;
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
+}
+
+.sidebar-content,
+.main-content {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: auto;
 }
 
 .leftSidebar {

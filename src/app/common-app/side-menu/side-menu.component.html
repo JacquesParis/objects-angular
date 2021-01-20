@@ -1,8 +1,8 @@
 <div
   class=""
-  [style.height]="height"
+  [style.top]="top"
   style="overflow: hidden"
-  class="position-relative"
+  class="side-menu-holder"
   #component
 >
   <div class="side-menu-container">
@@ -11,36 +11,31 @@
       [id]="leftMenuId"
       #leftSidebar
     >
+      <button
+        type="button"
+        class="btn btn-light pr-1 mt-2 btn-sm btn-sm collapse-right"
+        (click)="hideLeftSide()"
+        [attr.data-target]="'#' + leftMenuId"
+        data-toggle="collapse"
+      >
+        <i-bs name="chevron-bar-left"></i-bs>
+      </button>
       <div class="sidebar-content border-0">
-        <button
-          type="button"
-          class="btn btn-light pr-1 mt-2 btn-sm btn-sm collapse-right position-fixed"
-          (click)="hideLeftSide()"
-          [attr.data-target]="'#' + leftMenuId"
-          data-toggle="collapse"
-          [style.right]="0"
-          [style.z-index]="10"
-        >
-          <i-bs name="chevron-bar-left"></i-bs>
-        </button>
-
         <ng-content select="[app-side-menu-left-part]"></ng-content>
       </div>
     </div>
     <div class="float-left col px-0 main" [class.col-md-9]="isLeftSidebarShown">
-      <div class="main part">
-        <button
-          type="button"
-          class="btn btn-secondary float-left pl-1 mt-2 btn-sm collapse-left position-fixed"
-          (click)="showLeftSide()"
-          [attr.data-target]="'#' + leftMenuId"
-          data-toggle="collapse"
-          [class.d-none]="isLeftSidebarShown"
-          [style.z-index]="10"
-        >
-          <i-bs name="chevron-bar-right"></i-bs>
-        </button>
-
+      <button
+        type="button"
+        class="btn btn-secondary float-left pl-1 mt-2 btn-sm collapse-left"
+        (click)="showLeftSide()"
+        [attr.data-target]="'#' + leftMenuId"
+        data-toggle="collapse"
+        [class.d-none]="isLeftSidebarShown"
+      >
+        <i-bs name="chevron-bar-right"></i-bs>
+      </button>
+      <div class="main-content">
         <ng-content select="[app-side-menu-main-part]"></ng-content>
       </div>
     </div>

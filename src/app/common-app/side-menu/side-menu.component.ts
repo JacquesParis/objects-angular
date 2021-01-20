@@ -29,7 +29,7 @@ export class SideMenuComponent
   public isLeftSidebarShown = true;
   public saveSideBarsStatus: boolean = false;
 
-  public height = '100vh';
+  public top = '0';
   constructor(
     private managementPageService: ManagementPageService,
     private sideMenuService: SideMenuService
@@ -38,7 +38,7 @@ export class SideMenuComponent
     this.sideMenuService.initService(this);
     this.registerSubscription(
       this.managementPageService.subscribeMargingTop((margin: number) => {
-        this.height = 'calc(100vh - ' + margin + 'px )';
+        this.top = '' + margin + 'px';
       })
     );
   }

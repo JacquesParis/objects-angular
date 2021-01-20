@@ -2,7 +2,10 @@ import { SHOULD_BE_LOGIN_RESOLVE } from './../app.route';
 import { USER_LOGIN_ROUTE_NAME_AND_HREF } from './../user/user.const';
 import { UserService } from './../objects-client/services/user.service';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
-import { OBJECT_TREE_TOKEN } from './../admin/admin.const';
+import {
+  OBJECT_TREE_TOKEN,
+  ADMIN_OWNER_WELCOME_ROUTE_NAME,
+} from './../admin/admin.const';
 import { ObjectNodesListComponent } from './../admin/admin/object-nodes-list/object-nodes-list.component';
 import { RootAdminComponent } from './root-admin/root-admin.component';
 import {
@@ -20,7 +23,13 @@ const rootAdminState: Ng2StateDeclaration = {
   name: ROOT_ADMIN_ROUTE_NAME,
   url: '/root-admin',
   component: RootAdminComponent,
-  redirectTo: ROOT_ADMIN_OBJECTS_LIST_ROUTE_NAME,
+  redirectTo: {
+    state: ADMIN_OWNER_WELCOME_ROUTE_NAME,
+    params: {
+      ownerType: 'Root',
+      ownerName: 'root',
+    },
+  },
   resolve: [SHOULD_BE_LOGIN_RESOLVE],
 };
 

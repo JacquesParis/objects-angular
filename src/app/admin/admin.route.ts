@@ -8,13 +8,14 @@ import { ObjectsCommonService } from './../objects-client/services/objects-commo
 import { getParentStateName } from '../app.const';
 import { Ng2StateDeclaration, StateService, UIView } from '@uirouter/angular';
 import {
+  OBJECT_TREE_TOKEN,
   ADMIN_ROUTE_NAME,
   ADMIN_NAMESPACE_ROUTE_NAME,
-  OBJECT_TREE_TOKEN,
   ADMIN_OWNER_ROUTE_NAME,
   ADMIN_OWNER_NODE_ROUTE_NAME,
   OBJECT_NODE_TOKEN,
   ADMIN_NAMESPACE_NODE_ROUTE_NAME,
+  ADMIN_NAMESPACE_ENTRY_ROUTE_NAME,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
   ADMIN_OWNER_WELCOME_ROUTE_NAME,
@@ -22,6 +23,11 @@ import {
   ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME,
   ADMIN_OWNER_NODE_CREATE_ROUTE_NAME,
   OBJECT_NODE_TYPE_TOKEN,
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_CREATE_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
+  ADMIN_OWNER_ENTRY_ROUTE_NAME,
 } from './admin.const';
 import { AdminComponent } from './admin/admin.component';
 import { ObjectTreeImpl, EntityName } from '@jacquesparis/objects-client';
@@ -48,7 +54,7 @@ const adminOwnerState: Ng2StateDeclaration = {
   name: ADMIN_OWNER_ROUTE_NAME,
   url: '/owner/:ownerType/:ownerName',
   abstract: true,
-  component: AdminFramesComponent,
+  component: UIView,
   resolve: [
     SHOULD_BE_LOGIN_RESOLVE,
     {
@@ -65,6 +71,14 @@ const adminOwnerState: Ng2StateDeclaration = {
       },
     },
   ],
+};
+
+const adminOwnerEntryState: Ng2StateDeclaration = {
+  parent: getParentStateName(ADMIN_OWNER_ENTRY_ROUTE_NAME),
+  name: ADMIN_OWNER_ENTRY_ROUTE_NAME,
+  url: '',
+  abstract: true,
+  component: AdminFramesComponent,
 };
 
 const adminOwnerWelcomeState: Ng2StateDeclaration = {
@@ -203,7 +217,8 @@ const adminNamespaceState = {
   parent: getParentStateName(ADMIN_NAMESPACE_ROUTE_NAME),
   name: ADMIN_NAMESPACE_ROUTE_NAME,
   url: '/namespace/:namespaceType/:namespaceName',
-  component: AdminFramesComponent,
+  component: UIView,
+  abstract: true,
   resolve: [
     SHOULD_BE_LOGIN_RESOLVE,
     {
@@ -224,6 +239,15 @@ const adminNamespaceState = {
   ],
 };
 
+const adminNamespaceEntryState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerEntryState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_ENTRY_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_ENTRY_ROUTE_NAME,
+  }
+);
+
 const adminNamespaceWelcomeState: Ng2StateDeclaration = merge(
   {},
   adminOwnerWelcomeState,
@@ -238,19 +262,73 @@ const adminNamespaceNodeState: Ng2StateDeclaration = merge(
   {
     parent: getParentStateName(ADMIN_NAMESPACE_NODE_ROUTE_NAME),
     name: ADMIN_NAMESPACE_NODE_ROUTE_NAME,
+    resolve: [
+      SHOULD_BE_LOGIN_RESOLVE,
+      {
+        token: OBJECT_NODE_TOKEN,
+        deps: [
+          ObjectsCommonService,
+          StateService,
+          OBJECT_TREE_TOKEN,
+          RestEntityListService,
+        ],
+        resolveFn: adminOwnerNodeState.resolve[1].resolveFn,
+      },
+    ],
   }
 );
 
+const adminNamespaceNodeViewState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeViewState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  }
+);
+
+const adminNamespaceNodeListState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeListState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME,
+  }
+);
+
+const adminNamespaceNodeCreateState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeCreateState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_CREATE_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_CREATE_ROUTE_NAME,
+  }
+);
+
+const adminNamespaceNodeCreateTypeState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeCreateTypeState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
+  }
+);
 export const ADMIN_STATES = [
   adminState,
   adminOwnerState,
-  adminNamespaceState,
+  adminOwnerEntryState,
   adminOwnerNodeState,
-  adminNamespaceNodeState,
+  adminOwnerWelcomeState,
   adminOwnerNodeViewState,
   adminOwnerNodeListState,
-  adminOwnerWelcomeState,
-  adminNamespaceWelcomeState,
   adminOwnerNodeCreateState,
   adminOwnerNodeCreateTypeState,
+  adminNamespaceState,
+  adminNamespaceEntryState,
+  adminNamespaceNodeState,
+  adminNamespaceWelcomeState,
+  adminNamespaceNodeViewState,
+  adminNamespaceNodeListState,
+  adminNamespaceNodeCreateState,
+  adminNamespaceNodeCreateTypeState,
 ];

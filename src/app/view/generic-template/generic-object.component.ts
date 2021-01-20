@@ -1,3 +1,8 @@
+import { getOwnerName } from 'src/app/app.const';
+import {
+  ADMIN_OWNER_WELCOME_ROUTE_NAME,
+  ADMIN_NAMESPACE_WELCOME_ROUTE_NAME,
+} from './../../admin/admin.const';
 import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
 import { StateService } from '@uirouter/angular';
 import { ObjectTreeImpl, ObjectNodeImpl } from '@jacquesparis/objects-client';
@@ -89,24 +94,28 @@ export class GenericObjectComponent implements IGenericObjectComponent {
       });
     }
   }
-  public goToPage(page: ObjectTreeImpl, event) {
-    if (page) {
-      window.scrollTo(0, 0);
-      this.stateService.go(VIEW_PAGE_ROUTE_NAME, {
-        siteId: this.siteTree.id,
-        pageId: page.id,
-        pageName: page.treeNode.name,
-        siteTree: this.siteTree,
-        pageTree: page,
-        siteName: this.siteTree.treeNode.name,
+
+  public getAdminHref(adminObject: ObjectTreeImpl): string {
+    if (adminObject) {
+      if (this.siteTree.namespaceName) {
+        return this.stateService.href(ADMIN_NAMESPACE_WELCOME_ROUTE_NAME, {
+          ownerType: this.siteTree.ownerType,
+          ownerName: this.siteTree.ownerName,
+          namespaceType: this.siteTree.namespaceType,
+          namespaceName: this.siteTree.namespaceName,
+        });
+      } else if (this.siteTree.ownerName) {
+        return this.stateService.href(ADMIN_OWNER_WELCOME_ROUTE_NAME, {
+          ownerType: this.siteTree.ownerType,
+          ownerName: this.siteTree.ownerName,
+        });
+      }
+      return this.stateService.href(ADMIN_OWNER_WELCOME_ROUTE_NAME, {
+        ownerType: 'Tenant',
+        ownerName: getOwnerName(),
       });
     }
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
   }
-
   public getImgSrc(controlValue: {
     base64?: string;
     type?: string;
