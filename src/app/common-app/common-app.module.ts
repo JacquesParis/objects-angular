@@ -12,6 +12,7 @@ import { AppNavComponent } from './app-nav/app-nav.component';
 import { UiRouterStateDirective } from './ui-router-state/ui-router-state.directive';
 import { ManagementPageComponent } from './management-page/management-page.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { AppRootComponent } from './app-root/app-root.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     ManagementPageComponent,
     ElementResizeDirective,
     SideMenuComponent,
+    AppRootComponent,
   ],
   imports: [
     UIRouterModule,
@@ -44,6 +46,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     ManagementPageComponent,
     SideMenuComponent,
     ElementResizeDirective,
+    AppRootComponent,
   ],
 })
 export class CommonAppModule {}

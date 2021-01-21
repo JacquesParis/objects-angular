@@ -10,6 +10,7 @@ import { UIView, Ng2StateDeclaration, StateService } from '@uirouter/angular';
 import { AppComponent } from './app.component';
 import { ObjectsCommonService } from './objects-client/services/objects-common.service';
 import { getParentStateName } from './app.const';
+import { AppRootComponent } from './common-app/app-root/app-root.component';
 const WELCOME_STATE_NAME2 = buildStateName(WELCOME_STATE_NAME, '2');
 
 const shouldBeLoginResolve = async (
@@ -28,7 +29,7 @@ export const SHOULD_BE_LOGIN_RESOLVE = {
 const rootState: Ng2StateDeclaration = {
   name: ROOT_STATE_NAME,
   url: '',
-  component: UIView,
+  component: AppRootComponent,
   abstract: true,
   resolve: [
     {
