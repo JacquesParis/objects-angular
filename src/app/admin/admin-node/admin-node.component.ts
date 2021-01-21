@@ -63,6 +63,7 @@ export class AdminNodeComponent
   public previousTree: ObjectTreeImpl;
   public nextTree: ObjectTreeImpl;
   public creations: string[] = [];
+  navBarHeight: string = '0px';
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -77,6 +78,13 @@ export class AdminNodeComponent
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     super.ngOnChanges(changes);
+  }
+
+  setNavbarSize(size: { width: number; height: number }) {
+    if ('' + size.height + 'px' !== this.navBarHeight) {
+      this.navBarHeight = '' + size.height + 'px';
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   calculateParentAndBrother() {

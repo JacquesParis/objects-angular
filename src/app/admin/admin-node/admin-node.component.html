@@ -1,8 +1,10 @@
 <div *ngIf="objectTree; else noTree">
   <div
     *ngIf="parentTree"
-    class="mt-2 position-fixed w-100 bg-white"
+    class="mt-2 top-navbar-container bg-white"
     style="z-index: 9"
+    appResize
+    (sizeChanged)="setNavbarSize($event)"
   >
     <div class="top-navbar">
       <div class="btn-group btn-group-sm top-navbar-inside" role="group">
@@ -63,7 +65,7 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid pt-4">
+  <div class="container-fluid node-container mt-2" [style.top]="navBarHeight">
     <div class="page-header">
       <h2 class="display-4 font-weight-light text-truncate">
         {{ objectTree.treeNode.name }}

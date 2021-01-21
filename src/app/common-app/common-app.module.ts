@@ -43,6 +43,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     UiRouterStateDirective,
     ManagementPageComponent,
     SideMenuComponent,
+    ElementResizeDirective,
   ],
 })
 export class CommonAppModule {}
