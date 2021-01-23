@@ -46,6 +46,8 @@ import {
   ChevronRight,
   ChevronDown,
   ArrowRepeat,
+  Eye,
+  ArrowDownUp,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -67,6 +69,8 @@ const icons = {
   ChevronRight,
   ChevronDown,
   ArrowRepeat,
+  Eye,
+  ArrowDownUp,
 };
 
 export function createCompiler(compilerFactory: CompilerFactory) {

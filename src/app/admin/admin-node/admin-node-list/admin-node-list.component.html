@@ -1,5 +1,5 @@
 <div
-  class=""
+  class="mx-4 my-2"
   cdkDropList
   [id]="'dropList' + objectTree.treeNode.id"
   [cdkDropListData]="objectTree.children"
@@ -7,37 +7,46 @@
   (cdkDropListDropped)="onChildDrop($event)"
 >
   <div
-    class="card border-top-0"
+    class="card"
     *ngFor="let child of objectTree.children"
     cdkDrag
     [ngStyle]="{
       cursor: 'move'
     }"
   >
-    <div class="card-body">
-      <span class="card-title"
-        ><h5
-          class="d-inline"
+    <div class="input-group input-group-sm">
+      <span
+        class="form-control form-control-plaintext form-control-sm text-muted bg-light px-2"
+        [attr.aria-describedby]="'child_' + child.id"
+      >
+        <i-bs name="arrow-down-up" class="align-middle"></i-bs>
+        {{ child.treeNode.objectTypeId }}
+      </span>
+
+      <div class="input-group-append" [id]="'child_' + child.id">
+        <button class="btn btn-sm btn-light" type="button">
+          <i-bs name="trash" class="align-middle"></i-bs>
+        </button>
+        <button
+          class="btn btn-sm btn-light"
+          (click)="displayNode(child, $event)"
+          type="button"
+        >
+          <i-bs name="eye" class="align-middle"></i-bs>
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-2">
+      <p class="card-text">
+        <span
+          app-admin-node-preview
+          [treeNode]="child"
           [ngStyle]="{
             cursor: 'pointer'
           }"
           (click)="displayNode(child, $event)"
-        >
-          {{ child.treeNode.name }}
-        </h5>
-        <h6
-          class="d-inline text-muted mx-2"
-          [ngStyle]="{ 'font-size': 'small' }"
-        >
-          {{ child.treeNode.objectTypeId }}
-        </h6>
-        <a
-          class="btn btn-sm btn-outline-secondary float-right"
-          [style.cursor]="'pointer'"
-          (click)="displayNode(child, $event)"
-          >View Data</a
-        ></span
-      >
+        ></span>
+      </p>
     </div>
   </div>
 </div>

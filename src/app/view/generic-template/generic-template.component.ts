@@ -1,9 +1,10 @@
+import { GenericTemplateService } from './../../common-app/generic-template/generic-template.service';
 import { async } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
 import { OBJECT_TREE_TOKEN } from './../../admin/admin.const';
 import { StateService } from '@uirouter/angular';
-import { DynamicTemplateDirective } from './dynamic-template.dircetive';
+import { DynamicTemplateDirective } from '../../common-app/generic-template/dynamic-template.dircetive';
 import { CommonAppModule } from './../../common-app/common-app.module';
 import {
   ChangeDetectorRef,
@@ -21,7 +22,7 @@ import {
 import {
   GenericObjectComponent,
   IGenericObjectComponent,
-} from './generic-object.component';
+} from '../../common-app/generic-template/generic-object.component';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 
 @Component({
@@ -42,31 +43,14 @@ export class GenericTemplateComponent implements OnInit {
   public siteTemplateTree: ObjectTreeImpl;
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
     protected compiler: Compiler,
     @Inject('siteTree') public siteTree: ObjectTreeImpl,
     @Inject('pageTree') public pageTree: ObjectTreeImpl,
     public sanitization: DomSanitizer,
     public stateService: StateService,
-    public changeDetectorRef: ChangeDetectorRef
+    public changeDetectorRef: ChangeDetectorRef,
+    private genericTemplateService: GenericTemplateService
   ) {}
-
-  hashCode(str, seed = 0) {
-    let h1 = 0xdeadbeef ^ seed,
-      h2 = 0x41c6ce57 ^ seed;
-    for (let i = 0, ch; i < str.length; i++) {
-      ch = str.charCodeAt(i);
-      h1 = Math.imul(h1 ^ ch, 2654435761);
-      h2 = Math.imul(h2 ^ ch, 1597334677);
-    }
-    h1 =
-      Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
-      Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-    h2 =
-      Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
-      Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
-  }
 
   async ngOnInit() {
     console.log(
@@ -101,40 +85,12 @@ export class GenericTemplateComponent implements OnInit {
       this.templateTree.treeNode.contentGenericTemplate?.template ||
       'Missing template for {{dataTree.treeNode.name}} {{templateTree.treeNode.name}}';
     const scss = this.templateTree.treeNode.contentGenericTemplate?.scss || '';
-    const templateId = this.hashCode(template + scss); //+ Math.ceil(Math.random() * 100000000);
 
-    if (!(templateId in GenericTemplateComponent.templates)) {
-      const tmpCmp: any = Component({
-        template:
-          '<div class="template-holder" *ngIf="templateReady">' +
-          template +
-          '</div>',
-        styles: [scss],
-      })(class extends GenericObjectComponent {});
-      const tmpModule = NgModule({
-        imports: [CommonAppModule],
-        declarations: [
-          tmpCmp,
-          GenericTemplateComponent,
-          DynamicTemplateDirective,
-        ],
-        entryComponents: [tmpCmp],
-      })(class {});
-      const factories = await this.compiler.compileModuleAndAllComponentsAsync(
-        tmpModule
-      );
-      GenericTemplateComponent.templates[
-        templateId
-      ] = factories.componentFactories.find(
-        (component) => 'ng-component' === component.selector
-      );
-    }
-
-    const viewContainerRef = this.dynamicTemplatePlaceholder.viewContainer;
-    //  viewContainerRef.clear();
-
-    this.componentRef = viewContainerRef.createComponent<IGenericObjectComponent>(
-      GenericTemplateComponent.templates[templateId]
+    this.componentRef = await this.genericTemplateService.getComponent(
+      template,
+      scss,
+      this.dynamicTemplatePlaceholder,
+      [GenericTemplateComponent, DynamicTemplateDirective]
     );
 
     const controller =

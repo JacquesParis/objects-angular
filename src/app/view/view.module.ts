@@ -1,5 +1,5 @@
 import { GenericTemplateComponent } from './generic-template/generic-template.component';
-import { DynamicTemplateDirective } from './generic-template/dynamic-template.dircetive';
+import { DynamicTemplateDirective } from '../common-app/generic-template/dynamic-template.dircetive';
 import { VIEW_STATES } from './view.route';
 import { UIRouterModule } from '@uirouter/angular';
 import { CommonAppModule } from './../common-app/common-app.module';
@@ -19,11 +19,7 @@ import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
       states: VIEW_STATES,
     }),
   ],
-  declarations: [
-    ViewComponent,
-    DynamicTemplateDirective,
-    GenericTemplateComponent,
-  ],
+  declarations: [ViewComponent, GenericTemplateComponent],
   providers: [],
 })
 export class ViewModule {}

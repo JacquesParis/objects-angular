@@ -2,8 +2,8 @@ import { getOwnerName } from 'src/app/app.const';
 import {
   ADMIN_OWNER_WELCOME_ROUTE_NAME,
   ADMIN_NAMESPACE_WELCOME_ROUTE_NAME,
-} from './../../admin/admin.const';
-import { VIEW_PAGE_ROUTE_NAME } from './../view.const';
+} from '../../admin/admin.const';
+import { VIEW_PAGE_ROUTE_NAME } from '../../view/view.const';
 import { StateService } from '@uirouter/angular';
 import { ObjectTreeImpl, ObjectNodeImpl } from '@jacquesparis/objects-client';
 import { IObjectNode } from '@jacquesparis/objects-model';
