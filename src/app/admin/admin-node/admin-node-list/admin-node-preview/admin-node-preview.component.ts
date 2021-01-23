@@ -1,55 +1,21 @@
-import { GenericTemplateService } from './../../../../common-app/generic-template/generic-template.service';
-import { DynamicTemplateDirective } from './../../../../common-app/generic-template/dynamic-template.dircetive';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ComponentRef,
-  AfterViewInit,
-  ChangeDetectorRef,
-} from '@angular/core';
-import { IGenericObjectComponent } from 'src/app/common-app/generic-template/generic-object.component';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: '[app-admin-node-preview]',
   templateUrl: './admin-node-preview.component.html',
   styleUrls: ['./admin-node-preview.component.scss'],
 })
-export class AdminNodePreviewComponent implements AfterViewInit {
+export class AdminNodePreviewComponent implements OnInit {
   @Input() treeNode: ObjectTreeImpl;
-  @ViewChild(DynamicTemplateDirective)
-  dynamicTemplatePlaceholder: DynamicTemplateDirective;
-  previewComponent: ComponentRef<IGenericObjectComponent>;
+  preView: SafeHtml;
 
-  constructor(
-    private genericTemplateService: GenericTemplateService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private domSanitizer: DomSanitizer) {}
 
-  async ngAfterViewInit() {
-    const typeTemplate =
-      this.treeNode.entityCtx &&
-      this.treeNode.entityCtx.preview &&
-      this.treeNode.entityCtx.preview.template
-        ? this.treeNode.entityCtx.preview.template
-        : `<h5
-    class="d-inline"
-  >
-    {{ dataNode.name }}
-  </h5>`;
-    const template =
-      '<span class="child-preview-holder">' + typeTemplate + '</span>';
-    const scss = '';
-
-    this.previewComponent = await this.genericTemplateService.getComponent(
-      template,
-      scss,
-      this.dynamicTemplatePlaceholder
+  ngOnInit() {
+    this.preView = this.domSanitizer.bypassSecurityTrustHtml(
+      this.treeNode.entityCtx.preview.html
     );
-    this.previewComponent.instance.dataTree = this.treeNode;
-    this.previewComponent.instance.initComponent();
-    this.changeDetectorRef.detectChanges();
   }
 }
