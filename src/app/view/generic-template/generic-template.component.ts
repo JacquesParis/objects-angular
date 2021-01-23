@@ -82,7 +82,7 @@ export class GenericTemplateComponent implements OnInit {
       await this.pageTree.treeNode.waitForReady();
     }
     const template =
-      this.templateTree.treeNode.contentGenericTemplate?.template ||
+      this.templateTree.treeNode.contentGenericTemplate?.templateAngular ||
       'Missing template for {{dataTree.treeNode.name}} {{templateTree.treeNode.name}}';
     const scss = this.templateTree.treeNode.contentGenericTemplate?.scss || '';
 
