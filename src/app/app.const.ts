@@ -107,7 +107,7 @@ export function getBaseUri(): string {
       '[name~="objectTrees:baseUri"][content]'
     )['content'];
   }
-  return '/';
+  return location.pathname;
 }
 
 export function uriDecode(param: string) {
