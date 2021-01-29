@@ -90,8 +90,7 @@ export function getServer(): string {
   }
   return (
     'http://' +
-    location.hostname +
-    ('localhost' === location.hostname ? ':3000' : '') +
+    ('localhost' === location.hostname ? 'localhost:3000' : location.host) +
     '/api'
   );
 }

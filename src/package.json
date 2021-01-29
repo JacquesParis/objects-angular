@@ -1,0 +1,25 @@
+{
+  "name": "@jacquesparis/objects-angular",
+  "version": "1.0.1",
+  "description": "Angular administration and view application of @jacquesparis/objects-tree",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacquesParis/objects-angular.git"
+  },
+  "keywords": [
+    "rest",
+    "angular",
+    "loopback",
+    "generic",
+    "objects"
+  ],
+  "author": "https://github.com/JacquesParis",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/JacquesParis/objects-angular/issues"
+  },
+  "homepage": "https://github.com/JacquesParis/objects-angular#readme"
+}

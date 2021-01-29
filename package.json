@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "cp": "cp dist/objectsites/index.html dist/index.html && cp src/package.json dist/package.json",
+    "build": "ng build --prod --deploy-url /objectsites/  &&  npm run cp",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

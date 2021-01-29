@@ -1,3 +1,4 @@
+import { getServer } from 'src/app/app.const';
 import { GenericTemplateService } from './../../common-app/generic-template/generic-template.service';
 import { async } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -41,6 +42,7 @@ export class GenericTemplateComponent implements OnInit {
   dynamicTemplatePlaceholder: DynamicTemplateDirective;
   protected componentRef: ComponentRef<IGenericObjectComponent>;
   public siteTemplateTree: ObjectTreeImpl;
+  ajaxContentUrl: string;
 
   constructor(
     protected compiler: Compiler,
@@ -53,6 +55,15 @@ export class GenericTemplateComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // 'http://localhost:3000/api/object-trees/3df0b581-33b2-43f7-af4b-aea1341420fa/view/ajax';
+    /*
+    this.ajaxContentUrl =
+      getServer() +
+      '/object-trees/' +
+      this.siteTree.id +
+      '/view/ajax/' +
+      this.pageTree.id;
+    return;*/
     console.log(
       'dataNode',
       this.dataTree?.treeNode?.name,
