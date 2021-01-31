@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { WebsiteGenerationService } from '../../../../../objects-website/lib';
+import { IObjectTree } from '@jacquesparis/objects-model';
 
 @Component({
   selector: '[mustache-template]',
@@ -26,11 +27,31 @@ export class GenericMustacheTemplateComponent implements OnInit {
       await WebsiteGenerationService.get().getTamplateContent(
         this.objectsCommonService.objectTreesService,
         this.objectsCommonService.objectNodesService,
+        this,
         this.siteTree.id,
         this.pageTree.id,
         this.dataTree.id,
         this.templateTree.id
       )
+    );
+  }
+
+  public getPageHref(page: IObjectTree): string {
+    return (
+      '#/view/' + this.siteTree.id + '/' + (page ? page.treeNode.id : 'default')
+    );
+  }
+
+  public getAdminHref(page: IObjectTree): string {
+    return (
+      '#/admin/owner/' +
+      page.ownerType +
+      '/' +
+      page.ownerName +
+      '/namespace/' +
+      page.namespaceType +
+      '/' +
+      page.namespaceName
     );
   }
 }
