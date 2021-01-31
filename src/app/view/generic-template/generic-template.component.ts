@@ -25,6 +25,7 @@ import {
   IGenericObjectComponent,
 } from '../../common-app/generic-template/generic-object.component';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
+import { WebsiteGenerationService } from '../../../../../objects-website/lib';
 
 @Component({
   selector: 'app-template,[template]',
@@ -43,6 +44,7 @@ export class GenericTemplateComponent implements OnInit {
   protected componentRef: ComponentRef<IGenericObjectComponent>;
   public siteTemplateTree: ObjectTreeImpl;
   ajaxContentUrl: string;
+  websiteGenerationService: WebsiteGenerationService;
 
   constructor(
     protected compiler: Compiler,

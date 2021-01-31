@@ -9,8 +9,14 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-angular-forms && npm --save install ../objects-model ../objects-client ../objects-angular-lib/dist/objects-angular-forms",
-    "update": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-angular-forms && npm --save install @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-angular-forms"
+    "dev": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms && npm --save install ../objects-model ../objects-client ../objects-website ../objects-angular-lib/dist/objects-angular-forms",
+    "update": "npm uninstall @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms && npm --save install @jacquesparis/objects-model @jacquesparis/objects-client @jacquesparis/objects-website @jacquesparis/objects-angular-forms"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "source-map-resolve": false
   },
   "private": true,
   "dependencies": {
@@ -31,6 +37,7 @@
     "@jacquesparis/objects-angular-forms": "file:../objects-angular-lib/dist/objects-angular-forms",
     "@jacquesparis/objects-client": "file:../objects-client",
     "@jacquesparis/objects-model": "file:../objects-model",
+    "@jacquesparis/objects-website": "file:../objects-website",
     "@uirouter/angular": "^6.0.1",
     "@uirouter/core": "^6.0.4",
     "@uirouter/rx": "^0.6.5",

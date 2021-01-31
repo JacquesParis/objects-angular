@@ -24,8 +24,8 @@ import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entit
 export class ObjectsCommonService {
   private objectsTypeService: ObjectTypesService;
   private objectsSubTypeService: ObjectSubTypesService;
-  private objectNodesService: ObjectNodesService;
-  private objectTreesService: ObjectTreesService;
+  public objectNodesService: ObjectNodesService;
+  public objectTreesService: ObjectTreesService;
   private _objectTrees: {
     [treeType: string]: { [treeName: string]: ObjectTreeImpl };
   } = {};
