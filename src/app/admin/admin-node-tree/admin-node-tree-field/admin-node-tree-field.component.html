@@ -1,56 +1,56 @@
 <div
-  (click)="switchCollapsed(treeChild)"
-  [attr.aria-expanded]="!isCollapsed(treeChild)"
+  (click)="switchCollapsed()"
+  [attr.aria-expanded]="!isCollapsed()"
   [attr.aria-controls]="'treeNode_' + treeChild.treeNode.id"
   [style.cursor]="
-    mayOpen(treeChild)
-      ? isCollapsed(treeChild)
+    mayOpen()
+      ? isCollapsed()
         ? 'default'
         : 'default'
-      : isFinalChild(treeChild)
+      : isFinalChild()
       ? 'pointer'
       : 'default'
   "
 >
   <span class="align-middle text-nowrap">
     <i-bs
-      *ngIf="!mayOpen(treeChild) || isCollapsed(treeChild)"
+      *ngIf="!mayOpen() || isCollapsed()"
       name="chevron-right"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-      [style.color]="mayOpen(treeChild) ? 'inherit' : 'transparent'"
+      [style.color]="mayOpen() ? 'inherit' : 'transparent'"
     ></i-bs>
     <i-bs
-      *ngIf="mayOpen(treeChild) && !isCollapsed(treeChild)"
+      *ngIf="mayOpen() && !isCollapsed()"
       name="chevron-down"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
     ></i-bs>
     <i-bs
-      *ngIf="mayOpen(treeChild) && isCollapsed(treeChild)"
+      *ngIf="mayOpen() && isCollapsed()"
       name="folder"
       width="1rem"
       height="1rem"
       class="align-middle text-light py-2 p-1"
     ></i-bs>
     <i-bs
-      *ngIf="mayOpen(treeChild) && !isCollapsed(treeChild)"
+      *ngIf="mayOpen() && !isCollapsed()"
       name="folder2-open"
       width="1rem"
       height="1rem"
       class="align-middle text-light py-2 p-1"
     ></i-bs>
     <i-bs
-      *ngIf="isFinalChild(treeChild)"
+      *ngIf="isFinalChild()"
       name="file-earmark"
       width="1rem"
       height="1rem"
       class="align-middle text-light py-2 p-1"
     ></i-bs>
     <i-bs
-      *ngIf="isLoading(treeChild)"
+      *ngIf="isLoading()"
       name="hourglass-split"
       width="1rem"
       height="1rem"
@@ -64,10 +64,10 @@
 
 <div
   [id]="'treeNode_' + treeChild.treeNode.id"
-  [collapse]="isCollapsed(treeChild)"
+  [collapse]="isCollapsed()"
   [isAnimated]="true"
 >
-  <div class="subtree" *ngIf="mayDisplay(treeChild)">
+  <div class="subtree" *ngIf="mayDisplay()">
     <div
       app-admin-node-tree-field
       [treeChild]="child"
