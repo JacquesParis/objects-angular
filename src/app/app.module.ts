@@ -1,11 +1,5 @@
-import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { BrowserModule } from '@angular/platform-browser';
-import {
-  Compiler,
-  CompilerFactory,
-  COMPILER_OPTIONS,
-  NgModule,
-} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
@@ -73,9 +67,6 @@ const icons = {
   ArrowDownUp,
 };
 
-export function createCompiler(compilerFactory: CompilerFactory) {
-  return compilerFactory.createCompiler();
-}
 @NgModule({
   declarations: [AppComponent, WelcomeComponent],
   entryComponents: [WelcomeComponent],
@@ -96,22 +87,9 @@ export function createCompiler(compilerFactory: CompilerFactory) {
     BrowserAnimationsModule,
     NgxBootstrapIconsModule.pick(icons),
   ],
-  providers: [
-    { provide: WidgetRegistry, useClass: DefaultWidgetRegistry },
-    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
-    {
-      provide: CompilerFactory,
-      useClass: JitCompilerFactory,
-      deps: [COMPILER_OPTIONS],
-    },
-    {
-      provide: Compiler,
-      useFactory: createCompiler,
-      deps: [CompilerFactory],
-    },
-  ],
+  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
   bootstrap: [WelcomeComponent],
 })
 export class AppModule {
-  constructor(compiler: Compiler) {}
+  constructor() {}
 }

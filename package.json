@@ -23,8 +23,6 @@
     "@angular/animations": "~9.1.0",
     "@angular/cdk": "^9.2.1",
     "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/compiler-cli": "~9.1.0",
     "@angular/core": "~9.1.0",
     "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~9.1.0",
@@ -58,6 +56,8 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.0",
     "@angular/cli": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/compiler-cli": "~9.1.0",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",

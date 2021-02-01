@@ -1,4 +1,3 @@
-import { DynamicTemplateDirective } from './generic-template/dynamic-template.dircetive';
 import { ElementResizeDirective } from './element-resize/element-resize.directive';
 import { UIRouterModule } from '@uirouter/angular';
 import { NgModule } from '@angular/core';
@@ -23,7 +22,6 @@ import { AppRootComponent } from './app-root/app-root.component';
     ElementResizeDirective,
     SideMenuComponent,
     AppRootComponent,
-    DynamicTemplateDirective,
   ],
   imports: [
     UIRouterModule,
@@ -49,7 +47,6 @@ import { AppRootComponent } from './app-root/app-root.component';
     SideMenuComponent,
     ElementResizeDirective,
     AppRootComponent,
-    DynamicTemplateDirective,
   ],
 })
 export class CommonAppModule {}
