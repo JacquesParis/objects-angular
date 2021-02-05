@@ -1,3 +1,4 @@
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   OBJECT_NODE_TOKEN,
   OBJECT_TREE_TOKEN,
@@ -64,6 +65,7 @@ export class AdminNodeComponent
   public nextTree: ObjectTreeImpl;
   public creations: string[] = [];
   navBarHeight: string = '0px';
+  safeName: SafeHtml;
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -71,13 +73,25 @@ export class AdminNodeComponent
     protected objectsCommonService: ObjectsCommonService,
     protected stateService: StateService,
     protected restEntityListService: RestEntityListService,
-    protected changeDetectorRef: ChangeDetectorRef
+    protected changeDetectorRef: ChangeDetectorRef,
+    private domSanitizer: DomSanitizer
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     super.ngOnChanges(changes);
+    this.calculateHtml();
+  }
+
+  calculateHtml() {
+    if (this.objectTree) {
+      this.safeName = this.domSanitizer.bypassSecurityTrustHtml(
+        this.objectTree.entityCtx?.preview?.html
+          ? this.objectTree.entityCtx.preview.html
+          : this.objectTree.treeNode.name
+      );
+    }
   }
 
   setNavbarSize(size: { width: number; height: number }) {
@@ -170,6 +184,7 @@ export class AdminNodeComponent
         );
       }
 
+      this.calculateHtml();
       await super.ngOnInit();
       if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
         this.hasWebSite = true;

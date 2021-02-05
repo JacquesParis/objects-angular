@@ -1,7 +1,7 @@
 <div class="card border-top-0" *ngIf="isReady">
   <div class="card-body">
     <h5 class="card-title">
-      <span [innerHTML]="title"></span>
+      <span [innerHTML]="safeName"></span>
     </h5>
     <lib-editable-json-schema-form
       [entity]="entity"

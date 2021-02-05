@@ -56,9 +56,13 @@
       height="1rem"
       class="align-middle text-light py-2 p-1"
     ></i-bs>
-    <a (click)="displayNode($event)" [style.cursor]="'pointer'">
-      {{ treeChild.treeNode.name }}</a
-    >
+    <span
+      app-admin-node-preview
+      [objectTree]="treeChild"
+      (click)="displayNode($event)"
+      class="ml-1"
+      [style.cursor]="'pointer'"
+    ></span>
   </span>
 </div>
 

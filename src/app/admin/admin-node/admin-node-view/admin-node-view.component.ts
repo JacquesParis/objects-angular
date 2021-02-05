@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { merge } from 'lodash-es';
 import { VIEW_ROUTE_NAME } from './../../../view/view.const';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
@@ -37,6 +38,7 @@ export class AdminNodeViewComponent
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
 
   public entity: ObjectNodeImpl;
+  safeName: any;
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -44,13 +46,15 @@ export class AdminNodeViewComponent
     protected objectsCommonService: ObjectsCommonService,
     protected stateService: StateService,
     protected restEntityListService: RestEntityListService,
-    protected changeDetectorRef: ChangeDetectorRef
+    protected changeDetectorRef: ChangeDetectorRef,
+    protected domSanitizer: DomSanitizer
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     super.ngOnChanges(changes);
+    this.calculateHtml();
   }
 
   async ngOnInit() {
@@ -61,10 +65,22 @@ export class AdminNodeViewComponent
 
       await this.entity.waitForReady();
 
-      this.title =
-        this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
+      this.calculateHtml();
 
       await super.ngOnInit();
+    }
+  }
+
+  calculateHtml() {
+    if (this.objectTree) {
+      this.safeName = this.domSanitizer.bypassSecurityTrustHtml(
+        this.objectTree.entityCtx?.preview?.html
+          ? this.objectTree.entityCtx.preview.html
+          : this.entity.name +
+              ' (' +
+              this.objectTree.treeNode.objectTypeId +
+              ')'
+      );
     }
   }
 

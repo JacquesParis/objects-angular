@@ -24,7 +24,12 @@
       </span>
 
       <div class="input-group-append" [id]="'child_' + child.id">
-        <button class="btn btn-sm btn-light" type="button">
+        <button
+          class="btn btn-sm btn-light"
+          type="button"
+          *ngIf="child.entityCtx.aclCtx.rights.delete"
+          (click)="deleteNode(child, $event)"
+        >
           <i-bs name="trash" class="align-middle"></i-bs>
         </button>
         <button
@@ -40,7 +45,7 @@
       <p class="card-text">
         <span
           app-admin-node-preview
-          [treeNode]="child"
+          [objectTree]="child"
           [ngStyle]="{
             cursor: 'pointer'
           }"
@@ -50,3 +55,18 @@
     </div>
   </div>
 </div>
+<ng-template #deleteModalTemplate>
+  <div class="modal-body text-center">
+    <p>Do you want to confirm?</p>
+    <button type="button" class="btn btn-primary" (click)="confirmDelete()">
+      Yes
+    </button>
+    <button
+      type="button"
+      class="btn btn-default ml-2"
+      (click)="deleteModalref.hide()"
+    >
+      No
+    </button>
+  </div>
+</ng-template>

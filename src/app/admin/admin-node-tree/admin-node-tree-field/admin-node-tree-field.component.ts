@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { SideMenuService } from './../../../common-app/side-menu/side-menu.service';
 import { StateService } from '@uirouter/angular';
 import {
@@ -7,7 +8,14 @@ import {
 import { EntityName, ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { CommonComponent } from './../../../common-app/common-component/common-component.component';
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Input,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-admin-node-tree-field,[app-admin-node-tree-field]',
@@ -16,14 +24,16 @@ import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 })
 export class AdminNodeTreeFieldComponent
   extends CommonComponent
-  implements OnInit {
+  implements OnInit, OnChanges {
   @Input() treeChild: ObjectTreeImpl;
+  safeName: any;
   //public nodeState = ADMIN_OWNER_NODE_ROUTE_NAME;
   constructor(
     protected restEntityListService: RestEntityListService,
     public changeDetectorRef: ChangeDetectorRef,
     public stateService: StateService,
-    protected sideMenuService: SideMenuService
+    protected sideMenuService: SideMenuService,
+    protected domSanitizer: DomSanitizer
   ) {
     super();
     /*
@@ -33,8 +43,24 @@ export class AdminNodeTreeFieldComponent
       })
     );*/
   }
-  ngOnInit() {
-    this.treeChild.waitForReady();
+  async ngOnInit(): Promise<void> {
+    this.calculateHtml();
+    await this.treeChild.waitForReady();
+    this.calculateHtml();
+  }
+
+  calculateHtml() {
+    if (this.treeChild) {
+      this.safeName = this.domSanitizer.bypassSecurityTrustHtml(
+        this.treeChild.entityCtx?.preview?.html
+          ? this.treeChild.entityCtx.preview.html
+          : this.treeChild.treeNode.name
+      );
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.calculateHtml();
   }
 
   isCollapsed(): boolean {

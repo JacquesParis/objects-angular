@@ -67,8 +67,8 @@
   </div>
   <div class="container-fluid node-container mt-2" [style.top]="navBarHeight">
     <div class="page-header">
-      <h2 class="display-4 font-weight-light text-truncate">
-        {{ objectTree.treeNode.name }}
+      <h2 class="display-4 font-weight-light text-truncate text-secondary">
+        <span app-admin-node-preview [objectTree]="objectTree"></span>
       </h2>
     </div>
     <ul class="nav nav-tabs">

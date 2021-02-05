@@ -1,1 +1,6 @@
-<span [innerHTML]="preView"> </span>
+<i
+  *ngIf="objectTree.entityCtx?.preview?.icon"
+  class="align-middle pr-1"
+  [class]="objectTree.entityCtx.preview.icon"
+></i
+><span [innerHTML]="preView" class="align-middle"> </span>
