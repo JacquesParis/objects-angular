@@ -20,6 +20,12 @@ import {
 } from 'ngx-schema-form';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
+// RECOMMENDED
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { frLocale } from 'ngx-bootstrap/locale';
+
 import {
   NgxBootstrapIconsModule,
   Trash,
@@ -86,10 +92,14 @@ const icons = {
     CollapseModule.forRoot(),
     BrowserAnimationsModule,
     NgxBootstrapIconsModule.pick(icons),
+
+    BsDatepickerModule.forRoot(),
   ],
   providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
   bootstrap: [WelcomeComponent],
 })
 export class AppModule {
-  constructor() {}
+  constructor() {
+    defineLocale('fr', frLocale);
+  }
 }

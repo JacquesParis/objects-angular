@@ -45,6 +45,7 @@
     "jexl": "^2.2.2",
     "jquery": "^3.5.1",
     "lodash-es": "^4.17.15",
+    "moment": "^2.29.1",
     "ngx-bootstrap": "^6.1.0",
     "ngx-bootstrap-icons": "^1.2.1",
     "ngx-schema-form": "^2.5.2",
