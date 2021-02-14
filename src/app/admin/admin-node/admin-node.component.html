@@ -109,10 +109,15 @@
           <a
             class="dropdown-item ml-2"
             *ngFor="let creation of creations"
-            (click)="createNode(creation, $event)"
+            (click)="createNode(creation.typeId, $event)"
             [style.cursor]="'pointer'"
-            >{{ creation }}</a
-          >
+            ><i
+              *ngIf="creation.icon"
+              class="align-middle pr-1"
+              [class]="creation.icon"
+            ></i
+            ><span [innerHTML]="creation.typeId" class="align-middle"> </span
+          ></a>
           <div class="dropdown-divider" *ngIf="0 < creations.length"></div>
 
           <span class="dropdown-item-text" *ngIf="0 < moveTo.length"
@@ -152,9 +157,14 @@
             class="dropdown-item"
             *ngFor="let creation of creations"
             [style.cursor]="'pointer'"
-            (click)="createNode(creation, $event)"
-            >{{ creation }}</a
-          >
+            (click)="createNode(creation.typeId, $event)"
+            ><i
+              *ngIf="creation.icon"
+              class="align-middle pr-1"
+              [class]="creation.icon"
+            ></i
+            ><span [innerHTML]="creation.typeId" class="align-middle"> </span
+          ></a>
         </div>
       </li>
 

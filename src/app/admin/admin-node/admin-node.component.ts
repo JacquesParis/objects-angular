@@ -35,7 +35,7 @@ import {
   IObjectSubType,
   IMoveToAction,
 } from '@jacquesparis/objects-model';
-import * as _ from 'lodash-es';
+import { merge, map } from 'lodash-es';
 import { OnChanges } from '@angular/core';
 
 @Component({
@@ -63,7 +63,7 @@ export class AdminNodeComponent
   public parentTree: ObjectTreeImpl;
   public previousTree: ObjectTreeImpl;
   public nextTree: ObjectTreeImpl;
-  public creations: string[] = [];
+  public creations: { typeId: string; icon?: string }[] = [];
   navBarHeight: string = '0px';
   safeName: SafeHtml;
   moveTo: IMoveToAction[] = [];
@@ -110,7 +110,13 @@ export class AdminNodeComponent
       this.objectTree.entityCtx &&
       this.objectTree.entityCtx.actions &&
       this.objectTree.entityCtx.actions.creations
-        ? Object.keys(this.objectTree.entityCtx.actions.creations)
+        ? map(
+            Object.keys(this.objectTree.entityCtx.actions.creations),
+            (typeId) => ({
+              typeId: typeId,
+              icon: this.objectTree.entityCtx.actions.creations[typeId].icon,
+            })
+          )
         : [];
 
     this.treeType = this.objectTree.treeNode.objectType;
@@ -178,7 +184,7 @@ export class AdminNodeComponent
     }
     return this.stateService.go(
       this.nodeViewStateName,
-      _.merge({}, this.stateService.params, { treeId: child.treeNode.id })
+      merge({}, this.stateService.params, { treeId: child.treeNode.id })
     );
   }
 
@@ -200,7 +206,7 @@ export class AdminNodeComponent
 
     return this.stateService.go(
       this.nodeCreateTypeStateName,
-      _.merge({}, this.stateService.params, { typeId: typeId })
+      merge({}, this.stateService.params, { typeId: typeId })
     );
   }
 

@@ -80,7 +80,7 @@ export class ObjectNodeChildrenAccordionComponent
         entityType: this.objectType,
         jsonSchema: this.objectTree.entityCtx?.actions?.creations[
           this.objectType.id
-        ],
+        ].schema,
       }
     );
   }
