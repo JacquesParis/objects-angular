@@ -54,7 +54,7 @@ export class AdminNodeCreateComponent
 
       this.typeSchema = this.objectTree.entityCtx.actions.creations[
         this.typeId
-      ];
+      ].schema;
 
       this.entity = this.objectsCommonService.newEntity<ObjectNodeImpl>(
         EntityName.objectNode,
