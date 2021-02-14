@@ -33,6 +33,7 @@ import {
   IObjectNode,
   IObjectType,
   IObjectSubType,
+  IMoveToAction,
 } from '@jacquesparis/objects-model';
 import * as _ from 'lodash-es';
 import { OnChanges } from '@angular/core';
@@ -54,7 +55,6 @@ export class AdminNodeComponent
   public entity: ObjectNodeImpl;
 
   public treeType: IObjectType;
-  public subTypes: IObjectSubType[] = [];
   public hasWebSite: boolean = false;
   public params: { [paramName: string]: any };
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
@@ -66,7 +66,15 @@ export class AdminNodeComponent
   public creations: string[] = [];
   navBarHeight: string = '0px';
   safeName: SafeHtml;
-
+  moveTo: IMoveToAction[] = [];
+  public get isCreationActive(): boolean {
+    return this.stateService.current.name.startsWith(
+      this.nodeCreateTypeStateName
+    );
+  }
+  public get isCreationOrActionsActive(): boolean {
+    return this.isCreationActive;
+  }
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
     @Inject(OBJECT_NODE_TOKEN) public objectTree: ObjectTreeImpl,
@@ -79,6 +87,51 @@ export class AdminNodeComponent
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
   }
 
+  async ngOnInit() {
+    if (this.objectTree) {
+      this.params = this.stateService.params;
+
+      this.entity = this.objectTree.treeNode;
+      await this.objectTree.waitForReady();
+
+      await this.entity.waitForReady();
+
+      await super.ngOnInit();
+      if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
+        this.hasWebSite = true;
+      }
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  async initEntity() {
+    this.calculateParentAndBrother();
+    this.creations =
+      this.objectTree.entityCtx &&
+      this.objectTree.entityCtx.actions &&
+      this.objectTree.entityCtx.actions.creations
+        ? Object.keys(this.objectTree.entityCtx.actions.creations)
+        : [];
+
+    this.treeType = this.objectTree.treeNode.objectType;
+    this.title =
+      this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
+
+    if (
+      this.objectTree.entityCtx &&
+      this.objectTree.entityCtx.actions &&
+      this.objectTree.entityCtx.actions.moveTo
+    ) {
+      this.moveTo = this.objectTree.entityCtx.actions.moveTo;
+    }
+
+    this.calculateHtml();
+    await super.initEntity();
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     super.ngOnChanges(changes);
     this.calculateHtml();
@@ -151,50 +204,16 @@ export class AdminNodeComponent
     );
   }
 
-  async ngOnInit() {
-    if (this.objectTree) {
-      this.calculateParentAndBrother();
-      this.params = this.stateService.params;
-      this.creations =
-        this.objectTree.entityCtx &&
-        this.objectTree.entityCtx.actions &&
-        this.objectTree.entityCtx.actions.creations
-          ? Object.keys(this.objectTree.entityCtx.actions.creations)
-          : [];
-
-      this.entity = this.objectTree.treeNode;
-      await this.objectTree.waitForReady();
-
-      await this.entity.waitForReady();
-
-      this.treeType = this.objectTree.treeNode.objectType;
-      this.title =
-        this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
-      let objectChildTypes = [];
-      if (
-        this.objectTree.entityCtx &&
-        this.objectTree.entityCtx.actions &&
-        this.objectTree.entityCtx.actions.reads
-      ) {
-        objectChildTypes = this.objectTree.entityCtx.actions.reads;
-      }
-      if (this.entity.objectType) {
-        this.subTypes = this.entity.objectType.objectSubTypes.filter(
-          (subType) => -1 < objectChildTypes.indexOf(subType.subObjectTypeId)
-        );
-      }
-
-      this.calculateHtml();
-      await super.ngOnInit();
-      if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
-        this.hasWebSite = true;
-      }
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
+  public async moveNode(move: IMoveToAction, event: MouseEvent) {
+    await this.objectTree.runAction('moveTo', {
+      targetId: move.id,
+      targetUri: move.uri,
+    });
+    await this.objectsCommonService.getTreeById(
+      this.objectTree.treeNode.parentNodeId
+    );
+    await this.objectsCommonService.getTreeById(move.id);
+    await this.objectsCommonService.getNodeByUri(this.objectTree.treeNode.uri);
   }
 
   public openWebSite() {

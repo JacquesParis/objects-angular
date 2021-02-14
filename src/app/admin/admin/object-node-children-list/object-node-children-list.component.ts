@@ -69,6 +69,5 @@ export class ObjectNodeChildrenListComponent
       'sort',
       this.objectTree.children.map((child) => child.treeNode.id)
     );
-    console.log(event);
   }
 }

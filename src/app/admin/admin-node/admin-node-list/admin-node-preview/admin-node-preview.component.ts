@@ -21,13 +21,17 @@ export class AdminNodePreviewComponent
   async ngOnInit() {
     super.ngOnInit();
     this.calculatePreview();
-    await this.objectTree.waitForReady();
-    this.calculatePreview();
-    this.registerSubscription(
-      this.objectTree.onChange(() => {
-        this.calculatePreview();
-      })
-    );
+    if (this.objectTree.waitForReady) {
+      await this.objectTree.waitForReady();
+      this.calculatePreview();
+    }
+    if (this.objectTree.onChange) {
+      this.registerSubscription(
+        this.objectTree.onChange(() => {
+          this.calculatePreview();
+        })
+      );
+    }
   }
 
   calculatePreview() {

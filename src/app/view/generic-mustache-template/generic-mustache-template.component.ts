@@ -14,6 +14,7 @@ export class GenericMustacheTemplateComponent implements OnInit {
   @Input() templateTree: ObjectTreeImpl;
   @Input() dataTree: ObjectTreeImpl;
   public content: SafeHtml;
+  public id = '' + Math.ceil(Math.random() * 10000000000000000);
 
   constructor(
     @Inject('siteTree') public siteTree: ObjectTreeImpl,
@@ -34,6 +35,19 @@ export class GenericMustacheTemplateComponent implements OnInit {
         this.templateTree.id
       )
     );
+    window.setTimeout(this.copyScript.bind(this));
+  }
+  public copyScript() {
+    const includedScript = document.querySelector(
+      '#holder_' + this.id + ' script'
+    );
+    if (includedScript) {
+      const value = includedScript['text'];
+      const script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.appendChild(document.createTextNode(value));
+      document.body.appendChild(script);
+    }
   }
 
   public getPageHref(page: IObjectTree): string {
