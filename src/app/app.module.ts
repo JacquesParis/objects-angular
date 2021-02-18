@@ -48,6 +48,7 @@ import {
   ArrowRepeat,
   Eye,
   ArrowDownUp,
+  Pencil,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -71,6 +72,7 @@ const icons = {
   ArrowRepeat,
   Eye,
   ArrowDownUp,
+  Pencil,
 };
 
 @NgModule({

@@ -1,3 +1,4 @@
+import { ConfigurationService } from './../../common-app/services/configuration.service';
 import { ObjectsCommonService } from './../../objects-client/services/objects-common.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
@@ -20,7 +21,8 @@ export class GenericMustacheTemplateComponent implements OnInit {
     @Inject('siteTree') public siteTree: ObjectTreeImpl,
     @Inject('pageTree') public pageTree: ObjectTreeImpl,
     protected objectsCommonService: ObjectsCommonService,
-    public sanitization: DomSanitizer
+    public sanitization: DomSanitizer,
+    public configurationService: ConfigurationService
   ) {}
 
   async ngOnInit() {
@@ -48,6 +50,13 @@ export class GenericMustacheTemplateComponent implements OnInit {
       script.appendChild(document.createTextNode(value));
       document.body.appendChild(script);
     }
+  }
+
+  public getServerUri(uri: string) {
+    if (uri.startsWith('/')) {
+      return this.configurationService.getHostName() + uri;
+    }
+    return uri;
   }
 
   public getPageHref(page: IObjectTree): string {

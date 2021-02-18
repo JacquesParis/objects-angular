@@ -12,6 +12,11 @@ export class ConfigurationService {
     return getServer();
   }
 
+  getHostName(): string {
+    const server = this.getServer();
+    return new URL(server).origin;
+  }
+
   getSiteId(): string {
     return getSiteId();
   }
