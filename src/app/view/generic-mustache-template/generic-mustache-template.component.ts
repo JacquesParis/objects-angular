@@ -27,7 +27,7 @@ export class GenericMustacheTemplateComponent implements OnInit {
 
   async ngOnInit() {
     this.content = this.sanitization.bypassSecurityTrustHtml(
-      await WebsiteGenerationService.get().getTamplateContent(
+      await WebsiteGenerationService.get().getTemplateContent(
         this.objectsCommonService.objectTreesService,
         this.objectsCommonService.objectNodesService,
         this,
@@ -62,6 +62,13 @@ export class GenericMustacheTemplateComponent implements OnInit {
   public getPageHref(page: IObjectTree): string {
     return (
       '#/view/' + this.siteTree.id + '/' + (page ? page.treeNode.id : 'default')
+    );
+  }
+  public getPopupHref(page: IObjectTree): string {
+    return this.getServerUri(
+      `/api/object-trees/${this.siteTree.id}/view/popup/${
+        page ? page.treeNode.id : 'default'
+      }`
     );
   }
 
