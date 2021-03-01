@@ -1,4 +1,4 @@
-import { getOwnerName } from 'src/app/app.const';
+import { getOwnerName, getRootState } from 'src/app/app.const';
 import { CommonComponent } from './../common-component/common-component.component';
 import {
   USER_ACCOUNT_ROUTE_NAME_AND_HREF,
@@ -44,6 +44,9 @@ export class AppNavComponent extends CommonComponent implements OnInit {
     private transitionService: TransitionService
   ) {
     super();
+    if (getRootState() === ADMIN_ROUTE_NAME) {
+      this.welcomeRootName = VIEW_ROUTE_NAME;
+    }
   }
 
   async ngOnInit() {
