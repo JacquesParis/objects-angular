@@ -1,5 +1,9 @@
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { ADMIN_OWNER_NODE_VIEW_ROUTE_NAME } from './../../admin.const';
+import {
+  ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+} from './../../admin.const';
 import { StateService } from '@uirouter/angular';
 import {
   ADMIN_OWNER_NODE_ROUTE_NAME,
@@ -38,6 +42,7 @@ export class AdminNodeListComponent
   private deleteModalTemplate: TemplateRef<any>;
   deleteModalref: BsModalRef;
   deletedChild: ObjectTreeImpl;
+  nodeViewStateName: string = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
 
   constructor(
     @Inject(OBJECT_TREE_TOKEN) public mainTree: ObjectTreeImpl,
@@ -56,6 +61,9 @@ export class AdminNodeListComponent
       EntityName.objectNode,
       EntityName.objectType
     );
+    if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
+      this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
+    }
   }
   openModal(template: TemplateRef<any>) {
     this.deleteModalref = this.modalService.show(template);
@@ -70,8 +78,9 @@ export class AdminNodeListComponent
       event.preventDefault();
       // event.stopPropagation();
     }
+
     this.stateService.go(
-      ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+      this.nodeViewStateName,
       _.merge({}, this.stateService.params, { treeId: child.treeNode.id })
     );
   }

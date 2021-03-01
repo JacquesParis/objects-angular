@@ -5,6 +5,10 @@ import {
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
   ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME,
+  ADMIN_NAMESPACE_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
 } from './../admin.const';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 
@@ -85,6 +89,11 @@ export class AdminNodeComponent
     private domSanitizer: DomSanitizer
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
+    if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
+      this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
+      this.nodeListStateName = ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME;
+      this.nodeCreateTypeStateName = ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME;
+    }
   }
 
   async ngOnInit() {

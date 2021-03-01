@@ -2,6 +2,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SideMenuService } from './../../../common-app/side-menu/side-menu.service';
 import { StateService } from '@uirouter/angular';
 import {
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_ROUTE_NAME,
   ADMIN_OWNER_NODE_ROUTE_NAME,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
 } from './../../admin.const';
@@ -27,6 +29,7 @@ export class AdminNodeTreeFieldComponent
   implements OnInit, OnChanges {
   @Input() treeChild: ObjectTreeImpl;
   safeName: any;
+  nodeViewStateName: string = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
   //public nodeState = ADMIN_OWNER_NODE_ROUTE_NAME;
   constructor(
     protected restEntityListService: RestEntityListService,
@@ -36,12 +39,10 @@ export class AdminNodeTreeFieldComponent
     protected domSanitizer: DomSanitizer
   ) {
     super();
-    /*
-    this.registerSubscription(
-      this.restEntityListService.subscribe(EntityName.objectTree, () => {
-        this.changeDetectorRef.detectChanges();
-      })
-    );*/
+
+    if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
+      this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
+    }
   }
   async ngOnInit(): Promise<void> {
     this.calculateHtml();
@@ -106,7 +107,7 @@ export class AdminNodeTreeFieldComponent
       // event.stopPropagation();
     }
     this.sideMenuService.showMainContent();
-    this.stateService.go(ADMIN_OWNER_NODE_VIEW_ROUTE_NAME, {
+    this.stateService.go(this.nodeViewStateName, {
       treeId: this.treeChild.id,
     });
   }

@@ -2,6 +2,9 @@ import { RestEntityListService } from './../../../objects-client/abstract-rest-e
 import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
 import {
+  ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   OBJECT_NODE_TOKEN,
@@ -43,6 +46,10 @@ export class AdminNodeCreateComponent
     protected changeDetectorRef: ChangeDetectorRef
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
+    if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
+      this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
+      this.nodeListStateName = ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME;
+    }
   }
 
   async ngOnInit() {

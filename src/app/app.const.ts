@@ -65,6 +65,35 @@ export function getOwnerName(): string {
   return 'Démo';
 }
 
+export function getAdminParts(): {
+  ownerType: string;
+  ownerName: string;
+  namespaceType?: string;
+  namespaceName?: string;
+} {
+  const parts: {
+    ownerType: string;
+    ownerName: string;
+    namespaceType?: string;
+    namespaceName?: string;
+  } = {
+    ownerType: 'Tenant',
+    ownerName: getOwnerName(),
+  };
+
+  const siteParts: string[] = getSiteId().split('/');
+  if (siteParts.length === 5 && 'namespace' === siteParts[0]) {
+    parts.ownerType = siteParts[1];
+    parts.ownerName = siteParts[2];
+    parts.namespaceType = siteParts[3];
+    parts.namespaceName = siteParts[4];
+  } else if (siteParts.length === 3 && 'owner' === siteParts[0]) {
+    parts.ownerType = siteParts[1];
+    parts.ownerName = siteParts[2];
+  }
+  return parts;
+}
+
 export function getRootState(): string {
   if (
     document.head.querySelector('[name~="objectTrees:rootState"][content]') &&

@@ -8,6 +8,8 @@ import {
   OBJECT_TREE_TOKEN,
   OBJECT_NODE_TOKEN,
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
+  ADMIN_NAMESPACE_ROUTE_NAME,
 } from './../../admin.const';
 import {
   ObjectNodeImpl,
@@ -50,6 +52,9 @@ export class AdminNodeViewComponent
     protected domSanitizer: DomSanitizer
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
+    if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
+      this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
+    }
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
