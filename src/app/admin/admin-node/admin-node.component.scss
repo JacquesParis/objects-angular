@@ -10,6 +10,14 @@
   margin: auto;
 }
 
+@media (max-width: 575.98px) {
+  .navbar-preview::ng-deep {
+    i {
+      display: none;
+    }
+  }
+}
+
 .top-navbar-inside {
   width: 100%;
 }

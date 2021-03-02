@@ -16,7 +16,11 @@
         >
           <i-bs name="box-arrow-left" class="align-middle"></i-bs>
           <ng-container *ngIf="previousTree">
-            {{ previousTree.treeNode.name }}
+            <span
+              app-admin-node-preview
+              [objectTree]="previousTree"
+              class="ml-sm-2 navbar-preview"
+            ></span>
           </ng-container>
         </button>
         <button
@@ -25,7 +29,11 @@
           (click)="displayNode(parentTree, $event)"
         >
           <i-bs name="box-arrow-up" class="align-middle"></i-bs>
-          {{ parentTree.treeNode.name }}
+          <span
+            app-admin-node-preview
+            [objectTree]="parentTree"
+            class="ml-sm-2 navbar-preview"
+          ></span>
         </button>
         <button
           type="button"
@@ -35,7 +43,11 @@
         >
           <i-bs name="box-arrow-right" class="align-middle"></i-bs>
           <ng-container *ngIf="nextTree">
-            {{ nextTree.treeNode.name }}
+            <span
+              app-admin-node-preview
+              [objectTree]="nextTree"
+              class="ml-sm-2 navbar-preview"
+            ></span>
           </ng-container>
         </button>
 
@@ -55,8 +67,9 @@
             class="dropdown-item"
             (click)="displayNode(child, $event)"
             *ngFor="let child of objectTree.children"
-            >{{ child.treeNode.name }}</a
           >
+            <span app-admin-node-preview [objectTree]="child"></span
+          ></a>
         </div>
 
         <button type="button" class="btn btn-light" (click)="refresh($event)">
