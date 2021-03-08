@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { IActionsLoggingService } from '@jacquesparis/objects-client/lib/helper/object-client-configuration.service';
+import { IActionsLoggingService } from '@jacquesparis/objects-client';
 
 @Injectable({
   providedIn: 'root',

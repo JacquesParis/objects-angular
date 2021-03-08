@@ -18,7 +18,7 @@ import { HttpRestService } from '../../common-app/services/http-rest.service';
 import * as _ from 'lodash-es';
 import { ObjectSubTypeImpl } from '@jacquesparis/objects-client';
 import { IJsonSchema, IRestEntity } from '@jacquesparis/objects-model';
-import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entity.impl';
+import { RestEntityImpl } from '@jacquesparis/objects-client';
 
 @Injectable({
   providedIn: 'root',
