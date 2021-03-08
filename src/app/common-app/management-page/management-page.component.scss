@@ -1,0 +1,24 @@
+.full-page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10000;
+}
+.full-page-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 0.5;
+}
+
+.middle-page {
+  overflow: hidden;
+  max-width: 300px;
+  margin: auto;
+  margin-top: calc(50% - 40px);
+  position: relative;
+}

@@ -9,6 +9,7 @@ import {
 
 export class CommonComponent implements OnInit, OnDestroy {
   private subscriptions: ((() => void) | Function)[] = [];
+  public _id = Math.ceil(Math.random() * 1000000000000000);
   constructor() {}
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {

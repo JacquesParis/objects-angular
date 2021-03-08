@@ -26,6 +26,9 @@ import {
   Inject,
   TemplateRef,
   ViewChild,
+  ViewChildren,
+  QueryList,
+  AfterViewInit,
 } from '@angular/core';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import * as _ from 'lodash-es';
@@ -35,12 +38,10 @@ import * as _ from 'lodash-es';
   templateUrl: './admin-node-list.component.html',
   styleUrls: ['./admin-node-list.component.scss'],
 })
-export class AdminNodeListComponent
-  extends AbstractRestEntityListComponent<ObjectNodeImpl>
-  implements OnInit {
+export class AdminNodeListComponent extends AbstractRestEntityListComponent<ObjectNodeImpl> {
   @ViewChild('deleteModalTemplate')
   private deleteModalTemplate: TemplateRef<any>;
-  deleteModalref: BsModalRef;
+  deleteModalRef: BsModalRef;
   deletedChild: ObjectTreeImpl;
   nodeViewStateName: string = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
 
@@ -65,12 +66,14 @@ export class AdminNodeListComponent
       this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
     }
   }
-  openModal(template: TemplateRef<any>) {
-    this.deleteModalref = this.modalService.show(template);
-  }
 
-  ngOnInit() {
-    super.ngOnInit();
+  openModal(template: TemplateRef<any>) {
+    this.deleteModalRef = this.modalService.show(template);
+    window.setTimeout(() => {
+      (document.querySelector(
+        '#confirmButton_' + this._id
+      ) as HTMLButtonElement).focus();
+    });
   }
 
   public async displayNode(child: ObjectTreeImpl, event: MouseEvent) {
@@ -95,9 +98,18 @@ export class AdminNodeListComponent
   }
 
   public async confirmDelete() {
-    this.deleteModalref.hide();
+    this.deleteModalRef.hide();
     try {
+      const lastChild = this.objectTree.children.length === 1;
       await this.deletedChild.treeNode.delete();
+      if (lastChild) {
+        this.stateService.go(
+          this.nodeViewStateName,
+          _.merge({}, this.stateService.params, {
+            treeId: this.objectTree.treeNode.id,
+          })
+        );
+      }
     } catch (error) {}
   }
 
@@ -124,6 +136,5 @@ export class AdminNodeListComponent
       'sort',
       this.objectTree.children.map((child) => child.treeNode.id)
     );
-    console.log(event);
   }
 }

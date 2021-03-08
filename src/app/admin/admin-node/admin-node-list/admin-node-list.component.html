@@ -58,13 +58,19 @@
 <ng-template #deleteModalTemplate>
   <div class="modal-body text-center">
     <p>Do you want to confirm?</p>
-    <button type="button" class="btn btn-primary" (click)="confirmDelete()">
+    <button
+      id="confirmButton_{{ _id }}"
+      type="button"
+      class="btn btn-primary"
+      (click)="confirmDelete()"
+      autofocus
+    >
       Yes
     </button>
     <button
       type="button"
       class="btn btn-default ml-2"
-      (click)="deleteModalref.hide()"
+      (click)="deleteModalRef.hide()"
     >
       No
     </button>

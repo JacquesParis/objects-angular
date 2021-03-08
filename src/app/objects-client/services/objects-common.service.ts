@@ -1,3 +1,4 @@
+import { SpinnerService } from './../../common-app/services/spinner.service';
 import { Injectable } from '@angular/core';
 import {
   ObjectTypesService,
@@ -9,6 +10,7 @@ import {
   ObjectNodeImpl,
   ObjectTreeImpl,
   ObjectTreesService,
+  ObjectClientService,
 } from '@jacquesparis/objects-client';
 import { ConfigurationService } from '../../common-app/services/configuration.service';
 import { NotInitialized } from '../../common-app/errors/not-initialized.error';
@@ -22,33 +24,33 @@ import { RestEntityImpl } from '@jacquesparis/objects-client/lib/rest/rest-entit
   providedIn: 'root',
 })
 export class ObjectsCommonService {
-  private objectsTypeService: ObjectTypesService;
-  private objectsSubTypeService: ObjectSubTypesService;
-  public objectNodesService: ObjectNodesService;
-  public objectTreesService: ObjectTreesService;
   private _objectTrees: {
     [treeType: string]: { [treeName: string]: ObjectTreeImpl };
   } = {};
+  public objectClient: ObjectClientService;
   constructor(
     protected configurationService: ConfigurationService,
-    protected httpRestService: HttpRestService
+    protected httpRestService: HttpRestService,
+    spinnerService: SpinnerService
   ) {
-    this.objectsTypeService = ObjectTypesService.getService(
+    this.objectClient = ObjectClientService.init(
       this.httpRestService,
-      this.configurationService.getServer()
+      this.configurationService.getServer(),
+      { actionsLoggingService: spinnerService }
     );
-    this.objectsSubTypeService = ObjectSubTypesService.getService(
-      this.httpRestService,
-      this.configurationService.getServer()
-    );
-    this.objectNodesService = ObjectNodesService.getService(
-      this.httpRestService,
-      this.configurationService.getServer()
-    );
-    this.objectTreesService = ObjectTreesService.getService(
-      this.httpRestService,
-      this.configurationService.getServer()
-    );
+  }
+
+  private get objectsTypeService(): ObjectTypesService {
+    return this.objectClient.objectTypesService;
+  }
+  private get objectsSubTypeService(): ObjectSubTypesService {
+    return this.objectClient.objectSubTypesService;
+  }
+  public get objectNodesService(): ObjectNodesService {
+    return this.objectClient.objectNodeService;
+  }
+  public get objectTreesService(): ObjectTreesService {
+    return this.objectClient.objectTreeService;
   }
 
   public async init(): Promise<void> {

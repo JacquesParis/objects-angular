@@ -4,3 +4,25 @@
 <div [style.margin-top.px]="bodyMargingTop" *ngIf="afterInit">
   <ng-content select="[pageBody]"></ng-content>
 </div>
+<div class="full-page" *ngIf="currentRunningActions > 0">
+  <div class="full-page-bg bg-secondary"></div>
+  <div class="middle-page">
+    <div class="spinner-group">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="progress mt-3"
+      *ngIf="percentageDone > 0 || currentRunningActions > 1"
+    >
+      <div
+        class="progress-bar"
+        role="progressbar"
+        style="width: {{ percentageDone }}%"
+      ></div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { ObjectsCommonService } from './objects-common.service';
 import { StateService } from '@uirouter/angular';
 import {
   USER_LOGIN_ROUTE_NAME_AND_HREF,
@@ -16,14 +17,10 @@ export class UserService {
   private appUserService: AppUserService;
   private nextLogInState: { stateName: string; params: RawParams };
   constructor(
-    protected configurationService: ConfigurationService,
-    protected httpRestService: HttpRestService,
+    protected objectsCommonService: ObjectsCommonService,
     protected stateService: StateService
   ) {
-    this.appUserService = AppUserService.getService(
-      this.httpRestService,
-      this.configurationService.getServer()
-    );
+    this.appUserService = this.objectsCommonService.objectClient.appUserService;
   }
 
   public login(credentials: {
