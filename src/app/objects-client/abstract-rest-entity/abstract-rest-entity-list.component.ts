@@ -1,5 +1,4 @@
 import { RestEntityListService } from './rest-entity-list.service';
-import { OnInit } from '@angular/core';
 import { EditableFormService } from '@jacquesparis/objects-angular-forms';
 import { CommonComponent } from '../../common-app/common-component/common-component.component';
 import { RestEntityImpl } from '@jacquesparis/objects-client';

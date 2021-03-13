@@ -133,11 +133,11 @@ export class AdminNodeComponent
       this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
 
     if (
-      this.objectTree.entityCtx &&
-      this.objectTree.entityCtx.actions &&
-      this.objectTree.entityCtx.actions.moveTo
+      this.entity.entityCtx &&
+      this.entity.entityCtx.actions &&
+      this.entity.entityCtx.actions.moveTo
     ) {
-      this.moveTo = this.objectTree.entityCtx.actions.moveTo;
+      this.moveTo = this.entity.entityCtx.actions.moveTo;
     }
 
     this.calculateHtml();
