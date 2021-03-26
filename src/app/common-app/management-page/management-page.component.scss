@@ -18,7 +18,8 @@
 .middle-page {
   overflow: hidden;
   max-width: 300px;
-  margin: auto;
-  margin-top: calc(50% - 40px);
+  top: calc(50% - 32px);
   position: relative;
+  margin-right: auto;
+  margin-left: auto;
 }
