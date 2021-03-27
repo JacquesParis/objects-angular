@@ -1,11 +1,16 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { IActionsLoggingService } from '@jacquesparis/objects-client';
+import {
+  IWaitingStateService,
+  EditableFormService,
+} from '@jacquesparis/objects-angular-forms';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SpinnerService implements IActionsLoggingService {
+export class SpinnerService
+  implements IActionsLoggingService, IWaitingStateService {
   protected runningActions: { [id: string]: number } = {};
   public currentRunningActions: BehaviorSubject<number> = new BehaviorSubject<number>(
     0
@@ -32,7 +37,9 @@ export class SpinnerService implements IActionsLoggingService {
     );
   }
 
-  constructor() {}
+  constructor(private editableFormService: EditableFormService) {
+    this.editableFormService.registerWaitingStateService(this);
+  }
   initAction(id: string): void {
     if (!(id in this.runningActions)) {
       this.runningActions[id] = 0;
