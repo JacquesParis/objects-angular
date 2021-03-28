@@ -1,41 +1,18 @@
 import { CommonComponent } from './../common-component/common-component.component';
 import { ManagementPageService } from './management-page.service';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { SpinnerService } from '../services/spinner.service';
+import { AfterViewInit, Component } from '@angular/core';
 
 @Component({
   selector: 'app-management-page',
   templateUrl: './management-page.component.html',
-  styleUrls: ['./management-page.component.scss'],
 })
 export class ManagementPageComponent
   extends CommonComponent
   implements AfterViewInit {
   public afterInit = false;
   public bodyMargingTop: number;
-  public currentRunningActions = 1;
-  public percentageDone = 0;
-  constructor(
-    private managementPageService: ManagementPageService,
-    public spinnerService: SpinnerService
-  ) {
+  constructor(private managementPageService: ManagementPageService) {
     super();
-    this.registerSubscription(
-      spinnerService.currentRunningActions.subscribe(
-        (currentRunningActions) => {
-          window.setTimeout(() => {
-            this.currentRunningActions = currentRunningActions;
-          });
-        }
-      )
-    );
-    this.registerSubscription(
-      spinnerService.percentageDone.subscribe((percentageDone) => {
-        window.setTimeout(() => {
-          this.percentageDone = percentageDone;
-        });
-      })
-    );
   }
 
   calculateMarginTop(size: { width: number; height: number }) {
