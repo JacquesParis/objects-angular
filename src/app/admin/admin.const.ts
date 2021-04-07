@@ -34,6 +34,14 @@ export const ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME = buildStateName(
   ADMIN_OWNER_NODE_CREATE_ROUTE_NAME,
   'type'
 );
+export const ADMIN_OWNER_NODE_MOVE_ROUTE_NAME = buildStateName(
+  ADMIN_OWNER_NODE_ROUTE_NAME,
+  'move'
+);
+export const ADMIN_OWNER_NODE_ACTION_ROUTE_NAME = buildStateName(
+  ADMIN_OWNER_NODE_ROUTE_NAME,
+  'action'
+);
 
 export const ADMIN_NAMESPACE_ROUTE_NAME = buildStateName(
   ADMIN_OWNER_ROUTE_NAME,
@@ -73,7 +81,16 @@ export const ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME = buildStateName(
   ADMIN_NAMESPACE_NODE_CREATE_ROUTE_NAME,
   'type'
 );
+export const ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME = buildStateName(
+  ADMIN_NAMESPACE_NODE_ROUTE_NAME,
+  'move'
+);
+export const ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME = buildStateName(
+  ADMIN_NAMESPACE_NODE_ROUTE_NAME,
+  'action'
+);
 
 export const OBJECT_TREE_TOKEN = 'objectTree';
 export const OBJECT_NODE_TOKEN = 'objectNode';
 export const OBJECT_NODE_TYPE_TOKEN = 'objectTypeId';
+export const OBJECT_NODE_METHOD_TOKEN = 'methodId';

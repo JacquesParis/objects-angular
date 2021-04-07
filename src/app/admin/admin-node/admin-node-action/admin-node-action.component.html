@@ -1,8 +1,5 @@
 <div class="card border-top-0" *ngIf="isReady">
   <div class="card-body">
-    <h5 class="card-title">
-      <span [innerHTML]="safeName"></span>
-    </h5>
     <lib-editable-json-schema-form
       [entity]="entity"
       [saveValue]="saveValueMethod"
@@ -13,7 +10,8 @@
       [actions]="actions"
       [crud]="crud"
       [runAction]="runActionMethod"
-      [hides]="{ methods: true }"
+      [currentMethod]="method"
+      [hides]="{ entity: true, commands: true }"
     >
     </lib-editable-json-schema-form>
   </div>

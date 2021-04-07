@@ -63,4 +63,22 @@ export class SpinnerService
       this.calculatePercentageDone();
     }
   }
+  initSteps(id: string, nbSteps: number): void {
+    this.runningActions[id] = nbSteps;
+    this.calculateCurrentRunningActions();
+    if (this.maxRunningActions < this.currentRunningActions.value) {
+      this.maxRunningActions = this.currentRunningActions.value;
+    }
+    this.calculatePercentageDone();
+  }
+  endSteps(id: string): void {
+    if (id in this.runningActions && this.runningActions[id] > 0) {
+      this.runningActions[id] = 0;
+      this.calculateCurrentRunningActions();
+      if (0 === this.currentRunningActions.value) {
+        this.maxRunningActions = 1;
+      }
+      this.calculatePercentageDone();
+    }
+  }
 }

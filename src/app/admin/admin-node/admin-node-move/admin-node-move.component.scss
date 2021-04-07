@@ -1,0 +1,11 @@
+.card-title::ng-deep {
+  i {
+    display: none;
+  }
+  .align-middle {
+    vertical-align: inherit !important;
+  }
+}
+.overflow-x-auto {
+  overflow-x: auto;
+}

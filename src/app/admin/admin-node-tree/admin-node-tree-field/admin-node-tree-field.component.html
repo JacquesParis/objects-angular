@@ -33,28 +33,28 @@
       name="folder"
       width="1rem"
       height="1rem"
-      class="align-middle text-light py-2 p-1"
+      class="align-middle py-2 p-1"
     ></i-bs>
     <i-bs
       *ngIf="mayOpen() && !isCollapsed()"
       name="folder2-open"
       width="1rem"
       height="1rem"
-      class="align-middle text-light py-2 p-1"
+      class="align-middle py-2 p-1"
     ></i-bs>
     <i-bs
       *ngIf="isFinalChild()"
       name="file-earmark"
       width="1rem"
       height="1rem"
-      class="align-middle text-light py-2 p-1"
+      class="align-middle py-2 p-1"
     ></i-bs>
     <i-bs
       *ngIf="isLoading()"
       name="hourglass-split"
       width="1rem"
       height="1rem"
-      class="align-middle text-light py-2 p-1"
+      class="align-middle py-2 p-1"
     ></i-bs>
     <span
       app-admin-node-preview
@@ -63,6 +63,11 @@
       class="ml-1"
       [style.cursor]="'pointer'"
     ></span>
+    <ng-template
+      *ngIf="postDisplay"
+      [ngTemplateOutlet]="postDisplay"
+      [ngTemplateOutletContext]="{ treeChild: treeChild }"
+    ></ng-template>
   </span>
 </div>
 
@@ -75,6 +80,9 @@
     <div
       app-admin-node-tree-field
       [treeChild]="child"
+      [entityListType]="entityListType"
+      [defaultAction]="defaultAction"
+      [postDisplay]="postDisplay"
       *ngFor="let child of treeChild.children"
     ></div>
   </div>

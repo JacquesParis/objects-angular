@@ -1,0 +1,28 @@
+<div class="card border-top-0">
+  <div class="card-body overflow-x-auto">
+    <h5 class="card-title">
+      <span>
+        <span>Choose the destination where to move </span>
+        <span app-admin-node-preview [objectTree]="objectTree"></span>
+      </span>
+    </h5>
+
+    <div
+      app-admin-node-tree
+      [entityListType]="'moveTo'"
+      [defaultAction]="defaultAction"
+      [postDisplay]="postDisplay"
+    ></div>
+  </div>
+</div>
+<ng-template #postDisplay let-treeChild="treeChild">
+  <button
+    *ngIf="mayMoveIn(treeChild)"
+    type="button"
+    class="btn btn-outline-secondary btn-sm border-0"
+    (click)="moveTo(treeChild, $event)"
+  >
+    <i-bs name="clipboard-check"></i-bs>
+    <span> move here</span>
+  </button>
+</ng-template>

@@ -1,7 +1,13 @@
 import { CommonComponent } from './../../../../common-app/common-component/common-component.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ObjectTreeImpl } from '@jacquesparis/objects-client';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  TemplateRef,
+} from '@angular/core';
 
 @Component({
   selector: '[app-admin-node-preview]',

@@ -49,6 +49,8 @@ import {
   Eye,
   ArrowDownUp,
   Pencil,
+  ClipboardCheck,
+  PlayFill,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -73,6 +75,8 @@ const icons = {
   Eye,
   ArrowDownUp,
   Pencil,
+  ClipboardCheck,
+  PlayFill,
 };
 
 @NgModule({

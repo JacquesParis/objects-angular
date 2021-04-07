@@ -1,3 +1,5 @@
+import { AdminNodeActionComponent } from './admin-node/admin-node-action/admin-node-action.component';
+import { AdminNodeMoveComponent } from './admin-node/admin-node-move/admin-node-move.component';
 import { AdminNodeCreateComponent } from './admin-node/admin-node-create/admin-node-create.component';
 import { AdminWelcomeComponent } from './admin-frames/admin-welcome/admin-welcome.component';
 import { AdminNodeListComponent } from './admin-node/admin-node-list/admin-node-list.component';
@@ -28,13 +30,19 @@ import {
   ADMIN_NAMESPACE_NODE_CREATE_ROUTE_NAME,
   ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
   ADMIN_OWNER_ENTRY_ROUTE_NAME,
+  ADMIN_OWNER_NODE_MOVE_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME,
+  ADMIN_OWNER_NODE_ACTION_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME,
+  OBJECT_NODE_METHOD_TOKEN,
 } from './admin.const';
 import { AdminComponent } from './admin/admin.component';
 import { ObjectTreeImpl, EntityName } from '@jacquesparis/objects-client';
 import { AdminFramesComponent } from './admin-frames/admin-frames.component';
 import { AdminNodeComponent } from './admin-node/admin-node.component';
 import { RestEntityListService } from '../objects-client/abstract-rest-entity/rest-entity-list.service';
-import { merge, indexOf } from 'lodash-es';
+import { merge, indexOf, map } from 'lodash-es';
+import { IEntityMethod } from '@jacquesparis/objects-model';
 
 const adminState: Ng2StateDeclaration = {
   parent: getParentStateName(ADMIN_ROUTE_NAME),
@@ -233,6 +241,54 @@ const adminOwnerNodeCreateTypeState: Ng2StateDeclaration = {
   ],
 };
 
+const adminOwnerNodeMoveState: Ng2StateDeclaration = {
+  parent: getParentStateName(ADMIN_OWNER_NODE_MOVE_ROUTE_NAME),
+  name: ADMIN_OWNER_NODE_MOVE_ROUTE_NAME,
+  url: '/move',
+  component: AdminNodeMoveComponent,
+};
+const adminOwnerNodeActionState: Ng2StateDeclaration = {
+  parent: getParentStateName(ADMIN_OWNER_NODE_ACTION_ROUTE_NAME),
+  name: ADMIN_OWNER_NODE_ACTION_ROUTE_NAME,
+  url: '/action/:methodId',
+  component: AdminNodeActionComponent,
+  resolve: [
+    SHOULD_BE_LOGIN_RESOLVE,
+    {
+      token: OBJECT_NODE_METHOD_TOKEN,
+      deps: [StateService, OBJECT_NODE_TOKEN],
+      resolveFn: async (
+        stateService: StateService,
+        nodeObjectTree: ObjectTreeImpl
+      ): Promise<IEntityMethod> => {
+        await nodeObjectTree.treeNode.waitForReady();
+        const methodId = stateService.transition.params().methodId;
+        if (
+          methodId &&
+          nodeObjectTree &&
+          nodeObjectTree.entityCtx &&
+          nodeObjectTree.entityCtx.actions &&
+          nodeObjectTree.entityCtx.actions.creations &&
+          -1 <
+            indexOf(
+              map(
+                nodeObjectTree.treeNode?.entityCtx?.actions?.methods,
+                (method: IEntityMethod) => method.methodId
+              ),
+              methodId
+            )
+        ) {
+          return nodeObjectTree.treeNode.entityCtx.actions.methods.find(
+            (method: IEntityMethod) => methodId === method.methodId
+          );
+        } else {
+          throw new Error('creation impossible');
+        }
+      },
+    },
+  ],
+};
+
 const adminNamespaceState = {
   parent: getParentStateName(ADMIN_NAMESPACE_ROUTE_NAME),
   name: ADMIN_NAMESPACE_ROUTE_NAME,
@@ -333,6 +389,24 @@ const adminNamespaceNodeCreateTypeState: Ng2StateDeclaration = merge(
     name: ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
   }
 );
+
+const adminNamespaceNodeMoveState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeMoveState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME,
+  }
+);
+const adminNamespaceNodeActionState: Ng2StateDeclaration = merge(
+  {},
+  adminOwnerNodeActionState,
+  {
+    parent: getParentStateName(ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME),
+    name: ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME,
+  }
+);
+
 export const ADMIN_STATES = [
   adminState,
   adminOwnerState,
@@ -343,6 +417,8 @@ export const ADMIN_STATES = [
   adminOwnerNodeListState,
   adminOwnerNodeCreateState,
   adminOwnerNodeCreateTypeState,
+  adminOwnerNodeMoveState,
+  adminOwnerNodeActionState,
   adminNamespaceState,
   adminNamespaceEntryState,
   adminNamespaceNodeState,
@@ -351,4 +427,6 @@ export const ADMIN_STATES = [
   adminNamespaceNodeListState,
   adminNamespaceNodeCreateState,
   adminNamespaceNodeCreateTypeState,
+  adminNamespaceNodeMoveState,
+  adminNamespaceNodeActionState,
 ];

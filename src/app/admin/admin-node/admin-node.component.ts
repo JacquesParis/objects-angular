@@ -5,10 +5,14 @@ import {
   ADMIN_OWNER_NODE_VIEW_ROUTE_NAME,
   ADMIN_OWNER_NODE_LIST_ROUTE_NAME,
   ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME,
+  ADMIN_OWNER_NODE_MOVE_ROUTE_NAME,
   ADMIN_NAMESPACE_ROUTE_NAME,
   ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME,
   ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME,
   ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME,
+  ADMIN_OWNER_NODE_ACTION_ROUTE_NAME,
+  ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME,
 } from './../admin.const';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 
@@ -34,10 +38,9 @@ import {
 } from '@angular/core';
 import { AbstractRestEntityComponent } from '../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
 import {
+  IEntityMethod,
   IObjectNode,
   IObjectType,
-  IObjectSubType,
-  IMoveToAction,
 } from '@jacquesparis/objects-model';
 import { merge, map } from 'lodash-es';
 import { OnChanges } from '@angular/core';
@@ -64,13 +67,14 @@ export class AdminNodeComponent
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
   public nodeListStateName = ADMIN_OWNER_NODE_LIST_ROUTE_NAME;
   public nodeCreateTypeStateName = ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME;
+  public nodeMoveStateName = ADMIN_OWNER_NODE_MOVE_ROUTE_NAME;
+  public nodeActionStateName = ADMIN_OWNER_NODE_ACTION_ROUTE_NAME;
   public parentTree: ObjectTreeImpl;
   public previousTree: ObjectTreeImpl;
   public nextTree: ObjectTreeImpl;
   public creations: { typeId: string; icon?: string }[] = [];
   navBarHeight: string = '0px';
   safeName: SafeHtml;
-  moveTo: IMoveToAction[] = [];
   public get isCreationActive(): boolean {
     return this.stateService.current.name.startsWith(
       this.nodeCreateTypeStateName
@@ -93,6 +97,8 @@ export class AdminNodeComponent
       this.nodeViewStateName = ADMIN_NAMESPACE_NODE_VIEW_ROUTE_NAME;
       this.nodeListStateName = ADMIN_NAMESPACE_NODE_LIST_ROUTE_NAME;
       this.nodeCreateTypeStateName = ADMIN_NAMESPACE_NODE_CREATE_TYPE_ROUTE_NAME;
+      this.nodeMoveStateName = ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME;
+      this.nodeActionStateName = ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME;
     }
   }
 
@@ -131,14 +137,6 @@ export class AdminNodeComponent
     this.treeType = this.objectTree.treeNode.objectType;
     this.title =
       this.entity.name + ' (' + this.objectTree.treeNode.objectTypeId + ')';
-
-    if (
-      this.entity.entityCtx &&
-      this.entity.entityCtx.actions &&
-      this.entity.entityCtx.actions.moveTo
-    ) {
-      this.moveTo = this.entity.entityCtx.actions.moveTo;
-    }
 
     this.calculateHtml();
     await super.initEntity();
@@ -219,16 +217,36 @@ export class AdminNodeComponent
     );
   }
 
-  public async moveNode(move: IMoveToAction, event: MouseEvent) {
-    await this.objectTree.runAction('moveTo', {
-      targetId: move.id,
-      targetUri: move.uri,
-    });
-    await this.objectsCommonService.getTreeById(
-      this.objectTree.treeNode.parentNodeId
+  public get hasActions(): boolean {
+    return this.hasMoveTo || 0 < this.actions.length;
+  }
+
+  public get hasMoveTo(): boolean {
+    return this.objectTree.entityCtx?.aclCtx?.rights?.delete;
+  }
+
+  public async moveTo(event: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      //event.stopPropagation();
+    }
+
+    return this.stateService.go(
+      this.nodeMoveStateName,
+      merge({}, this.stateService.params)
     );
-    await this.objectsCommonService.getTreeById(move.id);
-    await this.objectsCommonService.getNodeByUri(this.objectTree.treeNode.uri);
+  }
+
+  public run(action: IEntityMethod, event: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      //   event.stopPropagation();
+    }
+
+    return this.stateService.go(
+      this.nodeActionStateName,
+      merge({}, this.stateService.params, { methodId: action.methodId })
+    );
   }
 
   public openWebSite() {

@@ -106,7 +106,7 @@
 
       <li
         class="nav-item dropdown d-block d-sm-none"
-        *ngIf="0 < creations.length || 0 < moveTo.length"
+        *ngIf="0 < creations.length || hasActions"
       >
         <a
           class="nav-link dropdown-toggle"
@@ -136,22 +136,33 @@
           ></a>
           <div class="dropdown-divider" *ngIf="0 < creations.length"></div>
 
-          <span class="dropdown-item-text" *ngIf="0 < moveTo.length"
-            >Move to</span
+          <span class="dropdown-item-text" *ngIf="hasActions">Actions</span>
+
+          <a
+            class="dropdown-item ml-2"
+            *ngIf="hasMoveTo"
+            [style.cursor]="'pointer'"
+            (click)="moveTo($event)"
+            ><i-bs name="clipboard-check" class="align-middle pr-1"></i-bs
+            ><span class="align-middle">Move...</span></a
           >
           <a
             class="dropdown-item ml-2"
-            *ngFor="let move of moveTo"
-            (click)="moveNode(move, $event)"
             [style.cursor]="'pointer'"
-            ><span
-              app-admin-node-preview
-              [objectTree]="{
-                treeNode: move.nodeName,
-                entityCtx: { preview: move.preview }
-              }"
-            ></span
-          ></a>
+            *ngFor="let action of actions"
+            (click)="run(action, $event)"
+            ><i-bs
+              name="play-fill"
+              class="align-middle pr-1"
+              *ngIf="!action.icon"
+            ></i-bs
+            ><i
+              *ngIf="action.icon"
+              class="align-middle pr-1"
+              [class]="action.icon"
+            ></i
+            ><span class="align-middle">{{ action.methodName }}</span></a
+          >
         </div>
       </li>
       <li
@@ -184,7 +195,7 @@
         </div>
       </li>
 
-      <li class="nav-item dropdown d-none d-sm-block" *ngIf="0 < moveTo.length">
+      <li class="nav-item dropdown d-none d-sm-block" *ngIf="hasActions">
         <a
           class="nav-link dropdown-toggle"
           data-toggle="dropdown"
@@ -192,22 +203,34 @@
           role="button"
           aria-haspopup="true"
           aria-expanded="false"
-          >Move to</a
+          >Actions</a
         >
         <div class="dropdown-menu">
           <a
             class="dropdown-item"
-            *ngFor="let move of moveTo"
-            (click)="moveNode(move, $event)"
+            *ngIf="hasMoveTo"
             [style.cursor]="'pointer'"
-            ><span
-              app-admin-node-preview
-              [objectTree]="{
-                treeNode: move.nodeName,
-                entityCtx: { preview: move.preview }
-              }"
-            ></span
-          ></a>
+            (click)="moveTo($event)"
+            ><i-bs name="clipboard-check" class="align-middle pr-1"></i-bs
+            ><span class="align-middle">Move...</span></a
+          >
+          <a
+            class="dropdown-item"
+            [style.cursor]="'pointer'"
+            *ngFor="let action of actions"
+            (click)="run(action, $event)"
+            ><i-bs
+              name="play-fill"
+              class="align-middle pr-1"
+              *ngIf="!action.icon"
+            ></i-bs
+            ><i
+              *ngIf="action.icon"
+              class="align-middle pr-1"
+              [class]="action.icon"
+            ></i
+            ><span class="align-middle">{{ action.methodName }}</span></a
+          >
         </div>
       </li>
     </ul>

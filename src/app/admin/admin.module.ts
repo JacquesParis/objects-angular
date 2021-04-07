@@ -1,3 +1,5 @@
+import { AdminNodeActionComponent } from './admin-node/admin-node-action/admin-node-action.component';
+import { AdminNodeMoveComponent } from './admin-node/admin-node-move/admin-node-move.component';
 import { AdminNodePreviewComponent } from './admin-node/admin-node-list/admin-node-preview/admin-node-preview.component';
 import { AdminWelcomeComponent } from './admin-frames/admin-welcome/admin-welcome.component';
 import { AdminNodeViewComponent } from './admin-node/admin-node-view/admin-node-view.component';
@@ -36,6 +38,8 @@ import { AdminNodeCreateComponent } from './admin-node/admin-node-create/admin-n
     AdminWelcomeComponent,
     AdminNodeCreateComponent,
     AdminNodePreviewComponent,
+    AdminNodeMoveComponent,
+    AdminNodeActionComponent,
   ],
   exports: [ObjectNodesListComponent, ObjectNodeCardComponent],
   imports: [

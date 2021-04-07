@@ -17,6 +17,7 @@ import {
   Input,
   SimpleChanges,
   OnChanges,
+  TemplateRef,
 } from '@angular/core';
 
 @Component({
@@ -28,6 +29,11 @@ export class AdminNodeTreeFieldComponent
   extends CommonComponent
   implements OnInit, OnChanges {
   @Input() treeChild: ObjectTreeImpl;
+  @Input() entityListType: string = EntityName.objectTree;
+  @Input() defaultAction: (
+    tree: ObjectTreeImpl
+  ) => void = this.displayNodeInMainContent.bind(this);
+  @Input() postDisplay: TemplateRef<any>;
   safeName: any;
   nodeViewStateName: string = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
   //public nodeState = ADMIN_OWNER_NODE_ROUTE_NAME;
@@ -45,6 +51,9 @@ export class AdminNodeTreeFieldComponent
     }
   }
   async ngOnInit(): Promise<void> {
+    if (undefined === this.defaultAction) {
+      this.defaultAction = this.displayNodeInMainContent.bind(this);
+    }
     this.calculateHtml();
     await this.treeChild.waitForReady();
     this.calculateHtml();
@@ -66,7 +75,7 @@ export class AdminNodeTreeFieldComponent
 
   isCollapsed(): boolean {
     return !this.restEntityListService.isOpen(
-      EntityName.objectTree,
+      this.entityListType,
       this.treeChild
     );
   }
@@ -75,7 +84,7 @@ export class AdminNodeTreeFieldComponent
       this.displayNode();
     } else {
       this.restEntityListService.switchOpen(
-        EntityName.objectTree,
+        this.entityListType,
         this.treeChild.id
       );
     }
@@ -104,11 +113,15 @@ export class AdminNodeTreeFieldComponent
   displayNode(event?: MouseEvent) {
     if (event) {
       event.preventDefault();
-      // event.stopPropagation();
+      event.stopPropagation();
     }
+    this.restEntityListService.setOpen(this.entityListType, this.treeChild.id);
+    this.defaultAction(this.treeChild);
+  }
+  displayNodeInMainContent(tree: ObjectTreeImpl) {
     this.sideMenuService.showMainContent();
     this.stateService.go(this.nodeViewStateName, {
-      treeId: this.treeChild.id,
+      treeId: tree.id,
     });
   }
 }
