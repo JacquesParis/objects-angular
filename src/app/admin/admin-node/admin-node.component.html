@@ -132,8 +132,13 @@
               class="align-middle pr-1"
               [class]="creation.icon"
             ></i
-            ><span [innerHTML]="creation.typeId" class="align-middle"> </span
-          ></a>
+            ><span class="align-middle" *ngIf="!creation.typeTitle">{{
+              creation.typeId | toStartCase
+            }}</span
+            ><span class="align-middle" *ngIf="creation.typeTitle">{{
+              creation.typeTitle
+            }}</span></a
+          >
           <div class="dropdown-divider" *ngIf="0 < creations.length"></div>
 
           <span class="dropdown-item-text" *ngIf="hasActions">Actions</span>
@@ -190,8 +195,13 @@
               class="align-middle pr-1"
               [class]="creation.icon"
             ></i
-            ><span [innerHTML]="creation.typeId" class="align-middle"> </span
-          ></a>
+            ><span class="align-middle" *ngIf="!creation.typeTitle">{{
+              creation.typeId | toStartCase
+            }}</span
+            ><span class="align-middle" *ngIf="creation.typeTitle">{{
+              creation.typeTitle
+            }}</span></a
+          >
         </div>
       </li>
 

@@ -14,6 +14,7 @@ import { ManagementPageComponent } from './management-page/management-page.compo
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { AppRootComponent } from './app-root/app-root.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ToStartCasePipe } from './pipes/to-start-case.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
     SideMenuComponent,
     AppRootComponent,
     SpinnerComponent,
+    ToStartCasePipe,
   ],
   imports: [
     UIRouterModule,
@@ -50,6 +52,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
     ElementResizeDirective,
     AppRootComponent,
     SpinnerComponent,
+    ToStartCasePipe,
   ],
 })
 export class CommonAppModule {}

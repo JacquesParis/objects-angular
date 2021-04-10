@@ -66,6 +66,7 @@ export class AdminNodeActionComponent
       await this.entity.waitForReady();
 
       await super.ngOnInit();
+      this.cancelSubscription();
     }
   }
 

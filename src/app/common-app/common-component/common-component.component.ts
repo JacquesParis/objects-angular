@@ -12,9 +12,14 @@ export class CommonComponent implements OnInit, OnDestroy {
   public _id = Math.ceil(Math.random() * 1000000000000000);
   constructor() {}
   ngOnDestroy(): void {
+    this.cancelSubscription();
+  }
+
+  protected cancelSubscription() {
     for (const sub of this.subscriptions) {
       sub();
     }
+    this.subscriptions = [];
   }
 
   ngOnInit(): void {}

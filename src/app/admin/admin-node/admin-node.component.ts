@@ -38,6 +38,7 @@ import {
 } from '@angular/core';
 import { AbstractRestEntityComponent } from '../../objects-client/abstract-rest-entity/abstract-rest-entity.component';
 import {
+  ICreationContext,
   IEntityMethod,
   IObjectNode,
   IObjectType,
@@ -72,7 +73,7 @@ export class AdminNodeComponent
   public parentTree: ObjectTreeImpl;
   public previousTree: ObjectTreeImpl;
   public nextTree: ObjectTreeImpl;
-  public creations: { typeId: string; icon?: string }[] = [];
+  public creations: ICreationContext[] = [];
   navBarHeight: string = '0px';
   safeName: SafeHtml;
   public get isCreationActive(): boolean {
@@ -130,6 +131,8 @@ export class AdminNodeComponent
             (typeId) => ({
               typeId: typeId,
               icon: this.objectTree.entityCtx.actions.creations[typeId].icon,
+              typeTitle: this.objectTree.entityCtx.actions.creations[typeId]
+                .typeTitle,
             })
           )
         : [];

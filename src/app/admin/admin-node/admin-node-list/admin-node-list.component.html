@@ -19,9 +19,17 @@
         class="form-control form-control-plaintext form-control-sm text-muted bg-light px-2"
         [attr.aria-describedby]="'child_' + child.id"
       >
-        <i-bs name="arrow-down-up" class="align-middle"></i-bs>
-        {{ child.treeNode.objectTypeId }}
-      </span>
+        <i-bs name="arrow-down-up" class="align-middle pr-1"></i-bs
+        ><span
+          class="align-middle"
+          *ngIf="!child.entityCtx?.preview?.typeTitle"
+          >{{ child.treeNode.objectTypeId | toStartCase }}</span
+        ><span
+          class="align-middle"
+          *ngIf="child.entityCtx?.preview?.typeTitle"
+          >{{ child.entityCtx.preview.typeTitle }}</span
+        ></span
+      >
 
       <div class="input-group-append" [id]="'child_' + child.id">
         <button

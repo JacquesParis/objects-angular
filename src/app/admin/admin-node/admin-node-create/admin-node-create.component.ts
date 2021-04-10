@@ -16,7 +16,7 @@ import {
   ObjectTreeImpl,
   EntityName,
 } from '@jacquesparis/objects-client';
-import { IObjectNode, IJsonSchema } from '@jacquesparis/objects-model';
+import { IObjectNode, ICreationContext } from '@jacquesparis/objects-model';
 import { AbstractRestEntityComponent } from 'src/app/objects-client/abstract-rest-entity/abstract-rest-entity.component';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { merge } from 'lodash-es';
@@ -30,7 +30,7 @@ export class AdminNodeCreateComponent
   extends AbstractRestEntityComponent<IObjectNode, ObjectNodeImpl>
   implements OnInit {
   public parentEntity: ObjectNodeImpl;
-  public typeSchema: IJsonSchema;
+  public creationContext: ICreationContext;
   public entity: ObjectNodeImpl;
   public isReady = false;
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
@@ -59,16 +59,16 @@ export class AdminNodeCreateComponent
       await this.objectTree.waitForReady();
       await this.parentEntity.waitForReady();
 
-      this.typeSchema = this.objectTree.entityCtx.actions.creations[
+      this.creationContext = this.objectTree.entityCtx.actions.creations[
         this.typeId
-      ].schema;
+      ];
 
       this.entity = this.objectsCommonService.newEntity<ObjectNodeImpl>(
         EntityName.objectNode,
         {
           parentEntity: this.parentEntity,
           entityTypeId: this.typeId,
-          jsonSchema: this.typeSchema,
+          jsonSchema: this.creationContext.schema,
         }
       );
 

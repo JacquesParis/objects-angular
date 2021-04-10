@@ -12,63 +12,63 @@
       : 'default'
   "
 >
-  <span class="align-middle text-nowrap">
-    <i-bs
+  <span class="align-middle text-nowrap"
+    ><i-bs
       *ngIf="!mayOpen() || isCollapsed()"
       name="chevron-right"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
       [style.color]="mayOpen() ? 'inherit' : 'transparent'"
-    ></i-bs>
-    <i-bs
+    ></i-bs
+    ><i-bs
       *ngIf="mayOpen() && !isCollapsed()"
       name="chevron-down"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-    ></i-bs>
-    <i-bs
+    ></i-bs
+    ><i-bs
       *ngIf="mayOpen() && isCollapsed()"
       name="folder"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-    ></i-bs>
-    <i-bs
+    ></i-bs
+    ><i-bs
       *ngIf="mayOpen() && !isCollapsed()"
       name="folder2-open"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-    ></i-bs>
-    <i-bs
+    ></i-bs
+    ><i-bs
       *ngIf="isFinalChild()"
       name="file-earmark"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-    ></i-bs>
-    <i-bs
+    ></i-bs
+    ><i-bs
       *ngIf="isLoading()"
       name="hourglass-split"
       width="1rem"
       height="1rem"
       class="align-middle py-2 p-1"
-    ></i-bs>
-    <span
+    ></i-bs
+    ><span
       app-admin-node-preview
       [objectTree]="treeChild"
       (click)="displayNode($event)"
-      class="ml-1"
+      class="ml-1 align-middle"
       [style.cursor]="'pointer'"
-    ></span>
-    <ng-template
+    ></span
+    ><ng-template
       *ngIf="postDisplay"
       [ngTemplateOutlet]="postDisplay"
       [ngTemplateOutletContext]="{ treeChild: treeChild }"
-    ></ng-template>
-  </span>
+    ></ng-template
+  ></span>
 </div>
 
 <div

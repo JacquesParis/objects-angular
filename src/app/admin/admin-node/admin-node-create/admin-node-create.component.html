@@ -1,12 +1,22 @@
 <div class="card border-top-0" *ngIf="isReady">
   <div class="card-body">
     <h5 class="card-title">
-      <span>{{ typeId }}</span>
+      <i
+        *ngIf="creationContext.icon"
+        class="align-middle pr-1"
+        [class]="creationContext.icon"
+      ></i
+      ><span class="align-middle" *ngIf="!creationContext.typeTitle">{{
+        typeId | toStartCase
+      }}</span
+      ><span class="align-middle" *ngIf="creationContext.typeTitle">{{
+        creationContext.typeTitle
+      }}</span>
     </h5>
     <lib-editable-json-schema-form
       [entity]="entity"
       [saveValue]="saveValueMethod"
-      [schema]="typeSchema"
+      [schema]="creationContext.schema"
       [layout]="layout"
       (onCancel)="cancelAction()"
     >
