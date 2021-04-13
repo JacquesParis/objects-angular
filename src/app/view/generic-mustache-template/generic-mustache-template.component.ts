@@ -28,8 +28,7 @@ export class GenericMustacheTemplateComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.spinnerService.initSteps('generate-mustache', 2);
-    this.spinnerService.endAction('generate-mustache');
+    this.spinnerService.initSteps('generate-mustache');
     this.content = this.sanitization.bypassSecurityTrustHtml(
       await WebsiteGenerationService.get().getTemplateContent(
         this.objectsCommonService.objectTreesService,

@@ -63,13 +63,18 @@ export class SpinnerService
       this.calculatePercentageDone();
     }
   }
-  initSteps(id: string, nbSteps: number): void {
-    this.runningActions[id] = nbSteps;
+  initSteps(id: string, nbSteps: number = 1): void {
+    this.runningActions[id] = 2 > nbSteps ? 2 : nbSteps;
     this.calculateCurrentRunningActions();
     if (this.maxRunningActions < this.currentRunningActions.value) {
       this.maxRunningActions = this.currentRunningActions.value;
     }
     this.calculatePercentageDone();
+    if (2 > nbSteps) {
+      for (let step = nbSteps; step < 2; step++) {
+        this.endAction(id);
+      }
+    }
   }
   endSteps(id: string): void {
     if (id in this.runningActions && this.runningActions[id] > 0) {
