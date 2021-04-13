@@ -1,3 +1,4 @@
+import { SpinnerService } from './../../common-app/services/spinner.service';
 import { ConfigurationService } from './../../common-app/services/configuration.service';
 import { ObjectsCommonService } from './../../objects-client/services/objects-common.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -22,10 +23,12 @@ export class GenericMustacheTemplateComponent implements OnInit {
     @Inject('pageTree') public pageTree: ObjectTreeImpl,
     protected objectsCommonService: ObjectsCommonService,
     public sanitization: DomSanitizer,
-    public configurationService: ConfigurationService
+    public configurationService: ConfigurationService,
+    private spinnerService: SpinnerService
   ) {}
 
   async ngOnInit() {
+    this.spinnerService.initSteps('generate-mustache', 1);
     this.content = this.sanitization.bypassSecurityTrustHtml(
       await WebsiteGenerationService.get().getTemplateContent(
         this.objectsCommonService.objectTreesService,
@@ -37,6 +40,7 @@ export class GenericMustacheTemplateComponent implements OnInit {
         this.templateTree.id
       )
     );
+    this.spinnerService.endSteps('generate-mustache');
     window.setTimeout(this.copyScript.bind(this));
   }
   public copyScript() {
