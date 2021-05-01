@@ -1,6 +1,42 @@
 <div class="card border-top-0" *ngIf="isReady">
   <div class="card-body">
+    <div class="card mt-2" *ngIf="displayedResult">
+      <div class="card-header">
+        <span>Result: </span
+        ><i-bs
+          name="play-fill"
+          class="align-middle pr-1"
+          *ngIf="!method.icon"
+        ></i-bs
+        ><i
+          *ngIf="method.icon"
+          class="align-middle pr-1"
+          [class]="method.icon"
+        ></i
+        ><span>{{ method.methodName }}</span>
+      </div>
+      <div class="card-body">
+        <div [innerHtml]="displayedResult"></div>
+        <div role="group" class="btn-group btn-group-sm mt-3">
+          <a class="btn btn-primary" (click)="displayedResult = undefined"
+            ><i-bs
+              name="play-fill"
+              class="align-middle pr-1"
+              *ngIf="!method.icon"
+            ></i-bs
+            ><i
+              *ngIf="method.icon"
+              class="align-middle pr-1"
+              [class]="method.icon"
+            ></i
+            ><span>{{ method.methodName }}</span></a
+          >
+        </div>
+      </div>
+    </div>
+
     <lib-editable-json-schema-form
+      *ngIf="!displayedResult"
       [entity]="entity"
       [saveValue]="saveValueMethod"
       [schema]="schema"

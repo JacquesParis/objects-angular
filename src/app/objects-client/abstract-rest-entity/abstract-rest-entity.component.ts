@@ -11,7 +11,11 @@ import {
   IEntityPropertiesWrapper,
   EntityName,
 } from '@jacquesparis/objects-client';
-import { IEntityMethod, IRestEntity } from '@jacquesparis/objects-model';
+import {
+  IEntityMethod,
+  IMethodResult,
+  IRestEntity,
+} from '@jacquesparis/objects-model';
 import {
   IJsonSchema,
   IJsonLayoutProperty,
@@ -133,7 +137,7 @@ export abstract class AbstractRestEntityComponent<
     methodId: string,
     parameters: any,
     methodSampling?: string
-  ): Promise<any> {
+  ): Promise<IMethodResult> {
     return this.entity.runAction(methodId, parameters, methodSampling);
   }
 }

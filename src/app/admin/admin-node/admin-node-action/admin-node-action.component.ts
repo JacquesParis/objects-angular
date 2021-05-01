@@ -1,5 +1,5 @@
-import { merge } from 'lodash-es';
-import { DomSanitizer } from '@angular/platform-browser';
+import { merge, isObject } from 'lodash-es';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RestEntityListService } from './../../../objects-client/abstract-rest-entity/rest-entity-list.service';
 import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../../objects-client/services/objects-common.service';
@@ -12,16 +12,13 @@ import {
   OBJECT_TREE_TOKEN,
 } from './../../admin.const';
 import { AbstractRestEntityComponent } from 'src/app/objects-client/abstract-rest-entity/abstract-rest-entity.component';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Inject,
-  ChangeDetectorRef,
-  SimpleChanges,
-} from '@angular/core';
-import { IObjectNode, IEntityMethod } from '@jacquesparis/objects-model';
+  IObjectNode,
+  IEntityMethod,
+  IMethodResult,
+  IMethodValuesResult,
+} from '@jacquesparis/objects-model';
 import {
   ObjectNodeImpl,
   ObjectTreeImpl,
@@ -38,6 +35,7 @@ export class AdminNodeActionComponent
   implements OnInit {
   public title: string;
   public nodeViewStateName = ADMIN_OWNER_NODE_VIEW_ROUTE_NAME;
+  public displayedResult: SafeHtml;
 
   public entity: ObjectNodeImpl;
 
@@ -80,15 +78,29 @@ export class AdminNodeActionComponent
     methodId: string,
     parameters: any,
     methodSampling?: string
-  ): Promise<any> {
-    const result = await super.runAction(methodId, parameters, methodSampling);
-
-    this.stateService.go(
-      this.nodeViewStateName,
-      merge({}, this.stateService.params, {
-        treeId: this.objectTree.treeNode.id,
-      })
+  ): Promise<IMethodResult> {
+    const result: IMethodResult = await super.runAction(
+      methodId,
+      parameters,
+      methodSampling
     );
+
+    if (isObject(result) && 'displayedResult' in (result as Object)) {
+      const valueResult: IMethodValuesResult = result as IMethodValuesResult;
+      this.displayedResult = this.domSanitizer.bypassSecurityTrustHtml(
+        valueResult.displayedResult
+      );
+    }
+
+    if (!this.displayedResult) {
+      this.stateService.go(
+        this.nodeViewStateName,
+        merge({}, this.stateService.params, {
+          treeId: this.objectTree.treeNode.id,
+        })
+      );
+    }
+
     return result;
   }
 }
