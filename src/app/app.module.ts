@@ -51,6 +51,7 @@ import {
   Pencil,
   ClipboardCheck,
   PlayFill,
+  PencilSquare,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -77,6 +78,7 @@ const icons = {
   Pencil,
   ClipboardCheck,
   PlayFill,
+  PencilSquare,
 };
 
 @NgModule({

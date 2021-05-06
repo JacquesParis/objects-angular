@@ -4,4 +4,12 @@
   [dataTree]="siteTree"
   [templateTree]="templateTree"
 ></div>
+<div class="back-admin" *ngIf="isUserLogued && hasAdmin">
+  <a class="nav-link" [uiSref]="adminStateName" [uiSrefActive]="'active'"
+    ><i-bs
+      name="pencil-square"
+      class="pr-1 pl-1 pb-1 pt-0 rounded-circle text-light bg-info"
+    ></i-bs
+  ></a>
+</div>
 <div app-spinner></div>
