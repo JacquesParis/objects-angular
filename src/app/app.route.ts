@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { ObjectsCommonService } from './objects-client/services/objects-common.service';
 import { getParentStateName } from './app.const';
 import { AppRootComponent } from './common-app/app-root/app-root.component';
+import { GeolocationService } from './common-app/services/geolocation.service';
 const WELCOME_STATE_NAME2 = buildStateName(WELCOME_STATE_NAME, '2');
 
 const shouldBeLoginResolve = async (
@@ -34,8 +35,11 @@ const rootState: Ng2StateDeclaration = {
   resolve: [
     {
       token: 'initCommonService',
-      deps: [ObjectsCommonService],
-      resolveFn: (objectsCommonService: ObjectsCommonService) => {
+      deps: [ObjectsCommonService, GeolocationService],
+      resolveFn: (
+        objectsCommonService: ObjectsCommonService,
+        geolocationService: GeolocationService
+      ) => {
         return objectsCommonService.init();
       },
     },

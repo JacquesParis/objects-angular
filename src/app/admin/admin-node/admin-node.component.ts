@@ -18,7 +18,7 @@ import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { RestEntityListService } from './../../objects-client/abstract-rest-entity/rest-entity-list.service';
-import { VIEW_ROUTE_NAME } from './../../view/view.const';
+import { VIEW_ROUTE_NAME, VIEW_PAGE_ROUTE_NAME } from './../../view/view.const';
 import { StateService } from '@uirouter/angular';
 import { ObjectsCommonService } from './../../objects-client/services/objects-common.service';
 import {
@@ -45,6 +45,7 @@ import {
 } from '@jacquesparis/objects-model';
 import { merge, map } from 'lodash-es';
 import { OnChanges } from '@angular/core';
+import { NavigationService } from 'src/app/objects-client/services/navigation.service';
 
 @Component({
   selector: 'app-admin-node',
@@ -70,12 +71,14 @@ export class AdminNodeComponent
   public nodeCreateTypeStateName = ADMIN_OWNER_NODE_CREATE_TYPE_ROUTE_NAME;
   public nodeMoveStateName = ADMIN_OWNER_NODE_MOVE_ROUTE_NAME;
   public nodeActionStateName = ADMIN_OWNER_NODE_ACTION_ROUTE_NAME;
+  public pageViewStateName = VIEW_PAGE_ROUTE_NAME;
   public parentTree: ObjectTreeImpl;
   public previousTree: ObjectTreeImpl;
   public nextTree: ObjectTreeImpl;
   public creations: ICreationContext[] = [];
-  navBarHeight: string = '0px';
-  safeName: SafeHtml;
+  public navBarHeight: string = '0px';
+  public safeName: SafeHtml;
+  public pageView: string;
   public get isCreationActive(): boolean {
     return this.stateService.current.name.startsWith(
       this.nodeCreateTypeStateName
@@ -91,7 +94,8 @@ export class AdminNodeComponent
     protected stateService: StateService,
     protected restEntityListService: RestEntityListService,
     protected changeDetectorRef: ChangeDetectorRef,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    public navigationService: NavigationService
   ) {
     super(EntityName.objectNode, objectsCommonService, restEntityListService);
     if (this.stateService.current.name.startsWith(ADMIN_NAMESPACE_ROUTE_NAME)) {
@@ -101,6 +105,7 @@ export class AdminNodeComponent
       this.nodeMoveStateName = ADMIN_NAMESPACE_NODE_MOVE_ROUTE_NAME;
       this.nodeActionStateName = ADMIN_NAMESPACE_NODE_ACTION_ROUTE_NAME;
     }
+    this.navigationService.adminHref = window.location.hash;
   }
 
   async ngOnInit() {
@@ -115,6 +120,9 @@ export class AdminNodeComponent
       await super.ngOnInit();
       if (this.entity.webSiteObjectTreeUri && this.objectTree.aliasUri) {
         this.hasWebSite = true;
+      }
+      if (this.entity.pageId && this.entity.siteId) {
+        this.pageView = `#/view/${this.entity.siteId}/${this.entity.pageId}`;
       }
       this.changeDetectorRef.detectChanges();
     }

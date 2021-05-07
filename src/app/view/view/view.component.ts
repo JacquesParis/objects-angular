@@ -5,6 +5,7 @@ import { ObjectTreeImpl } from '@jacquesparis/objects-client';
 import { OBJECT_TREE_TOKEN, ADMIN_ROUTE_NAME } from './../../admin/admin.const';
 import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from 'src/app/objects-client/services/user.service';
+import { NavigationService } from 'src/app/objects-client/services/navigation.service';
 
 @Component({
   selector: 'app-view',
@@ -24,7 +25,8 @@ export class ViewComponent implements OnInit {
     protected objectsCommonService: ObjectsCommonService,
     protected stateService: StateService,
     private userService: UserService,
-    private transitionService: TransitionService
+    private transitionService: TransitionService,
+    public navigationService: NavigationService
   ) {}
 
   async ngOnInit() {
@@ -33,12 +35,6 @@ export class ViewComponent implements OnInit {
     this.templateTree = this.siteTree.treeNode.webSiteTree;
     await this.templateTree.waitForReady();
     await this.templateTree.treeNode.waitForReady();
-    console.log(
-      'display siteTree',
-      this.siteTree.treeNode.name,
-      'templateTree',
-      this.templateTree.treeNode.name
-    );
 
     window.scrollTo(0, 0);
     /*    this.templateTree = await this.objectsCommonService.getTreeByUri(

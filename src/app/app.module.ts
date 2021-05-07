@@ -1,3 +1,5 @@
+import { EntityObservationInterceptor } from './common-app/services/entity-observation.interceptor';
+import { EntityObservationService } from './common-app/services/entity-observation.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -8,7 +10,7 @@ import { ObjectsClientModule } from './objects-client/objects-client.module';
 import { CommonAppModule } from './common-app/common-app.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { APP_STATES } from './app.route';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RootAdminModule } from './root-admin/root-admin.module';
 import { LAZY_STATES } from './app.lazy.route';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
@@ -52,6 +54,7 @@ import {
   ClipboardCheck,
   PlayFill,
   PencilSquare,
+  BoxArrowInRight,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -79,6 +82,7 @@ const icons = {
   ClipboardCheck,
   PlayFill,
   PencilSquare,
+  BoxArrowInRight,
 };
 
 @NgModule({
@@ -100,10 +104,16 @@ const icons = {
     CollapseModule.forRoot(),
     BrowserAnimationsModule,
     NgxBootstrapIconsModule.pick(icons),
-
     BsDatepickerModule.forRoot(),
   ],
-  providers: [{ provide: WidgetRegistry, useClass: DefaultWidgetRegistry }],
+  providers: [
+    { provide: WidgetRegistry, useClass: DefaultWidgetRegistry },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: EntityObservationInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [WelcomeComponent],
 })
 export class AppModule {

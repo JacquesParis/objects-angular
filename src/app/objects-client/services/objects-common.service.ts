@@ -54,7 +54,7 @@ export class ObjectsCommonService {
   }
 
   public async init(): Promise<void> {
-    await this.objectsTypeService.getAll();
+    //await this.objectsTypeService.getAll();
     return;
   }
 

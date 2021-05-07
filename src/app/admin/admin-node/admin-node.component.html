@@ -243,6 +243,9 @@
           >
         </div>
       </li>
+      <li class="nav-item" *ngIf="pageView">
+        <a class="nav-link" [href]="pageView"><i-bs name="eye"></i-bs></a>
+      </li>
     </ul>
     <ui-view></ui-view>
   </div>
