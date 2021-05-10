@@ -23,5 +23,22 @@
   </head>
   <body>
     <app-welcome></app-welcome>
+    <div style="width: 100vw; height: 100vh" id="tempSpinner">
+      <div
+        style="
+          overflow: hidden;
+          max-width: 300px;
+          top: calc(50% - 32px);
+          position: relative;
+          margin-right: auto;
+          text-align: center;
+          margin-left: auto;
+        "
+      >
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

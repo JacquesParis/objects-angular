@@ -39,6 +39,7 @@ export class SpinnerService
 
   constructor(private editableFormService: EditableFormService) {
     this.editableFormService.registerWaitingStateService(this);
+    document.querySelector('#tempSpinner').remove();
   }
   initAction(id: string): void {
     if (!(id in this.runningActions)) {
