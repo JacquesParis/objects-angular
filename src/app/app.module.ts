@@ -24,6 +24,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 // RECOMMENDED
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { frLocale } from 'ngx-bootstrap/locale';
@@ -105,6 +106,7 @@ const icons = {
     BrowserAnimationsModule,
     NgxBootstrapIconsModule.pick(icons),
     BsDatepickerModule.forRoot(),
+    TimepickerModule.forRoot(),
   ],
   providers: [
     { provide: WidgetRegistry, useClass: DefaultWidgetRegistry },

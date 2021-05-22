@@ -1,5 +1,14 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
 .height-200 {
   height: 200px;
+}
+
+.form-group-plaintext .form-control {
+  border: none;
+}
+.form-group-plaintext .form-control {
+  @extend .form-group-plaintext;
 }
 
 .form-group-plaintext .form-control,
@@ -12,6 +21,10 @@
     -webkit-appearance: none;
     appearance: none;
   }
+}
+
+.form-control-sm .form-control {
+  @extend .form-control-sm;
 }
 
 .imageSelect {
