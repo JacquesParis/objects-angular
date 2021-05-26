@@ -1,3 +1,4 @@
+import { StateService } from '@uirouter/angular';
 import { SpinnerService } from './../../common-app/services/spinner.service';
 import { ConfigurationService } from './../../common-app/services/configuration.service';
 import { ObjectsCommonService } from './../../objects-client/services/objects-common.service';
@@ -24,7 +25,8 @@ export class GenericMustacheTemplateComponent implements OnInit {
     protected objectsCommonService: ObjectsCommonService,
     public sanitization: DomSanitizer,
     public configurationService: ConfigurationService,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    protected stateService: StateService
   ) {}
 
   async ngOnInit() {
@@ -41,9 +43,9 @@ export class GenericMustacheTemplateComponent implements OnInit {
       )
     );
     this.spinnerService.endSteps('generate-mustache');
-    window.setTimeout(this.copyScript.bind(this));
+    window.setTimeout(this.postDisplayActions.bind(this));
   }
-  public copyScript() {
+  public postDisplayActions() {
     const includedScript = document.querySelector(
       '#holder_' + this.id + ' script'
     );
@@ -53,6 +55,23 @@ export class GenericMustacheTemplateComponent implements OnInit {
       script.setAttribute('type', 'text/javascript');
       script.appendChild(document.createTextNode(value));
       document.body.appendChild(script);
+    }
+    if (this.stateService.params['#']) {
+      const selector =
+        '#' + this.stateService.params['#'].replace(/\./g, '\\.');
+      let anchor: HTMLElement = document.querySelector(selector);
+      if (anchor) {
+        let top = anchor.offsetTop;
+        while (anchor.offsetParent) {
+          anchor = anchor.offsetParent as HTMLElement;
+          top += anchor.offsetTop ? anchor.offsetTop : 0;
+        }
+        const fixedTop: HTMLElement = document.querySelector('.fixed-top');
+        if (fixedTop) {
+          top = Math.max(0, top - fixedTop.offsetHeight);
+        }
+        window.scrollTo(0, top);
+      }
     }
   }
 
